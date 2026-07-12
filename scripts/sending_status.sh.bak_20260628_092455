@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# sending_status.sh — operator dashboard for the email drip sender.
+# Shows: drip on/off + heartbeat, totals, sends today, per-mailbox last send,
+# and any STUCK items (failed >= max attempts → excluded from the drip).
+# Usage:  bash /opt/email/scripts/sending_status.sh
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PW=$(grep -E '^DB_PASSWORD=' .env | head -1 | cut -d= -f2-)
+DB() { docker exec email_db mariadb -uemail_app -p"$PW" email_platform -N -e "$1" 2>/dev/null; }
+Q()  { docker exec email_db mariadb -uemail_app -p"$PW" email_platform -e "$1" 2>/dev/null; }
+
+echo "================ EMAIL SENDING STATUS ================"
+echo "now (UTC): $(DB 'SELECT UTC_TIMESTAMP();')"
+echo
+
+# --- Drip engine ---
+IFS=$'\t' read -r EN TICK TOTAL DPB HPB < <(DB "SELECT enabled, last_tick_at, sent_total, daily_per_mailbox, hourly_per_mailbox FROM outreach_drip_settings WHERE tenant_id=1;")
+PAUSED=$(DB "SELECT COALESCE(outreach_paused,0) FROM tenant_safety_settings WHERE tenant_id=1;")
+echo "DRIP ENGINE"
+[ "$EN" = "1" ] && echo "  state........: ON" || echo "  state........: OFF  <-- sending disabled"
+[ "${PAUSED:-0}" = "1" ] && echo "  kill-switch..: PAUSED  <-- outreach_paused=1"
+echo "  last tick....: $TICK   (worker heartbeat; should be < 2 min old)"
+echo "  caps/mailbox.: ${DPB}/day  ${HPB}/hour"
+echo
+
+# --- Totals ---
+echo "VOLUME"
+Q "SELECT
+     (SELECT COUNT(*) FROM manual_outreach_queue WHERE status='sent_smtp') AS sent_total,
+     (SELECT COUNT(*) FROM manual_outreach_queue WHERE status='sent_smtp' AND DATE(sent_at)=UTC_DATE()) AS sent_today,
+     (SELECT MAX(sent_at) FROM manual_outreach_queue WHERE status='sent_smtp') AS last_send_at,
+     (SELECT COUNT(*) FROM manual_outreach_queue WHERE status='approved') AS approved_waiting,
+     (SELECT COUNT(*) FROM manual_outreach_queue WHERE status='pending_review') AS pending_review;"
+echo
+
+echo "SENT PER DAY (last 7)"
+Q "SELECT DATE(sent_at) day, COUNT(*) sent FROM manual_outreach_queue
+   WHERE status='sent_smtp' AND sent_at >= UTC_DATE() - INTERVAL 7 DAY
+   GROUP BY DATE(sent_at) ORDER BY day DESC;"
+echo
+
+echo "ACTIVE MAILBOXES (last send + today's counter)"
+Q "SELECT id, from_email, status, sent_today, last_sent_at
+   FROM sender_identities WHERE status='active' ORDER BY last_sent_at DESC;"
+echo
+
+# --- Stuck items (the silent killer) ---
+STUCK=$(DB "SELECT COUNT(*) FROM manual_outreach_queue WHERE status='approved' AND send_attempts>=5;")
+echo "STUCK ITEMS (approved but failed >=5x -> drip skips them): ${STUCK:-0}"
+if [ "${STUCK:-0}" != "0" ]; then
+  echo "  >> Drip will NOT retry these. Run: bash scripts/sending_resume.sh"
+  Q "SELECT mailbox_id, last_send_error, COUNT(*) cnt
+     FROM manual_outreach_queue WHERE status='approved' AND send_attempts>=5
+     GROUP BY mailbox_id, last_send_error;"
+fi
+echo "======================================================"
+echo "Web view: https://email.clients.help/manual-outreach  (Drip + Today tabs)"

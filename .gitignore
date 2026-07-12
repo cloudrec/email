@@ -1,0 +1,51 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+.env.bak*
+*.snapshot
+env.snapshot
+*.pem
+*.key
+id_rsa*
+secrets/
+**/*CREDENTIALS*
+**/*credentials*
+
+# DB dumps
+*.sql
+*.sql.gz
+*.dump
+
+# Backups & runtime
+backups/
+logs/
+*.log
+
+# Node
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Docker
+docker-compose.override.yml
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+reports/private/
+
+# Postal runtime config (contains signing keys / DB creds)
+postal/config/
+postal/data/
+postal/**/postal.yml

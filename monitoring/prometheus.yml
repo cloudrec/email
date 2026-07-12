@@ -1,0 +1,18 @@
+# Email Platform — Prometheus scrape + alerting config.
+# Reaches services over the internal docker network (job targets use service names).
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: email-api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['api:4000']

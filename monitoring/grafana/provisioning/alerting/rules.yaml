@@ -1,0 +1,60 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: email-platform
+    folder: Email Platform
+    interval: 1m
+    rules:
+      - uid: worker-heartbeat-stale
+        title: WorkerHeartbeatStale
+        condition: C
+        for: 2m
+        isPaused: false
+        labels:
+          severity: critical
+        annotations:
+          summary: "Email worker heartbeat stale — worker likely dead or hung"
+          description: "worker:heartbeat has not advanced in >120s. Check email_worker."
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: prometheus
+            model:
+              refId: A
+              instant: true
+              expr: email_worker_heartbeat_age_seconds
+          - refId: C
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: gt, params: [120] }
+      - uid: worker-down
+        title: WorkerDown
+        condition: C
+        for: 2m
+        isPaused: false
+        labels:
+          severity: critical
+        annotations:
+          summary: "Email worker is down (email_worker_up == 0)"
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: prometheus
+            model:
+              refId: A
+              instant: true
+              expr: email_worker_up
+          - refId: C
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: lt, params: [1] }

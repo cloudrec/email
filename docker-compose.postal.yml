@@ -1,0 +1,36 @@
+networks:
+  internal:
+    external: true
+    name: email-platform_internal
+  edge:
+    external: true
+    name: email-platform_edge
+
+x-postal: &postal
+  image: ghcr.io/postalserver/postal:3.3.4
+  restart: unless-stopped
+  volumes:
+    - ./postal/config:/config
+  networks: [internal, edge]
+
+services:
+  postal-web:
+    <<: *postal
+    container_name: email_postal_web
+    command: postal web-server
+    ports:
+      - "127.0.0.1:5000:5000"
+    networks: [internal, edge]
+
+  postal-smtp:
+    <<: *postal
+    container_name: email_postal_smtp
+    command: postal smtp-server
+    networks: [internal, edge]
+    ports:
+      - "25:25"
+
+  postal-worker:
+    <<: *postal
+    container_name: email_postal_worker
+    command: postal worker

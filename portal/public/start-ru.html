@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>С чего начать — emails.cheap</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #f6f7f9; color: #1f2937; line-height: 1.55; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 24px 18px 60px; }
+  h1 { font-size: 26px; margin: 8px 0 4px; }
+  h2 { font-size: 19px; margin: 28px 0 8px; }
+  .sub { color: #6b7280; margin-bottom: 18px; }
+  .hero { background: #1d4ed8; color: #fff; border-radius: 12px; padding: 20px; }
+  .hero a.btn { display: inline-block; margin-top: 12px; background: #fff; color: #1d4ed8; font-weight: 700; padding: 10px 18px; border-radius: 8px; text-decoration: none; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-top: 14px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
+  .num { flex: 0 0 30px; height: 30px; border-radius: 50%; background: #1d4ed8; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .done { background: #15803d; }
+  .step b { font-size: 16px; }
+  .step p { margin: 4px 0; font-size: 14px; }
+  a { color: #1d4ed8; }
+  .pill { font-size: 12px; font-weight: 700; border-radius: 12px; padding: 2px 10px; }
+  .ok { background: #dcfce7; color: #15803d; }
+  .todo { background: #fef9c3; color: #a16207; }
+  .map td { padding: 6px 10px; border-top: 1px solid #eee; font-size: 14px; vertical-align: top; }
+  .map td:first-child { white-space: nowrap; font-weight: 600; }
+  .warn { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 14px; }
+  code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>С чего начать</h1>
+  <p class="sub">emails.cheap — холодная B2B-рассылка на ваших уже собранных лидах. Коротко: что где лежит и в каком порядке нажимать.</p>
+
+  <div class="hero">
+    <div style="font-size:18px;font-weight:700">Главная страница для запуска — «Мастер запуска»</div>
+    <div style="margin-top:6px;font-size:14px;opacity:.95">Там видно: что готово, что мешает, и какая ровно следующая кнопка. С неё и начинайте.</div>
+    <a class="btn" href="/go-live">Открыть Мастер запуска →</a>
+  </div>
+
+  <h2>Порядок действий (всё руками, ничего не уходит само)</h2>
+
+  <div class="card">
+    <div class="step">
+      <div class="num done">✓</div>
+      <div>
+        <b>1. Шаблон письма</b> <span class="pill ok">уже готово</span>
+        <p>Шаблон <code>ch_first_touch_no_ps</code> (Clients.Help, первое касание) <b>одобрен</b>. Проверка безопасности пройдена (есть отписка + адрес).</p>
+        <p>Где лежит: <a href="/sender-studio">Sender Studio</a> — редактор и одобрение шаблонов.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">
+      <div class="num">2</div>
+      <div>
+        <b>Почтовый ящик (отправитель)</b> <span class="pill todo">нужно ваше действие</span>
+        <p>Ящик <code>outreach@mail.emails.cheap</code> уже привязан к профилю <b>Zoho EU</b>. Но SMTP-тест показывает <code>not_configured</code> — <b>нет пароля Zoho</b>.</p>
+        <p><b>Что сделать вам:</b> вписать логин/пароль Zoho в файл <code>.env</code> на сервере (ключи <code>ZOHO_SMTP_USER</code>, <code>ZOHO_SMTP_PASSWORD</code>, <code>ZOHO_IMAP_USER</code>, <code>ZOHO_IMAP_PASSWORD</code>), перезапустить сервис, затем нажать «Тест SMTP».</p>
+        <p>Где: <a href="/mailboxes">Mailboxes</a> (ящики и тесты). Можно начать <b>без</b> SMTP — в режиме «копировать-вставить» в веб-почту Zoho.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">
+      <div class="num">3</div>
+      <div>
+        <b>Выбрать существующих лидов</b> <span class="pill ok">данные есть</span>
+        <p>В системе <b>75 000+</b> проверенных лидов. Поиск/сбор новых здесь <b>не нужен и не запускается</b>.</p>
+        <p>На <a href="/go-live">Мастере запуска</a>: кнопка <b>«Preview 20 existing leads»</b> — посмотреть 20 лидов; ничего не создаётся.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">
+      <div class="num">4</div>
+      <div>
+        <b>Создать первую очередь (20 шт., на проверку)</b>
+        <p>На <a href="/go-live">Мастере запуска</a> — <b>«Create safe first queue»</b>. Создаст до 20 черновиков со статусом «на проверку». <b>Письма не отправляются.</b></p>
+        <p>Проверить и одобрить: <a href="/manual-outreach">Manual Outreach → вкладка Queue</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">
+      <div class="num">5</div>
+      <div>
+        <b>День 1: отправить только 5</b>
+        <p>Безопасный старт — <b>5 писем</b> в первый день. По одному: либо копировать в Zoho, либо по SMTP (когда тест пройдёт).</p>
+        <p>Кнопка «Generate day-1 plan» на Мастере покажет точное число.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">
+      <div class="num">6</div>
+      <div>
+        <b>Ответы и отписки</b>
+        <p>Импорт ответов: <a href="/manual-outreach">Manual Outreach → Replies</a> (нужен IMAP). Негатив/отписка → «подавить» (suppress) навсегда.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Где что находится</h2>
+  <div class="card">
+    <table class="map" style="width:100%;border-collapse:collapse">
+      <tr><td><a href="/go-live">Go Live / Запуск</a></td><td>Главный экран. Готовность 0–100, чек-лист, следующий шаг, создание первой очереди.</td></tr>
+      <tr><td><a href="/sender-studio">Sender Studio</a></td><td>Шаблоны писем: редактор, превью, одобрение.</td></tr>
+      <tr><td><a href="/mailboxes">Mailboxes</a></td><td>Ящики-отправители, профили (Zoho EU), тесты SMTP/IMAP, активация.</td></tr>
+      <tr><td><a href="/manual-outreach">Manual Outreach</a></td><td>Очередь, отправка по одному, ответы, фоллоу-апы, подавление.</td></tr>
+      <tr><td><a href="/warehouse">Warehouse</a></td><td>База лидов (75 000+). Поиск/фильтры по уже собранным.</td></tr>
+      <tr><td><a href="/safety">Safety</a></td><td>Контроль безопасности и лимитов.</td></tr>
+    </table>
+  </div>
+
+  <div class="warn">
+    <b>Текущее состояние:</b> готовность <b>75/100</b> — «Готов к режиму копирования». Реальных писем отправлено: <b>0</b>. Боевой SMTP: <b>выключен</b>. Кампаний запланировано: <b>0</b>.
+    <br>Единственный блокер до отправки по SMTP — вписать пароль Zoho в <code>.env</code>. Либо начать прямо сейчас в режиме «копировать-вставить».
+  </div>
+
+  <p style="margin-top:22px;text-align:center"><a class="btn" href="/go-live" style="display:inline-block;background:#1d4ed8;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700">Начать → Мастер запуска</a></p>
+
+</div>
+</body>
+</html>

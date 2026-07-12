@@ -1,0 +1,10 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: email-ops
+    receivers:
+      - uid: email_ops_recv
+        type: email
+        settings:
+          addresses: cloudkroter@gmail.com
+          singleEmail: true

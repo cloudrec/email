@@ -1,0 +1,248 @@
+name: email-platform
+
+networks:
+  edge:
+  internal:
+    internal: true
+
+volumes:
+  db_data:
+  redis_data:
+  mailhog_data:
+  postal_data:
+  clickhouse_data:
+  grafana_data:
+  prometheus_data:
+  portal_node_modules:
+  api_node_modules:
+  worker_node_modules:
+
+services:
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: email_nginx
+    restart: unless-stopped
+    profiles: ["nginx"]
+    depends_on:
+      - portal
+      - api
+    ports:
+      - "${NGINX_HTTP_PORT:-8080}:80"
+      - "${NGINX_HTTPS_PORT:-8443}:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./logs/nginx:/var/log/nginx
+    networks: [edge, internal]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/_health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  portal:
+    build:
+      context: ./portal
+      dockerfile: Dockerfile
+    container_name: email_portal
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: ${PORTAL_PORT:-3000}
+      NEXT_PUBLIC_PLATFORM_DOMAIN: ${PLATFORM_DOMAIN}
+      NEXT_PUBLIC_API_URL: ${PORTAL_INTERNAL_API_URL}
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [internal, edge]
+    ports:
+      - "127.0.0.1:13000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: email_api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: ${API_PORT:-4000}
+      MIGRATIONS_DIR: /migrations
+    volumes:
+      - ./db/migrations:/migrations:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [internal, edge]
+    ports:
+      - "127.0.0.1:4000:4000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  worker:
+    build:
+      context: ./workers
+      dockerfile: Dockerfile
+    container_name: email_worker
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [internal, edge]
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    healthcheck:
+      test: ["CMD", "node", "/app/healthcheck.mjs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: mariadb:11.4
+    container_name: email_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_AUTO_UPGRADE: "1"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: email_redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ---------- Optional / profile-gated ----------
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: email_mailhog
+    restart: unless-stopped
+    # Dev-only SMTP capture. Production sends via Postal (SMTP_HOST=postal), so
+    # gate mailhog behind the `dev` profile instead of running it in prod.
+    profiles: ["dev"]
+    command: ["-ui-web-path=/mailhog"]
+    networks: [internal]
+    ports:
+      - "127.0.0.1:8025:8025"
+
+  postal:
+    image: ghcr.io/postalserver/postal:3.3.4
+    container_name: email_postal
+    restart: unless-stopped
+    profiles: ["smtp"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - postal_data:/opt/postal/data
+      - ./postal/config:/opt/postal/config:ro
+    networks: [internal, edge]
+    ports:
+      - "25:25"
+      - "587:587"
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: email_clickhouse
+    restart: unless-stopped
+    profiles: ["analytics"]
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks: [internal]
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+  prometheus:
+    image: prom/prometheus:v3.0.1
+    container_name: email_prometheus
+    restart: unless-stopped
+    profiles: ["monitoring"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:13290:9090"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [internal, edge]
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: email_grafana
+    restart: unless-stopped
+    profiles: ["monitoring"]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      # Alert email via the Zoho relay. Requires NOVATRADERSIO_ZOHOMAIL_EU_SMTP_PASSWORD
+      # (a Zoho app-password) to be set in .env — until then auth fails and alerts don't send.
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "smtp.zoho.eu:587"
+      GF_SMTP_USER: ${NOVATRADERSIO_ZOHOMAIL_EU_SMTP_USER}
+      GF_SMTP_PASSWORD: ${NOVATRADERSIO_ZOHOMAIL_EU_SMTP_PASSWORD}
+      GF_SMTP_FROM_ADDRESS: ${NOVATRADERSIO_ZOHOMAIL_EU_SMTP_USER}
+      GF_SMTP_FROM_NAME: "Email Platform Alerts"
+      GF_SMTP_STARTTLS_POLICY: "MandatoryStartTLS"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:13300:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [internal, edge]

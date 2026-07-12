@@ -1,0 +1,100 @@
+{
+  "uid": "email-platform",
+  "title": "Email Platform — Health",
+  "tags": ["email-platform"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Worker up",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }
+          ],
+          "thresholds": { "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] }
+        }
+      },
+      "targets": [ { "expr": "email_worker_up", "refId": "A" } ]
+    },
+    {
+      "id": 2,
+      "title": "API metrics up",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } }
+          ],
+          "thresholds": { "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] }
+        }
+      },
+      "targets": [ { "expr": "up{job=\"email-api\"}", "refId": "A" } ]
+    },
+    {
+      "id": 3,
+      "title": "Worker heartbeat age (s)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": { "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 60 }, { "color": "red", "value": 120 } ] }
+        }
+      },
+      "targets": [ { "expr": "email_worker_heartbeat_age_seconds", "refId": "A" } ]
+    },
+    {
+      "id": 4,
+      "title": "Worker heartbeat age over time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": { "drawStyle": "line", "fillOpacity": 10 },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 120 } ] }
+        }
+      },
+      "targets": [ { "expr": "email_worker_heartbeat_age_seconds", "refId": "A", "legendFormat": "heartbeat age" } ]
+    },
+    {
+      "id": 5,
+      "title": "API process memory (RSS)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "bytes" } },
+      "targets": [ { "expr": "process_resident_memory_bytes{service=\"email-api\"}", "refId": "A", "legendFormat": "rss" } ]
+    },
+    {
+      "id": 6,
+      "title": "API CPU (rate)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "targets": [ { "expr": "rate(process_cpu_seconds_total{service=\"email-api\"}[5m])", "refId": "A", "legendFormat": "cpu" } ]
+    },
+    {
+      "id": 7,
+      "title": "Node.js event-loop lag (p99)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [ { "expr": "nodejs_eventloop_lag_p99_seconds{service=\"email-api\"}", "refId": "A", "legendFormat": "lag p99" } ]
+    }
+  ]
+}

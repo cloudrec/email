@@ -1,0 +1,4 @@
+{
+  "subject": "quick question about {{company}}",
+  "body": "Hi,\n\nI came across {{company}} and saw you take enquiries through your website.\n\nMost sites quietly lose visitors who land, hesitate, and leave without ever messaging. We built a small tool that adds a chat button to your site — and if nobody replies in time, it saves that visitor as a lead and notifies your team, so nothing slips through.\n\nWorth a quick look for {{company}}? Just reply here and I'll show you in 2 minutes.\n\n— Andrii Pecherskiy\nClients.Help · Ukraine\n\nP.S. We also take on remote IT work of any kind — websites, WordPress, automation, fixes, integrations. If you ever need a hand with something technical, just ask.\n\n—\nYou're getting this because your business is listed publicly online. Not relevant? Reply STOP and I'll remove you — or unsubscribe here: {{unsubscribe_url}}"
+}

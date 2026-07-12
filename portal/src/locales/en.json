@@ -1,0 +1,3447 @@
+{
+  "app": {
+    "name": "Email Platform",
+    "tagline": "Operator console for lead intelligence and reviewed outreach"
+  },
+  "home": {
+    "seo": {
+      "title": "Email Platform — Lead Collection, Website Analysis & Reviewed Outreach Drafts",
+      "description": "Collect public business leads, analyze websites, and prepare personalized outreach drafts with human approval and safety controls."
+    },
+    "nav": {
+      "product": "Product",
+      "howItWorks": "How it works",
+      "safety": "Safety",
+      "modules": "Modules",
+      "audience": "For whom",
+      "login": "Sign in",
+      "openDashboard": "Open dashboard"
+    },
+    "hero": {
+      "eyebrow": "Operator console for B2B outreach",
+      "title": "Find business leads. Review every message. Never send by accident.",
+      "sub": "Email Platform collects public business contacts, analyzes each website, and prepares personalized outreach drafts. Every draft waits for a human operator to approve. No SMTP gate, no sending.",
+      "ctaPrimary": "Start collecting leads",
+      "ctaSecondary": "View how it works",
+      "trustChip": "Collector-only mode. No emails sent without approval.",
+      "panel": {
+        "title": "Operator console",
+        "kpiLeads": "Leads this month",
+        "kpiPending": "Drafts pending review",
+        "kpiCollector": "Active collectors",
+        "kpiSending": "Sending",
+        "sendingValue": "Disabled",
+        "kpiSmtp": "SMTP",
+        "smtpValue": "Not configured",
+        "row1": "Collector — Kyiv beauty salons",
+        "row1status": "succeeded",
+        "row2": "Website analysis — perfektdent.pl",
+        "row2status": "succeeded",
+        "row3": "Outreach draft #62 — Manchester local service",
+        "row3status": "pending review"
+      }
+    },
+    "problem": {
+      "eyebrow": "The problem",
+      "title": "B2B outreach is fast to get wrong.",
+      "p1": "Finding relevant businesses by hand is slow. Spreadsheets, manual searches, copy-paste between tools.",
+      "p2": "Cold outreach without controls burns sender reputation, triggers complaints, and gets domains blocked.",
+      "p3": "Teams need source attribution per lead, a review gate before any message goes out, and clear suppression handling.",
+      "p4": "And someone has to remember to verify the sending domain, configure SMTP, and stop campaigns when bounce rates rise."
+    },
+    "solution": {
+      "eyebrow": "The workflow",
+      "title": "Collect, analyze, draft, review, send — in that order.",
+      "steps": [
+        "Find websites from safe sources (OpenStreetMap, your CSV, or a paid search provider).",
+        "Crawl public pages politely (robots.txt, crawl-delay, custom user-agent).",
+        "Extract publicly visible business emails. Skip private areas and login pages.",
+        "Analyze each website: industry, offering, possible needs, confidence score.",
+        "Generate a personalized draft using only facts found on the site.",
+        "Review and approve manually with a compliance checkbox.",
+        "Send only after SMTP is ready, the sending domain is verified, and contact is activated."
+      ]
+    },
+    "features": {
+      "eyebrow": "Modules",
+      "title": "Everything you need for a controlled outreach pipeline.",
+      "items": [
+        {
+          "h": "Collector Mode",
+          "p": "Run discovery jobs on a schedule. Per-day source caps. Robots-aware crawler."
+        },
+        {
+          "h": "Lead Discovery",
+          "p": "Public business emails from pages you import. Status, score, source URL stored."
+        },
+        {
+          "h": "Website Analysis",
+          "p": "Industry, offering summary, possible pain points, confidence score per site."
+        },
+        {
+          "h": "Personalized Drafts",
+          "p": "Internal generator uses only website facts and your product profile. No invented claims."
+        },
+        {
+          "h": "Invite Links",
+          "p": "Branded short links with suppression-aware redirects and click tracking."
+        },
+        {
+          "h": "Tenant Safety Controls",
+          "p": "Per-tenant kill switches, daily limits, risk events, outreach-paused state."
+        },
+        {
+          "h": "Domain Verification",
+          "p": "Generated SPF/DKIM/DMARC + return-path records. Live DNS verification."
+        },
+        {
+          "h": "SMTP Readiness",
+          "p": "State machine: not_configured / unreachable / auth_failed / ready. Worker re-checks before every send."
+        },
+        {
+          "h": "EN / RU / UA UI",
+          "p": "Operator interface translated for English, Russian, and Ukrainian teams."
+        },
+        {
+          "h": "Multi-tenant SaaS",
+          "p": "Strict per-tenant isolation. Role-based access. Audited at every state change."
+        }
+      ]
+    },
+    "safety": {
+      "eyebrow": "Safety by default",
+      "title": "Hard gates between collection and sending.",
+      "items": [
+        "Spam is strictly prohibited — confirmed or niche base only.",
+        "No automatic sending. Default approval required.",
+        "Drafts stay in pending_review until an operator confirms.",
+        "Unsubscribe and suppression enforced at every layer.",
+        "Sending domain must be verified before any campaign schedules.",
+        "SMTP must report 'ready' before a single test send is allowed.",
+        "Tenant-level limits and risk events visible to administrators.",
+        "Every lead carries its source URL, discovery time, and context snippet.",
+        "No private data, no leaked databases, no CAPTCHA bypass."
+      ]
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Seven steps from niche to ready message.",
+      "steps": [
+        {
+          "n": "01",
+          "h": "Choose niche, city, or source",
+          "p": "Pick a category preset, paste URLs, upload a CSV, or run a paid search provider."
+        },
+        {
+          "n": "02",
+          "h": "Import or discover websites",
+          "p": "Sources land in your collector campaign. Duplicates are deduped per tenant."
+        },
+        {
+          "n": "03",
+          "h": "Collect public business contacts",
+          "p": "Polite crawler walks each site. Skips login, CAPTCHA, and private areas."
+        },
+        {
+          "n": "04",
+          "h": "Analyze every website",
+          "p": "Industry, offering, pain points, confidence score, language detected."
+        },
+        {
+          "n": "05",
+          "h": "Generate a draft for review",
+          "p": "Internal generator templates a personalized message using only verified site facts."
+        },
+        {
+          "n": "06",
+          "h": "Operator approves manually",
+          "p": "Approve-and-confirm checkbox. Reject with a reason. Full audit trail."
+        },
+        {
+          "n": "07",
+          "h": "Send only when ready",
+          "p": "Domain verified. SMTP ready. Contact activated. Suppression checked. Then send."
+        }
+      ]
+    },
+    "audience": {
+      "eyebrow": "Who it's for",
+      "title": "Operators who do outreach without burning bridges.",
+      "items": [
+        {
+          "h": "Web agencies",
+          "p": "Source local prospects, prepare reviewable pitches per niche, keep client domains clean."
+        },
+        {
+          "h": "SaaS founders",
+          "p": "Find businesses that match your product profile. Approve every draft personally."
+        },
+        {
+          "h": "Local service marketers",
+          "p": "City-by-city OSM collection, by category. Manual approval per recipient."
+        },
+        {
+          "h": "B2B sales teams",
+          "p": "Per-rep tenants, per-tenant safety settings, audited approvals."
+        },
+        {
+          "h": "Freelancers",
+          "p": "Self-hosted, low overhead, transparent pipeline you fully control."
+        },
+        {
+          "h": "Startup outreach teams",
+          "p": "Per-tenant limits keep junior operators from burning sender reputation."
+        }
+      ]
+    },
+    "modules": {
+      "eyebrow": "Inside the platform",
+      "title": "Six modules. One review pipeline.",
+      "items": [
+        {
+          "h": "Lead Collector",
+          "p": "Find sources, dedupe, queue for analysis."
+        },
+        {
+          "h": "Website Analyzer",
+          "p": "Honest summary of each website with confidence score."
+        },
+        {
+          "h": "Outreach Draft Review",
+          "p": "Personalized drafts with audit trail. Manual approve / reject."
+        },
+        {
+          "h": "Branded Invite Links",
+          "p": "Suppression-aware short links with click tracking and tenant safety."
+        },
+        {
+          "h": "Safety Center",
+          "p": "Per-tenant kill switches, daily limits, risk events."
+        },
+        {
+          "h": "Admin / Tenant Controls",
+          "p": "Super-admin view of every tenant: SMTP, domains, sends, audit."
+        }
+      ]
+    },
+    "why": {
+      "eyebrow": "Why it's safer",
+      "title": "Different from generic outreach blasters.",
+      "items": [
+        "The Collector module never sends. By design — it has no SMTP code at all.",
+        "A review gate sits between discovery and any outgoing message.",
+        "Every lead carries the source URL it came from. You can defend the list.",
+        "Imported contacts land in 'pending'. They never auto-activate to 'subscribed'.",
+        "Suppression and unsubscribe events flip future links and sends off.",
+        "Sending requires a verified domain, ready SMTP, and an activated contact.",
+        "No uncontrolled bulk: per-tenant caps, per-day caps, scheduler back-pressure."
+      ]
+    },
+    "cta": {
+      "eyebrow": "Get started",
+      "title": "Build a cleaner outreach pipeline.",
+      "sub": "Open the operator console and explore the modules. Sending stays disabled until you decide otherwise.",
+      "primary": "Open dashboard",
+      "secondary": "Sign in"
+    },
+    "footer": {
+      "tagline": "Operator console for lead intelligence and reviewed outreach.",
+      "selfHosted": "Self-hosted. Tenant data stays on your server.",
+      "product": "Product",
+      "support": "Support",
+      "legal": "Legal",
+      "linkHowItWorks": "How it works",
+      "linkSafety": "Safety",
+      "linkLogin": "Sign in",
+      "linkDashboard": "Open dashboard",
+      "linkPrivacy": "Privacy",
+      "linkTerms": "Terms",
+      "linkContact": "Contact",
+      "copyright": "© 2026 Email Platform. All rights reserved."
+    },
+    "antiSpam": {
+      "eyebrow": "Anti-Spam Policy",
+      "title": "Spam is strictly prohibited.",
+      "sub": "This platform is built for legitimate B2B outreach only. Every send must go to a consented or niche-confirmed contact base.",
+      "rules": [
+        {
+          "h": "Own confirmed base only",
+          "p": "You may send only to your own opt-in contact base — people who gave you their email directly or through a confirmed sign-up."
+        },
+        {
+          "h": "Our niche-segmented base",
+          "p": "Alternatively, use our platform's verified B2B base: publicly listed business contacts from Google Maps and public directories, segmented by industry niche."
+        },
+        {
+          "h": "Niches, not spray-and-pray",
+          "p": "Our base is divided by industry: cleaning services, dental clinics, beauty salons, auto repair, legal, HVAC, real estate, and more. You target a niche — not a mailbox dump."
+        },
+        {
+          "h": "One-click permanent unsubscribe",
+          "p": "Every outgoing email carries an unsubscribe link. A click removes the contact globally — no re-adds, no workarounds, enforced at platform level."
+        },
+        {
+          "h": "No purchased or leaked lists",
+          "p": "Sending to purchased lists, leaked data dumps, private scraped data, or any non-public source is forbidden and will result in immediate account suspension."
+        },
+        {
+          "h": "Abuse = instant suspension",
+          "p": "Spam complaints, excessive bounces, or complaint rates above threshold automatically suspend the tenant. All outreach activity is audited."
+        }
+      ]
+    }
+  },
+  "public": {
+    "headline": "Lead collection, website analysis, and reviewed outreach drafts.",
+    "subhead": "An operator console for B2B lead intelligence. Discover public business contacts, analyze their websites, generate honest draft outreach — and review every message manually before any send.",
+    "bullet1": "No sending without manual approval.",
+    "bullet2": "Imported contacts arrive pending. They never auto-activate.",
+    "bullet3": "Suppression and unsubscribe enforced at every layer.",
+    "bullet4": "Per-tenant isolation. Per-tenant safety controls. Audited.",
+    "trust": "Self-hosted. Tenant data stays on your server.",
+    "cardTitle": "Sign in",
+    "cardHint": "Use your operator account.",
+    "loginHint": "Operator access only.",
+    "smallPrint": "By signing in you agree to the operator policy. Outreach must follow applicable laws and include a working unsubscribe."
+  },
+  "shell": {
+    "smtp": "SMTP",
+    "domains": "Verified domains",
+    "collector": "Active collectors",
+    "pendingDrafts": "Pending review",
+    "emailsSent": "Emails sent (today)",
+    "superAdmin": "super-admin"
+  },
+  "nav": {
+    "sectionWork": "Operations",
+    "sectionAdmin": "Administration",
+    "dashboard": "Dashboard",
+    "contacts": "Contacts",
+    "lists": "Lists",
+    "segments": "Segments",
+    "campaigns": "Campaigns",
+    "sendControl": "Send Control",
+    "automations": "Automations",
+    "domains": "Domains",
+    "forms": "Forms",
+    "leads": "Lead Discovery",
+    "collector": "Collector",
+    "invites": "Invite Links",
+    "outreach": "Outreach",
+    "billing": "Billing",
+    "settings": "Settings",
+    "admin": "Admin",
+    "themes": "Themes",
+    "adminTheme": "Theme Settings",
+    "warehouse": "Warehouse",
+    "setup": "Setup Center",
+    "stats": "Stats & Logs",
+    "onboarding": "Setup Wizard",
+    "manualOutreach": "Manual Outreach",
+    "senderStudio": "Sender Studio",
+    "mailboxes": "Mailboxes",
+    "smtpNodes": "SMTP Nodes",
+    "partnerOutreach": "Partner Outreach",
+    "goLive": "Go Live",
+    "guide": "Help / Guide",
+    "deliverability": "Deliverability"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Sign up",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full name",
+    "workspaceName": "Workspace name",
+    "submit": "Continue",
+    "forgotPassword": "Forgot password?",
+    "loginFailed": "Invalid email or password",
+    "registerFailed": "Sign up failed",
+    "languageLabel": "Language",
+    "networkError": "Network error, try again"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Operator overview. No sending is enabled.",
+    "stats": {
+      "contacts": "Contacts",
+      "pending": "pending",
+      "leadsThisMonth": "Leads this month",
+      "draftsPending": "Drafts pending review",
+      "collector": "Active collectors",
+      "domains": "Verified domains",
+      "inviteLinks": "Invite links",
+      "sending": "Sending",
+      "sentLast30d": "Sent (30d)",
+      "openRate": "Open rate",
+      "clickRate": "Click rate",
+      "bounceRate": "Bounce rate",
+      "unsubRate": "Unsubscribe rate"
+    },
+    "sendingDisabled": "Disabled",
+    "smtpUnknown": "Status unknown",
+    "openReview": "Open review",
+    "nextActions": "Next actions",
+    "todoVerifyDomain": "Add and verify a sending domain.",
+    "todoConfigureSmtp": "Configure SMTP and confirm readiness.",
+    "todoReviewDrafts": "Review pending outreach drafts.",
+    "todoActivatePending": "Activate or remove pending contacts.",
+    "activity": "Activity",
+    "domainsStatus": "Sending domains",
+    "recentCampaigns": "Campaigns on record",
+    "recentDrafts": "Outreach drafts",
+    "noCampaigns": "No campaigns yet.",
+    "noDrafts": "No drafts yet.",
+    "draftsTotal": "total",
+    "pendingReview": "pending review",
+    "smtpReady": "SMTP ready",
+    "warehouseCompanies": "Warehouse companies",
+    "warehouseEmails": "Warehouse emails",
+    "view": "View"
+  },
+  "domains": {
+    "title": "Sending domains",
+    "detectedTitle": "Domains used by mailboxes — not registered yet",
+    "detectedHint": "You have mailboxes on these domains, but the domains are not registered here (no DKIM/SPF/DMARC). Register the ones you own to enable verified sending.",
+    "detectedMailboxes": "Mailboxes",
+    "detectedActive": "active",
+    "detectedRegister": "Register domain",
+    "addDomain": "Add domain",
+    "domain": "Domain",
+    "type": "Type",
+    "status": "Status",
+    "verify": "Verify DNS",
+    "dnsRecords": "DNS records",
+    "dnsInstructions": "Add these records at your DNS provider, then click Verify.",
+    "statusPending": "Pending",
+    "statusVerified": "Verified",
+    "statusFailed": "Failed",
+    "statusWarning": "Partially configured",
+    "cannotSendUnverified": "Unverified domains cannot send campaigns.",
+    "lastVerifyDetail": "Last verification detail",
+    "errorMissingSpf": "SPF record missing or incorrect.",
+    "errorMissingDkim": "DKIM record missing or incorrect.",
+    "errorMissingDmarc": "DMARC record missing or incorrect.",
+    "errorMissingReturnPath": "Return-Path CNAME missing or incorrect.",
+    "tipPropagation": "DNS propagation can take a few minutes to a few hours. Re-run Verify after publishing records.",
+    "tipNoAutoChange": "We never edit your registrar or Cloudflare. Copy each record manually.",
+    "colPurpose": "Purpose",
+    "colType": "Type",
+    "colHost": "Host",
+    "colValue": "Value",
+    "colOk": "OK",
+    "colGot": "Got"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "addContact": "Add contact",
+    "import": "Import CSV",
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "tags": "Tags",
+    "status": "Status",
+    "subscribed": "Subscribed",
+    "unsubscribed": "Unsubscribed",
+    "bounced": "Bounced",
+    "complained": "Complained",
+    "all": "All",
+    "pending": "Pending"
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "create": "New campaign",
+    "name": "Name",
+    "subject": "Subject",
+    "sender": "Sender",
+    "list": "List",
+    "schedule": "Schedule",
+    "sendTest": "Send test",
+    "preview": "Preview",
+    "status": "Status",
+    "draft": "Draft",
+    "scheduled": "Scheduled",
+    "sending": "Sending",
+    "sent": "Sent",
+    "paused": "Paused",
+    "failed": "Failed",
+    "canceled": "Canceled",
+    "stats": "Stats",
+    "segmentDisabled": "Segment-based campaigns are temporarily disabled — the rule evaluator is not yet shipped. Use a list_id instead.",
+    "listRequired": "A target list is required. Segment scheduling is disabled.",
+    "createdAt": "Created",
+    "confirmComplianceFirst": "Confirm the compliance checkbox before building the list.",
+    "listCreatedAlert": "List created: {n} contacts imported ({b} blocked by suppression).",
+    "confirmCancel": "Cancel this campaign?",
+    "testQueued": "Test queued. Check your inbox.",
+    "errorPrefix": "Error: {m}",
+    "senderIdentity": "Sender identity",
+    "listFromWarehouse": "List from warehouse",
+    "smtpMailhogTitle": "SMTP: Mailhog (local test only)",
+    "smtpMailhogBody": "— Campaign scheduling is blocked. Configure a real SMTP provider in /setup to enable production sends. Test-sends to Mailhog still work.",
+    "smtpNotReadyTitle": "SMTP not ready: {s}",
+    "smtpNotReadyBody": "— Campaign scheduling is blocked. Check SMTP configuration in /setup.",
+    "createSenderIdentity": "Create sender identity",
+    "identityRequiresDomainPre": "Requires a verified sending domain. Add and verify a domain in ",
+    "domainsLink": "Domains",
+    "identityRequiresDomainPost": " first.",
+    "noVerifiedDomains": "No verified domains yet. Verify a domain first.",
+    "fromEmail": "From email",
+    "fromName": "From name",
+    "fromNamePlaceholder": "Your Name",
+    "domain": "Domain",
+    "selectVerifiedDomain": "Select verified domain…",
+    "verifiedLabel": "verified",
+    "replyToOptional": "Reply-to (optional)",
+    "createBtn": "Create",
+    "cancelBtn": "Cancel",
+    "buildListTitle": "Build recipient list from Warehouse",
+    "buildListDesc": "Contacts are imported as PENDING. All suppression, global do-not-contact, and bounce filters are applied automatically.",
+    "listNameLabel": "List name *",
+    "listNamePlaceholder": "e.g. UK Beauty Salons May 2026",
+    "industrySlug": "Industry slug",
+    "countryIso2": "Country (ISO2)",
+    "productFitKey": "Product fit key",
+    "contactType": "Contact type",
+    "minScoreLabel": "Min verification score (0–100)",
+    "minScorePlaceholder": "0 = any",
+    "previewCount": "Preview count",
+    "previewLabel": "Preview:",
+    "previewEligible": "{n} contacts eligible after filters —",
+    "previewWouldImport": "{n} would be imported (limit 500).",
+    "previewBlocked": "{n} blocked by suppression/status filters.",
+    "complianceConfirm": "I confirm these are appropriate public business contacts collected from publicly accessible sources. I have not purchased this data, and I will respect opt-outs and unsubscribe requests immediately.",
+    "buildListBtn": "Build list",
+    "newCampaign": "New campaign",
+    "noVerifiedIdentity": "No sender identity with verified domain. Create one above first.",
+    "noRecipientLists": "No recipient lists yet. Build one from Warehouse above.",
+    "campaignNameLabel": "Campaign name *",
+    "subjectLineLabel": "Subject line *",
+    "senderIdentityLabel": "Sender identity *",
+    "selectEllipsis": "Select…",
+    "unverifiedSuffix": "(unverified)",
+    "recipientListLabel": "Recipient list *",
+    "selectList": "Select list…",
+    "contactsCount": "{n} contacts",
+    "pendingContactsNote": "Pending contacts will not receive campaigns until manually activated in Contacts.",
+    "preheaderOptional": "Preheader (optional)",
+    "htmlBodyLabel": "HTML body *",
+    "htmlBodyPlaceholder": "<p>Dear business owner,</p>\n<p>Your message here.</p>\n<p><a href=\"{{unsubscribe_url}}\">Unsubscribe</a></p>",
+    "unsubscribeHintPre": "Use ",
+    "unsubscribeHintPost": " for the opt-out link. Required for compliance.",
+    "createCampaignBtn": "Create campaign",
+    "senderIdentitiesHeading": "Sender identities",
+    "noneYet": "None yet.",
+    "recipientListsHeading": "Recipient lists",
+    "contactsWord": "contacts",
+    "noneYetBuildWarehouse": "None yet. Build from Warehouse.",
+    "testSendHeading": "Test send — campaign #{n}",
+    "mailhogModeTitle": "Mailhog mode:",
+    "mailhogModeBody": "Email goes to local Mailhog inbox only — not delivered externally. Check Mailhog at port :8025.",
+    "realSmtpTitle": "Real SMTP:",
+    "realSmtpBody": "Email will be sent to the address below via your configured provider.",
+    "testRequiresSmtp": "Requires verified domain + SMTP configured. Sends to one address only.",
+    "close": "Close",
+    "col": {
+      "name": "Name",
+      "subject": "Subject",
+      "statusCol": "Status",
+      "recipients": "Recipients",
+      "sentCol": "Sent",
+      "open": "Open",
+      "click": "Click",
+      "bounce": "Bounce",
+      "actions": "Actions"
+    },
+    "smtpNotReadyTooltip": "SMTP not ready: {s}",
+    "scheduleNow": "Schedule now",
+    "test": "Test",
+    "pause": "Pause",
+    "resume": "Resume",
+    "noCampaignsYet": "No campaigns yet."
+  },
+  "billing": {
+    "title": "Billing",
+    "plan": "Plan",
+    "status": "Status",
+    "invoices": "Invoices",
+    "upgrade": "Upgrade",
+    "manualInstructions": "Manual payment: contact admin with the invoice number to confirm payment. Access activates once admin marks it paid.",
+    "trialEnds": "Trial ends",
+    "suspendedNotice": "Your workspace is suspended. Live sending is disabled.",
+    "table": {
+      "code": "code",
+      "name": "name",
+      "price": "price",
+      "contacts": "contacts",
+      "sendsMonth": "sends/mo",
+      "domains": "domains",
+      "number": "number",
+      "amount": "amount",
+      "issued": "issued"
+    }
+  },
+  "leads": {
+    "title": "Lead Discovery",
+    "subtitle": "Collect publicly listed business contacts from websites you control or have permission to crawl.",
+    "complianceWarning": "Outreach to discovered contacts must follow applicable laws (GDPR, CAN-SPAM, etc.) and must include a working unsubscribe. Imported contacts arrive PENDING and cannot be mass-sent until you explicitly activate them.",
+    "limits": {
+      "title": "Plan limits this month",
+      "leadsDiscovered": "Leads discovered",
+      "sourcesAdded": "Sources added",
+      "verifications": "Verifications",
+      "exports": "Exports to contacts",
+      "exportAllowed": "Export to contacts",
+      "exportAllowedYes": "Allowed",
+      "exportAllowedNo": "Not allowed on this plan",
+      "disabledNotice": "Lead Discovery is not enabled for this workspace. Contact your administrator."
+    },
+    "sources": {
+      "title": "Source websites",
+      "add": "Add source",
+      "url": "URL",
+      "domain": "Domain",
+      "label": "Label",
+      "status": "Status",
+      "lastCrawled": "Last crawled",
+      "robots": "robots.txt",
+      "remove": "Remove",
+      "addHint": "Provide a public URL. The crawler honors robots.txt and uses a polite rate limit.",
+      "statusActive": "Active",
+      "statusPaused": "Paused",
+      "statusBlocked": "Blocked",
+      "statusRemoved": "Removed",
+      "empty": "No sources yet. Add a website you have permission to crawl."
+    },
+    "jobs": {
+      "title": "Discovery jobs",
+      "run": "Run discovery",
+      "maxPages": "Max pages",
+      "status": "Status",
+      "pagesFetched": "Pages",
+      "leadsFound": "Leads found",
+      "leadsNew": "New leads",
+      "started": "Started",
+      "finished": "Finished",
+      "cancel": "Cancel",
+      "empty": "No discovery jobs yet.",
+      "statusQueued": "Queued",
+      "statusRunning": "Running",
+      "statusSucceeded": "Succeeded",
+      "statusFailed": "Failed",
+      "statusCanceled": "Canceled",
+      "statusSkippedRobots": "Skipped — robots.txt disallow",
+      "statusRateLimited": "Rate limited"
+    },
+    "list": {
+      "title": "Discovered leads",
+      "email": "Email",
+      "company": "Company",
+      "role": "Role",
+      "status": "Status",
+      "score": "Score",
+      "sourceUrl": "Source URL",
+      "pageTitle": "Page title",
+      "snippet": "Context",
+      "discoveredAt": "Discovered",
+      "verify": "Verify selected",
+      "importToContacts": "Import to contacts",
+      "filterStatus": "Filter by status",
+      "empty": "No leads discovered yet."
+    },
+    "leadStatus": {
+      "discovered": "Discovered",
+      "verified": "Verified",
+      "invalid": "Invalid",
+      "risky": "Risky",
+      "duplicate": "Duplicate",
+      "suppressed": "Suppressed",
+      "unsubscribed": "Unsubscribed",
+      "imported": "Imported"
+    },
+    "import": {
+      "title": "Import to contacts",
+      "selectList": "Target list (optional)",
+      "requireVerified": "Only import verified leads",
+      "submit": "Import",
+      "success": "Imported {count} contacts in PENDING status. Activate them before sending.",
+      "pendingNotice": "Imported contacts are PENDING. They will NOT be included in mass sends until you confirm and activate them in Contacts.",
+      "activate": "Activate pending contacts",
+      "activateConfirm": "I confirm these contacts have a lawful basis to be contacted and I will include an unsubscribe link.",
+      "activated": "Activated {count} contacts."
+    }
+  },
+  "themes": {
+    "nav": "Themes",
+    "eyebrow": "Theme gallery",
+    "title": "Pick a visual style for your operator console.",
+    "sub": "Preview any theme. Apply one for yourself, or reset to the site default.",
+    "activeChip": "Active",
+    "globalDefaultChip": "Site default",
+    "reset": "Reset to site default",
+    "preview": "Preview",
+    "useThis": "Use this theme",
+    "topNavLabel": "Top",
+    "brand": "Email Platform",
+    "galleryHeading": "Theme Gallery"
+  },
+  "admin": {
+    "title": "Super-admin",
+    "subtitle": "Tenant management. Activate, suspend, toggle modules per workspace.",
+    "smtp": {
+      "title": "SMTP readiness",
+      "configured": "Configured",
+      "notConfigured": "SMTP is not configured — no live emails will be sent.",
+      "notReachable": "SMTP host is not reachable from the worker network.",
+      "postalPlaceholder": "SMTP_HOST is set to the 'postal' service but the postal profile is not running. Either start postal (docker compose --profile smtp up -d postal) or replace SMTP_HOST with an external relay.",
+      "ready": "SMTP ready for send",
+      "host": "Host",
+      "port": "Port",
+      "from": "From",
+      "userSet": "User credential",
+      "reachable": "Reachable",
+      "warnings": "Warnings"
+    },
+    "createTenant": {
+      "title": "Create tenant",
+      "name": "Workspace name",
+      "ownerEmail": "Owner email (must be an existing user)",
+      "plan": "Plan",
+      "locale": "Default locale",
+      "submit": "Create",
+      "hint": "Owner user must already exist. If not, register first via /register or seed via CLI."
+    },
+    "themePage": {
+      "title": "Theme",
+      "subtitle": "Set the global default. Set your personal override. Preview before applying.",
+      "active": "Active",
+      "globalDefault": "Global default",
+      "userOverride": "Your override",
+      "useSiteDefault": "Use site default",
+      "useForMe": "Use for me",
+      "makeDefault": "Make site default",
+      "currentDefault": "Current site default",
+      "gallery": "Theme gallery",
+      "authRequired": "Auth required",
+      "userOverrideSaved": "User override saved.",
+      "revertedToDefault": "Reverted to site default.",
+      "globalDefaultSet": "Global default → {name}",
+      "failed": "Failed: {msg}",
+      "ratingAA": "AA",
+      "ratingLow": "low"
+    },
+    "tenants": {
+      "title": "Tenants",
+      "name": "Name",
+      "slug": "Slug",
+      "status": "Status",
+      "locale": "Locale",
+      "actions": "Actions",
+      "view": "View",
+      "activate": "Activate",
+      "suspend": "Suspend",
+      "leadsOn": "Leads ON",
+      "leadsOff": "Leads OFF",
+      "empty": "No tenants yet."
+    },
+    "domain": {
+      "title": "Domain Strategy — emails.cheap",
+      "registered": "registered",
+      "pending": "pending",
+      "planned": "planned",
+      "rootDesc": "public landing / future SaaS domain",
+      "mailDesc": "sending subdomain (DNS not yet added)",
+      "goDesc": "branded invite/tracking links",
+      "bounceDesc": "Return-Path / bounce handling",
+      "recommended": "Recommended",
+      "recommendBody": "Use mail.emails.cheap for controlled testing. Do not use root domain for cold sending. email.clients.help reputation stays isolated. Sending remains blocked until SPF/DKIM/DMARC + SMTP ready. Test limits: 5 emails/hour, 20 emails/day, manual approval required.",
+      "setupCenter": "Setup Center"
+    }
+  },
+  "collector": {
+    "title": "Collector Mode",
+    "subtitle": "Continuously accumulate public business leads while sending stays disabled. No emails are ever sent from the collector.",
+    "safetyBanner": "Collector-only. No campaign sending. No auto-send. Imported contacts arrive pending and require manual approval before any send.",
+    "status": "Status",
+    "disabled": "Collector Mode is not enabled for this workspace. Ask your administrator to enable it.",
+    "createCampaign": "Create collector campaign",
+    "name": "Campaign name",
+    "mode": "Mode",
+    "modeManual": "Paste URLs",
+    "modeCsv": "CSV import",
+    "modeSearch": "Search provider",
+    "modeMixed": "Mixed",
+    "productProfile": "Product profile",
+    "presets": "Targeting presets",
+    "keywords": "Keywords (one per line)",
+    "countries": "Countries (comma-separated)",
+    "languages": "Languages (comma-separated)",
+    "maxSourcesTotal": "Max sources total",
+    "maxSourcesPerDay": "Max sources per day",
+    "maxPagesPerSource": "Max pages per source (cap 20)",
+    "crawlDelaySeconds": "Crawl delay (seconds)",
+    "analyzeWebsite": "Analyze website after discovery",
+    "generateDraft": "Generate outreach draft after analysis",
+    "save": "Save",
+    "campaigns": "Collector campaigns",
+    "start": "Start",
+    "pause": "Pause",
+    "view": "View",
+    "empty": "No collector campaigns yet.",
+    "statusDraft": "Draft",
+    "statusActive": "Active",
+    "statusPaused": "Paused",
+    "statusCompleted": "Completed",
+    "bulkImport": {
+      "title": "Bulk URL / domain import",
+      "paste": "Paste URLs or domains, one per line",
+      "submit": "Import",
+      "csv": "Upload CSV (URLs in any column)",
+      "csvHint": "Up to 5000 lines. Mixed columns are supported.",
+      "summary": "Import summary",
+      "accepted": "Accepted",
+      "duplicates": "Duplicates (already added)",
+      "invalid": "Invalid",
+      "blocked": "Blocked",
+      "queued": "Queued"
+    },
+    "freeSources": {
+      "title": "Free sources — OpenStreetMap",
+      "subtitle": "Find businesses by category and city using public OpenStreetMap data. No credits required. Polite usage: one request per ~6 s, results cached for 5 minutes.",
+      "fallbackNote": "Free fallback while paid search providers are unavailable or out of credits.",
+      "providerReady": "OSM Overpass: ready",
+      "providerRateLimited": "OSM Overpass: rate limited — try again later",
+      "providerError": "OSM Overpass returned an error.",
+      "category": "Category",
+      "country": "Country (ISO code, e.g. UA)",
+      "city": "City",
+      "maxResults": "Max results",
+      "onlyWithWebsite": "Only with website",
+      "preview": "Preview",
+      "import": "Import selected",
+      "importAllAccepted": "Import all accepted",
+      "found": "Found",
+      "withWebsite": "With website",
+      "accepted": "Accepted",
+      "duplicates": "Duplicates",
+      "selectAll": "Select all accepted",
+      "rateLimitWarning": "Overpass is rate-limited globally. If a query 429s, wait a minute before retrying.",
+      "legalNotice": "OSM data is from public records. Only public business contacts are stored. No personal/private profiles."
+    },
+    "search": {
+      "title": "Search provider import",
+      "providerNotConfigured": "Search provider is not configured. CSV and paste import still work.",
+      "providerReady": "Search provider ready",
+      "providerCreditsExhausted": "Search credits appear exhausted for this period. CSV and paste import still work.",
+      "providerError": "Search provider returned an error. Try again later or use CSV/paste import.",
+      "providerDisabled": "Search provider disabled.",
+      "creditsUsed": "Credits used",
+      "creditsLimit": "Credits limit",
+      "dailyCredits": "Daily credits",
+      "monthlyCredits": "Monthly credits",
+      "query": "Custom query (optional — uses preset queries if blank)",
+      "country": "Country code (optional)",
+      "language": "Language code (optional)",
+      "maxResults": "Max results",
+      "preview": "Preview",
+      "import": "Import selected",
+      "importAllAccepted": "Import all accepted",
+      "found": "Found",
+      "accepted": "Accepted",
+      "duplicates": "Duplicates",
+      "selectAll": "Select all",
+      "legalNotice": "Only public business websites. No automatic sending. Imported items become pending sources — review and start the collector manually.",
+      "history": "Search runs history",
+      "noHistory": "No search runs yet."
+    },
+    "stats": {
+      "title": "Activity",
+      "todayDate": "Today",
+      "leadsCollected": "Leads collected",
+      "websitesAnalyzed": "Websites analyzed",
+      "draftsGenerated": "Drafts generated",
+      "sourcesAdded": "Sources added",
+      "sourcesCrawled": "Sources crawled"
+    },
+    "noSendingNotice": "Reminder: this module does not send emails. To send, configure SMTP, verify a sending domain, approve a draft manually, then move pending contacts to subscribed.",
+    "agent": {
+      "title": "Collection Agent",
+      "running": "running",
+      "paused": "paused",
+      "pausedGlobal": "paused (global)",
+      "lastActivity": "last activity",
+      "sourcesFoundToday": "Sources found today",
+      "leadsFoundToday": "Leads found today",
+      "newLeadsToday": "New leads today",
+      "websitesAnalyzed": "Websites analyzed",
+      "queuePending": "Queue pending",
+      "queueRunning": "Queue running",
+      "errors24h": "Errors (24h)",
+      "activeCampaigns": "Active campaigns",
+      "day": "day",
+      "month": "mo",
+      "notConfigured": "not configured",
+      "free": "free",
+      "lastError": "last error",
+      "cooldownCities": "Cooldown cities"
+    },
+    "safetyLimits": {
+      "title": "Collector Safety Limits",
+      "globalEnabled": "Global collector enabled",
+      "globalPaused": "Global paused",
+      "maxSourcesPerDayTenant": "Max sources/day (tenant)",
+      "maxLeadsPerDayTenant": "Max leads/day (tenant)",
+      "maxPagesPerSourceTenant": "Max pages/source (tenant)",
+      "yes": "yes",
+      "no": "no",
+      "paused": "paused",
+      "running": "running",
+      "unlimited": "unlimited",
+      "unlimitedDetected": "Unlimited campaign detected",
+      "unlimitedDetail": "has max_sources_per_day ≥ 500,000 (effectively unlimited).",
+      "unlimitedAdvice": "Consider pausing or setting a finite daily cap to prevent uncontrolled database growth.",
+      "changeLimits1": "To change tenant limits: edit",
+      "changeLimits2": "in the database or through the Admin panel. New campaigns you create below will have their own per-campaign max_sources_per_day cap."
+    },
+    "table": {
+      "id": "ID",
+      "url": "URL",
+      "name": "name",
+      "website": "website",
+      "category": "category",
+      "city": "city",
+      "dup": "dup",
+      "date": "date"
+    }
+  },
+  "invites": {
+    "title": "Invite Links",
+    "subtitle": "Branded short links with per-lead attribution. No emails are sent from this module.",
+    "safetyBanner": "Honest use only. Links automatically deactivate when the recipient is suppressed, unsubscribed, or the tenant is suspended.",
+    "create": "Create invite link",
+    "destinationUrl": "Destination URL",
+    "landingMode": "Landing mode",
+    "modeRedirect": "Redirect",
+    "modePersonalPage": "Personal landing page",
+    "trackingDomain": "Tracking domain (optional)",
+    "noTrackingDomain": "Platform default (no custom domain)",
+    "expiresAt": "Expires at (optional)",
+    "save": "Create",
+    "list": "Existing links",
+    "publicUrl": "Public URL",
+    "fallbackUrl": "Fallback URL",
+    "status": "Status",
+    "clicks": "Clicks",
+    "lastClick": "Last click",
+    "createdAt": "Created",
+    "pause": "Pause",
+    "resume": "Resume",
+    "copy": "Copy",
+    "copied": "Copied",
+    "empty": "No invite links yet.",
+    "statusActive": "Active",
+    "statusPaused": "Paused",
+    "statusExpired": "Expired",
+    "statusDisabled": "Disabled",
+    "statusUnsubscribed": "Unsubscribed",
+    "statusSuppressed": "Suppressed",
+    "placeholderHint": "Use {{invite_link}} inside the draft body to insert this link automatically.",
+    "clicksLog": "Recent clicks",
+    "country": "Country",
+    "noClicksYet": "No clicks recorded yet.",
+    "disabledNotice": "Invite Links are not enabled for this workspace. Ask your administrator.",
+    "trackingDomains": {
+      "title": "Tracking domains",
+      "subtitle": "Custom subdomains (e.g. go.your-domain.com) need a CNAME pointing to the platform tracking host. Custom domains must be enabled by an administrator.",
+      "add": "Add tracking domain",
+      "domain": "Domain",
+      "status": "Status",
+      "verify": "Verify CNAME",
+      "disable": "Disable",
+      "dnsHint": "Add a CNAME record from your domain to the platform tracking host. We never edit your DNS automatically.",
+      "empty": "No tracking domains yet.",
+      "notAllowed": "Custom tracking domains are not enabled for this workspace."
+    },
+    "when": "When",
+    "referrer": "Referrer"
+  },
+  "outreach": {
+    "title": "Outreach",
+    "subtitle": "Analyze a target website, generate a personalized draft, and approve it manually before any send.",
+    "honestyBanner": "Honesty rules: only facts from the website are used; no fake conversations, no false claims, no auto-send. Manual review is required before any email is sent.",
+    "productProfile": {
+      "title": "Product profile",
+      "name": "Product/service name",
+      "url": "Website",
+      "description": "Short description",
+      "targetCustomer": "Target customer",
+      "keyBenefits": "Key benefits (one per line)",
+      "allowedClaims": "Allowed claims (one per line)",
+      "forbiddenClaims": "Forbidden claims (one per line)",
+      "preferredTone": "Preferred tone",
+      "defaultLanguage": "Default language",
+      "save": "Save profile",
+      "create": "Create new profile",
+      "empty": "No product profile yet. Define what you are promoting before generating outreach.",
+      "select": "Active product profile"
+    },
+    "tone": {
+      "neutral": "Neutral",
+      "friendly": "Friendly",
+      "professional": "Professional",
+      "short_direct": "Short / direct"
+    },
+    "analysis": {
+      "title": "Website analysis",
+      "addTarget": "Add target website",
+      "targetUrl": "Target URL",
+      "language": "Output language",
+      "run": "Run analysis",
+      "jobsTitle": "Analysis jobs",
+      "status": "Status",
+      "pagesFetched": "Pages fetched",
+      "started": "Started",
+      "finished": "Finished",
+      "viewResult": "View result",
+      "empty": "No analysis runs yet."
+    },
+    "result": {
+      "title": "Analysis summary",
+      "companyName": "Company / site",
+      "industry": "Industry",
+      "businessType": "Business type",
+      "offering": "Apparent offering",
+      "painPoints": "Possible pain points",
+      "relevanceReason": "Why this may be relevant",
+      "relevanceWarning": "Relevance warning",
+      "confidence": "Confidence",
+      "sourceUrls": "Source URLs analyzed",
+      "contactEmails": "Public contact emails",
+      "generate": "Generate outreach draft"
+    },
+    "drafts": {
+      "title": "Outreach drafts",
+      "create": "Generate draft",
+      "subject": "Subject",
+      "status": "Status",
+      "confidence": "Confidence",
+      "language": "Language",
+      "tone": "Tone",
+      "createdAt": "Created",
+      "empty": "No drafts yet.",
+      "open": "Open",
+      "statusDraft": "Draft",
+      "statusPendingReview": "Pending review",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "statusSentTest": "Test sent",
+      "statusQueued": "Queued",
+      "statusSent": "Sent",
+      "id": "ID"
+    },
+    "editor": {
+      "title": "Edit draft",
+      "subjectOptions": "Subject line options (one per line)",
+      "emailShort": "Short version",
+      "emailLong": "Long version",
+      "followUp": "Follow-up (optional)",
+      "personalizationPoints": "Facts cited",
+      "risks": "Risks / uncertainties",
+      "history": "History",
+      "save": "Save changes",
+      "approve": "Approve",
+      "reject": "Reject",
+      "rejectReason": "Reason for rejection",
+      "sendTest": "Send test email",
+      "sendTestTo": "Test recipient email",
+      "confirmCompliance": "I confirm this message is honest, includes a clear unsubscribe path on send, and has a lawful basis to contact the recipient.",
+      "approvedAt": "Approved at",
+      "rejectedAt": "Rejected at",
+      "approvalRequired": "Approval is required before any send. Auto-send is disabled by default.",
+      "lowConfidence": "Low confidence signal — review carefully or do not send."
+    },
+    "errProductProfileRequired": "A product profile is required first.",
+    "errComplianceRequired": "Please confirm compliance before approving."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading…",
+    "yes": "Yes",
+    "no": "No",
+    "error": "Something went wrong",
+    "tryAgain": "Try again"
+  },
+  "warehouse": {
+    "title": "Lead Warehouse",
+    "subtitle": "Permanent B2B lead intelligence database. Companies, contacts, industries, and product fit.",
+    "rebuild": "Rebuild from existing data",
+    "safetyNotice": "Warehouse stores lead intelligence and contact preferences. Global unsubscribe/do-not-contact blocks all outreach. Offer-level rejection only blocks that product/topic.",
+    "tab": {
+      "companies": "Companies",
+      "contacts": "Contacts",
+      "stats": "Stats",
+      "leadSearch": "Lead Search",
+      "reviewQueue": "Review Queue",
+      "analytics": "Analytics",
+      "sequences": "Sequences"
+    },
+    "stat": {
+      "companies": "Companies",
+      "websites": "Websites",
+      "contacts": "Contact Points",
+      "emails": "Emails",
+      "suppressed": "Global Suppressions",
+      "industries": "Industry Entries",
+      "productFits": "Product Fits Scored"
+    },
+    "industryTree": "Industry Taxonomy",
+    "filter": {
+      "search": "Search domain or name…",
+      "allIndustries": "All industries",
+      "allTypes": "All types",
+      "allStatuses": "All statuses",
+      "country": "CC",
+      "apply": "Apply"
+    },
+    "col": {
+      "domain": "Domain",
+      "name": "Name",
+      "location": "Location",
+      "industry": "Industry",
+      "contacts": "Contacts",
+      "fit": "Product Fit",
+      "status": "Status",
+      "lastSeen": "Last seen",
+      "contact": "Contact",
+      "company": "Company",
+      "role": "Role",
+      "score": "Score",
+      "firstSeen": "First seen",
+      "sourceUrl": "Source URL",
+      "actions": "Actions",
+      "email": "Email",
+      "fitShort": "Fit",
+      "why": "Why"
+    },
+    "total": "records",
+    "page": "Page",
+    "empty": "No records found.",
+    "setPref": "Set preference",
+    "prefModal": {
+      "title": "Set contact preference",
+      "product": "Product",
+      "status": "Preference status"
+    },
+    "pref": {
+      "unknown": "Unknown",
+      "interested": "Interested",
+      "notInterested": "Not interested in this offer",
+      "maybeLater": "Maybe later",
+      "rejectedOffer": "Rejected offer",
+      "customer": "Customer"
+    },
+    "globalStatus": {
+      "doNotContact": "Do not contact",
+      "suppressed": "Suppressed",
+      "unsubscribed": "Unsubscribed",
+      "bounced": "Bounced",
+      "complained": "Complained",
+      "legalDeleted": "Legal delete requested"
+    },
+    "website": "website",
+    "viewCards": "Cards",
+    "viewTable": "Table",
+    "started": "Started",
+    "globallySuppressed": "globally suppressed",
+    "notTracked": "not tracked",
+    "zeroBudgetPre": "Zero-budget path: build a tiny cohort and contact one-by-one via ",
+    "zeroBudgetLink": "Manual Outreach (Zoho bridge)",
+    "zeroBudgetPost": " — copy/paste works without any credentials.",
+    "search": {
+      "heading": "Who are you looking for?",
+      "placeholder": "e.g. dental clinics in Warsaw without live chat",
+      "button": "Search",
+      "understoodAs": "Understood as:",
+      "matches": "{n} matches",
+      "intro": "Describe your ideal company in plain language. Parsed locally — no data leaves the platform."
+    },
+    "example": {
+      "cleaning": "cleaning companies in London with website and public email",
+      "dental": "dental clinics in Warsaw without live chat",
+      "webAgencies": "web agencies in UK with contact form",
+      "beauty": "beauty salons in Poland without online booking"
+    },
+    "review": {
+      "triageNotice": "Triage surface only. Nothing here sends, activates, or approves automatically.",
+      "companiesReady": "Companies ready",
+      "draftsToReview": "Drafts to review",
+      "contactsToActivate": "Contacts to activate",
+      "highFitHeading": "High-fit companies ready for review"
+    },
+    "sequences": {
+      "previewNotice": "Preview only. Sequences are NOT armed — no email is sent or scheduled from this screen.",
+      "day0": "Day 0",
+      "day3": "Day 3",
+      "day7": "Day 7",
+      "step1": "First touch",
+      "step2": "Follow-up 1",
+      "step3": "Follow-up 2",
+      "step4": "Not interested",
+      "step5": "Reply / manual stop",
+      "desc1": "Soft, informational opener referencing one website fact. No promises.",
+      "desc2": "Gentle reminder. One sentence of new value. Easy opt-out.",
+      "desc3": "Final touch. \"I'll close the loop unless this is useful.\"",
+      "desc4": "Auto-tag contact preference = not_interested. Suppress from future touches.",
+      "desc5": "Any reply halts the sequence. Operator handles manually."
+    },
+    "drawer": {
+      "whyMatch": "Why this company is a match",
+      "safetyStatus": "Safety status",
+      "sendable": "Sendable:",
+      "suppressedContacts": "Suppressed contacts:",
+      "contacts": "Contacts",
+      "noContacts": "No contacts.",
+      "industries": "Industries",
+      "productFit": "Product fit",
+      "notScored": "Not scored.",
+      "websites": "Websites",
+      "drafts": "Drafts",
+      "sourceHistory": "Source history",
+      "noEvents": "No events.",
+      "notes": "Notes",
+      "addNotePlaceholder": "Add a note…",
+      "add": "Add"
+    },
+    "loadError": "Could not load data — check your connection or sign in again."
+  },
+  "setup": {
+    "title": "Setup Center",
+    "subtitle": "Configure domain, SMTP, and sending readiness.",
+    "zoho": {
+      "title": "Zero-budget: Zoho manual bridge",
+      "bodyBefore": "No ESP budget yet? Use the",
+      "linkText": "Manual Outreach",
+      "bodyMid": "tab. Set",
+      "bodyIn": "in",
+      "bodyAfter": "(values never shown in UI), or skip credentials and copy/paste drafts into Zoho webmail. Start at 5/day, one at a time."
+    },
+    "strategy": {
+      "title": "Domain Strategy — emails.cheap",
+      "statusRegistered": "Registered",
+      "statusVerified": "Verified",
+      "statusPending": "Pending",
+      "statusPlanned": "Planned",
+      "row1": "emails.cheap registered as SaaS/marketing domain",
+      "row2": "mail.emails.cheap — sending subdomain ({detail})",
+      "row2Verified": "SPF/DKIM/DMARC verified",
+      "row2Pending": "DNS pending",
+      "row3": "go.emails.cheap — branded invite/tracking links",
+      "row4": "bounce.emails.cheap — Return-Path bounce handling",
+      "row5": "app.emails.cheap — future app alias",
+      "isolationTitle": "Reputation isolation:",
+      "isolationBody": "email.clients.help remains the trusted main brand. emails.cheap is isolated for controlled testing only. New domains need careful ramp-up — 5 emails/hour, 20/day limit enforced. Do not rotate domains to bypass filters. Use correct SPF/DKIM/DMARC + transparent sender identity. First-touch emails should not include tracking links."
+    },
+    "gates": {
+      "title": "Sending Readiness Gates",
+      "readyCount": "{done}/{total} ready",
+      "verifiedDomain": "Verified sending domain (mail.emails.cheap)",
+      "smtpProvider": "SMTP: production provider configured (not Mailhog)",
+      "currentState": "Current: {state}",
+      "senderIdentity": "Sender identity with verified domain",
+      "subscribedContacts": "Subscribed contacts (or approved warehouse import)",
+      "approvedDraft": "At least one approved outreach draft",
+      "blockedNote": "All 5 gates must be open before any campaign can send. Sending remains fully blocked until then."
+    },
+    "domains": {
+      "title": "Sending Domains",
+      "empty": "No domains added yet.",
+      "addLink": "Add a domain →",
+      "colDomain": "Domain",
+      "colStatus": "Status",
+      "colDailyLimit": "Daily limit",
+      "perDay": "{limit}/day",
+      "dnsRecords": "DNS records",
+      "verify": "Verify",
+      "dnsHint": "Add these DNS records at your registrar/Cloudflare. Verification usually takes 5–60 minutes.",
+      "colPurpose": "Purpose",
+      "colType": "Type",
+      "colHost": "Host",
+      "colValue": "Value",
+      "manageLink": "Manage domains →"
+    },
+    "smtp": {
+      "title": "SMTP Status",
+      "badgeReady": "SMTP ready — production sends enabled",
+      "badgeMailhog": "Mailhog (local test only) — real campaigns blocked",
+      "badgeNotConfigured": "Not configured — set SMTP_HOST + SMTP_FROM_ADDRESS",
+      "badgeAuthFailed": "Auth failed — check SMTP_USER / SMTP_PASSWORD",
+      "mailhogTitle": "Mailhog mode:",
+      "mailhogBodyBefore": "All test sends go to Mailhog at",
+      "mailhogBodyAfter": "No real emails are sent. To enable production sending, replace SMTP_HOST in .env with a real provider and restart the API container.",
+      "rowState": "State",
+      "rowHost": "Host",
+      "rowPort": "Port",
+      "rowFromAddress": "From address",
+      "rowAuthSet": "Auth set",
+      "rowReachable": "Reachable",
+      "loading": "Loading… (super admin required)"
+    },
+    "provider": {
+      "title": "Configure Production SMTP",
+      "editBefore": "Edit",
+      "editMid": "then run",
+      "brevo": "Brevo (recommended first — low-volume B2B outreach)",
+      "smtp2go": "SMTP2GO (fallback)",
+      "mailgun": "Mailgun (possible)",
+      "ses": "Amazon SES (later, higher volume)",
+      "postmark": "Postmark (NOT recommended for cold outreach)",
+      "afterBefore": "After updating .env: verify SMTP state above shows",
+      "afterAfter": "before scheduling campaigns. Test-send to your own address first."
+    },
+    "steps": {
+      "title": "Steps to First Test Send",
+      "stepLabel": "Step {n}:",
+      "s1": "DNS records for mail.emails.cheap: SPF, DKIM, DMARC, bounce CNAME — all pass ✓",
+      "s2": "Domain mail.emails.cheap verified in /domains ✓",
+      "s3": "Configure SMTP provider in /opt/email/.env (see Owner Checklist above)",
+      "s4": "Restart: docker compose up -d --build api worker",
+      "s5": "Reload /setup — SMTP Status must show \"ready\"",
+      "s6": "Sender identity outreach@mail.emails.cheap exists ✓",
+      "s7": "Use \"First Real Test Email\" panel above — send to your own address only",
+      "s8": "Confirm email arrives in inbox. Check headers: DKIM pass, SPF pass, not spam",
+      "s9": "Review and approve outreach drafts in /outreach before any campaign",
+      "s10": "Create first campaign: limit 5/hour, 20/day — monitor bounce rate (block if >2%)"
+    },
+    "checklist": {
+      "title": "Owner Checklist — Enable Production SMTP",
+      "introBefore": "Complete these steps in order. Do not skip step 3 — real sends stay blocked until SMTP state =",
+      "introAfter": ".",
+      "stepLabel": "Step {n}:",
+      "c1": "Choose an SMTP provider: Brevo (recommended first), SMTP2GO (fallback), Mailgun, or SES later. Postmark is NOT recommended for cold outreach.",
+      "c2": "Get SMTP credentials from your provider (API token or SMTP password).",
+      "c3Before": "Update",
+      "c3After": "— see exact template below.",
+      "c4Before": "Restart API + worker:",
+      "c5": "Reload /setup — SMTP Status must show \"ready\". If not, check warnings.",
+      "c6": "Use \"First Real Test Email\" panel below — send to your own address only.",
+      "c7": "Confirm email arrives in your inbox (not spam). Check headers: DKIM pass, SPF pass.",
+      "c8": "Only after test passes: proceed to campaigns with 5/hour, 20/day limits.",
+      "envTemplateLabel": ".env template (replace placeholder values):",
+      "fallbackNote": "Fallback SMTP2GO: SMTP_HOST=mail.smtp2go.com · For Mailgun: smtp.mailgun.org · For SES: email-smtp.us-east-1.amazonaws.com · Postmark is NOT recommended for cold outreach."
+    },
+    "test": {
+      "title": "First Real Test Email",
+      "intro": "Send exactly one plain-text email to your own address. All gates must pass. No tracking links, no attachments. Opt-out notice included. Logs the event. Cannot expand to a list.",
+      "gateSmtpReady": "SMTP state = ready",
+      "gateDomainVerified": "Verified sending domain",
+      "gateIdentityExists": "Sender identity exists",
+      "gateRecipient": "Recipient email entered",
+      "noteLoading": "loading…",
+      "noteNone": "none",
+      "placeholder": "your@email.com",
+      "sending": "Sending…",
+      "sendButton": "Send one test email",
+      "configureFirst": "Configure production SMTP first (see checklist above)",
+      "sentMsg": "Sent! Message-ID: {id} · From: {from} · Domain: {domain}",
+      "failedMsg": "Failed: {err}"
+    },
+    "abuse": {
+      "title": "Anti-Abuse Constraints (always enforced)",
+      "r1": "No send to global suppression list",
+      "r2": "No send to unsubscribed contacts",
+      "r3": "No send to bounced or complained contacts",
+      "r4": "No send to do_not_contact contacts",
+      "r5": "No send to contacts marked not_interested for selected product",
+      "r6": "No send without opt-out text in email body",
+      "r7": "No send without verified domain",
+      "r8": "No send without SMTP configured",
+      "r9": "No uncontrolled bulk sending — manual approval required",
+      "r10": "First-touch emails must not include tracking links (ramp-up phase)",
+      "r11": "Do not use domain rotation as a filter bypass method"
+    }
+  },
+  "stats": {
+    "title": "Stats & Logs",
+    "subtitle": "Warehouse, collector, draft, and send statistics.",
+    "warehouseTitle": "Lead Warehouse",
+    "companies": "Companies",
+    "contactPoints": "Contact points",
+    "allAtDiscovered": "all at discovered status",
+    "industriesMapped": "Industries mapped",
+    "goodFitClientsHelp": "Good-fit (clients_help)",
+    "withoutIndustry": "Without industry",
+    "canReclassify": "can re-classify",
+    "withoutContact": "Without contact",
+    "collectorTitle": "Collector",
+    "campaigns": "Campaigns",
+    "active": "Active",
+    "outreachDraftsTitle": "Outreach Drafts",
+    "totalDrafts": "Total drafts",
+    "pendingReview": "Pending review",
+    "approved": "Approved",
+    "sentTest": "Sent (test)",
+    "sentLive": "Sent (live)",
+    "contactsTitle": "Contacts (mailing list)",
+    "total": "Total",
+    "subscribed": "Subscribed",
+    "pending": "Pending",
+    "unsubscribed": "Unsubscribed",
+    "bounced": "Bounced",
+    "campaignsTitle": "Campaigns",
+    "sentZero": "Sent = 0",
+    "noEmailSentYet": "no email sent yet",
+    "noCampaignsCreated": "No campaigns created. All sending gates are closed until SMTP + verified domain configured.",
+    "sendingDomainsTitle": "Sending Domains",
+    "verified": "Verified",
+    "colDomain": "Domain",
+    "colStatus": "Status",
+    "colDailyLimit": "Daily limit",
+    "perDay": "{n}/day",
+    "safetyStatusTitle": "Safety Status",
+    "safetyEmailsSent": "Emails sent",
+    "safetySmtpEnabled": "SMTP enabled",
+    "no": "no",
+    "safetyAutoActivatedContacts": "Auto-activated contacts",
+    "safetyAutoApprovedDrafts": "Auto-approved drafts",
+    "safetyBulkSends": "Bulk sends triggered"
+  },
+  "onboarding": {
+    "title": "Account Setup Wizard",
+    "subtitle": "Configure your account step by step.",
+    "headerSubtitle": "Complete these steps to configure your account. Progress is saved automatically — you can continue anytime.",
+    "stepNofM": "Step {n} of {m}",
+    "jumpTo": "Jump to:",
+    "common": {
+      "loading": "Loading…",
+      "saving": "Saving…",
+      "saveContinue": "Save & Continue →",
+      "back": "Back",
+      "continue": "Continue",
+      "skipForNow": "Skip for now",
+      "checking": "Checking…",
+      "optional": "optional"
+    },
+    "steps": {
+      "brandProfile": {
+        "title": "Brand Profile",
+        "sub": "What product or service are you promoting?"
+      },
+      "sendingDomain": {
+        "title": "Sending Domain",
+        "sub": "Set up the subdomain emails will be sent from."
+      },
+      "senderIdentity": {
+        "title": "Sender Identity",
+        "sub": "Who do recipients see in the From field?"
+      },
+      "importLeads": {
+        "title": "Import Leads",
+        "sub": "Pull a contact list from the lead warehouse."
+      },
+      "readyToGo": {
+        "title": "Ready to Go",
+        "sub": "Your account is configured."
+      }
+    },
+    "channel": {
+      "heading": "Connect your sending channel",
+      "step1Before": "Add domain & choose purpose (cold_outreach for scraped data — never",
+      "step1Bold": "main",
+      "step1After": ").",
+      "step2": "Publish DNS records (SPF, DKIM, DMARC, Return-Path) and verify.",
+      "step3Before": "Add an SMTP relay provider (Brevo first, SMTP2GO fallback) in",
+      "step3Link": "Setup",
+      "step4": "Create a mailbox / sender identity (starts at 10/day, 3/hour).",
+      "step5": "Send one test email to yourself.",
+      "step6": "Build a small list, approve a draft, start a tiny campaign.",
+      "warning": "⚠ Do NOT use the main company domain for scraped cold outreach. Do NOT send to all contacts. Start at 10/day per mailbox. Stop on bounces > 3% / complaints > 0.1%. Production sending is blocked until SMTP=ready + a verified domain + an active mailbox."
+    },
+    "step1": {
+      "nameLabel": "Brand / product name *",
+      "nameHint": "e.g. «clients.help — client management for local services»",
+      "namePlaceholder": "My Product",
+      "urlLabel": "Product URL",
+      "urlHint": "Homepage or landing page (optional)",
+      "descLabel": "Description *",
+      "descHint": "What it is, what problem it solves. Min 10 chars.",
+      "descPlaceholder": "We help local service businesses manage clients, bookings, and follow-ups in one place.",
+      "targetLabel": "Target customer",
+      "targetHint": "Who you're reaching out to (optional)",
+      "targetPlaceholder": "Local service businesses: salons, dentists, plumbers, etc.",
+      "toneLabel": "Tone",
+      "toneProfessional": "Professional",
+      "toneFriendly": "Friendly",
+      "toneNeutral": "Neutral",
+      "toneShortDirect": "Short & direct",
+      "langLabel": "Language",
+      "langEn": "English",
+      "langRu": "Russian",
+      "langUk": "Ukrainian",
+      "updateContinue": "Update & Continue →",
+      "errNameDescRequired": "Name and description are required.",
+      "errDescMin": "Description must be at least 10 characters."
+    },
+    "step2": {
+      "introBefore": "Use a subdomain dedicated to sending, e.g.",
+      "introAfter": "Never use the root domain for outreach.",
+      "subdomainLabel": "Sending subdomain *",
+      "subdomainHint": "e.g. mail.yourdomain.com — must match a domain you control",
+      "adding": "Adding…",
+      "addDomain": "Add domain",
+      "change": "Change",
+      "dnsHeading": "Add these DNS records at Cloudflare / your registrar",
+      "dnsProxyBefore": "Set proxy to",
+      "dnsProxyBold": "DNS-only (grey cloud)",
+      "dnsProxyAfter": "for all records. Propagation: 5–60 min.",
+      "colPurpose": "Purpose",
+      "colType": "Type",
+      "colHost": "Host",
+      "colValue": "Value",
+      "checkingDns": "Checking DNS…",
+      "verifyDns": "Verify DNS",
+      "allVerified": "All records verified",
+      "notResolved": "DNS not fully resolved yet — propagation can take up to 60 min",
+      "errEnterDomain": "Enter a domain.",
+      "errDuplicate": "Domain already added. Reload to see existing entries."
+    },
+    "step3": {
+      "introBefore": "This is what recipients see in their inbox. Use a real name — not \"noreply\". Domain must match",
+      "yourSendingDomain": "your sending domain",
+      "alreadyHave": "Already have {count} sender {noun}.",
+      "identitySingular": "identity",
+      "identityPlural": "identities",
+      "useExisting": "Use existing",
+      "fromNameLabel": "From name *",
+      "fromNameHint": "e.g. \"Alex from clients.help\" or \"Support Team\"",
+      "fromNamePlaceholder": "Alex from Acme",
+      "fromEmailLabel": "From email *",
+      "fromEmailHint": "Must be @{domain}",
+      "noVerifiedDomain": "⚠ No verified domain yet. You can create the identity now, but emails won't send until the domain is verified.",
+      "errFromRequired": "From name and email are required.",
+      "errNoDomain": "No domain found. Go back and add a sending domain first."
+    },
+    "step4": {
+      "intro": "Pull a filtered slice of the warehouse into a mailing list. All suppression rules apply — no banned/unsubscribed contacts will be imported.",
+      "listNameLabel": "List name *",
+      "listNamePlaceholder": "First import",
+      "maxContactsLabel": "Max contacts",
+      "industryLabel": "Industry filter",
+      "industryHint": "Leave blank for all",
+      "industryPlaceholder": "e.g. beauty_salon",
+      "countryLabel": "Country",
+      "countryHint": "2-letter ISO, blank for all",
+      "fitLabel": "Product fit filter",
+      "fitGood": "Good fit only",
+      "fitWeak": "Weak fit",
+      "fitAll": "All",
+      "dryRunResult": "Dry run result:",
+      "dryRunDetail": "{eligible} eligible → would import {wouldImport} contacts",
+      "previewCount": "Preview count",
+      "importing": "Importing…",
+      "importContinue": "Import & Continue →",
+      "errListNameRequired": "List name required.",
+      "defaultListName": "First import"
+    },
+    "step5": {
+      "checkBrandProfile": "Brand profile",
+      "checkDomain": "Sending domain added",
+      "checkIdentity": "Sender identity",
+      "checkContacts": "Contacts imported",
+      "nextVerifyDns": "Verify DNS for sending domain",
+      "nextConfigureSmtp": "Configure SMTP in Admin → .env",
+      "nextReviewDrafts": "Review outreach drafts",
+      "nextTestSend": "Run first test send",
+      "heading": "Setup complete!",
+      "subheading": "Your account is configured. Sending is still blocked until DNS and SMTP are ready.",
+      "nextStepsHeading": "Next steps before first send",
+      "goToDashboard": "Go to Dashboard",
+      "setupCenter": "Setup Center"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Profile, password, and session.",
+    "accountTitle": "Account",
+    "emailLabel": "Email",
+    "roleLabel": "Role",
+    "roleSuperAdmin": "Super Admin",
+    "roleUser": "User",
+    "emailCannotChange": "Email cannot be changed. Contact support if needed.",
+    "profileTitle": "Profile",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "Your name",
+    "localeLabel": "Language / locale",
+    "saving": "Saving…",
+    "saveProfile": "Save profile",
+    "profileUpdated": "Profile updated.",
+    "changePasswordTitle": "Change password",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "newPasswordHint": "Minimum 10 characters.",
+    "confirmPasswordLabel": "Confirm new password",
+    "updating": "Updating…",
+    "changePasswordButton": "Change password",
+    "fillAllPasswordFields": "Fill in all password fields.",
+    "passwordsDoNotMatch": "New passwords do not match.",
+    "passwordMinLength": "New password must be at least 10 characters.",
+    "passwordChanged": "Password changed. Your existing session remains valid.",
+    "currentPasswordWrong": "Current password is wrong.",
+    "sessionTitle": "Session",
+    "sessionDescription": "Logging out removes your session cookie. Your data is not deleted.",
+    "logOut": "Log out",
+    "loading": "Loading…"
+  },
+  "publicNav": {
+    "home": "Home",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "instructions": "Instructions",
+    "safety": "Safety",
+    "faq": "FAQ",
+    "login": "Sign in",
+    "openDashboard": "Open dashboard"
+  },
+  "publicFooter": {
+    "tagline": "Operator console for lead intelligence and reviewed outreach.",
+    "selfHosted": "Self-hosted. Tenant data stays on your server.",
+    "product": "Product",
+    "support": "Support",
+    "legal": "Legal",
+    "linkHome": "Home",
+    "linkFeatures": "Features",
+    "linkHowItWorks": "How it works",
+    "linkInstructions": "Instructions",
+    "linkSafety": "Safety",
+    "linkFaq": "FAQ",
+    "linkLogin": "Sign in",
+    "linkDashboard": "Open dashboard",
+    "linkPrivacy": "Privacy Policy",
+    "linkTerms": "Terms of Service",
+    "linkContact": "Contact support",
+    "copyright": "© 2026 Email Platform. All rights reserved.",
+    "linkSystemOverview": "System overview"
+  },
+  "pages": {
+    "features": {
+      "seo": {
+        "title": "Features — Email Platform",
+        "description": "Every module in the Email Platform: lead collector, website analyzer, outreach drafts, domain verification, sending controls, and safety gates."
+      },
+      "eyebrow": "Full feature overview",
+      "title": "Every module, explained.",
+      "sub": "Email Platform is an operator console for B2B outreach. Below is every module in the platform — what it does, how it fits into the pipeline, and what it requires before it activates.",
+      "marker": "PUBLIC_DOCS_PHASE13_VISIBLE",
+      "modules": [
+        {
+          "id": "collector",
+          "h": "Lead Collector",
+          "badge": "Active by default",
+          "p": "The Collector finds public business websites from multiple sources: OpenStreetMap (free), Tavily search API, or user-uploaded CSV archives. It queues each source for crawling, deduplicates by domain across the tenant, and stores discovered contacts with their source URL and extraction context.",
+          "details": [
+            "Perpetual mode runs automatically in the background, processing queued sources on a schedule.",
+            "Per-day source caps protect against accidental runaway crawls.",
+            "Each discovered contact carries the exact source URL, page snippet, and timestamp.",
+            "Respects robots.txt and crawl-delay headers. Never touches login or private pages."
+          ]
+        },
+        {
+          "id": "warehouse",
+          "h": "Lead Warehouse",
+          "badge": "Always available",
+          "p": "The Warehouse stores every collected company and contact. It shows industry classification, fit scoring, duplicate status, and all contact points per company. Leads can be filtered, searched, exported, or promoted to the Contacts module for outreach.",
+          "details": [
+            "Industry classification: automatically applied via LLM-based classifier.",
+            "Product fit scoring: good_fit / weak_fit / not_fit per company profile.",
+            "Full source attribution on every contact.",
+            "CSV export available. Contacts promoted to Contacts module arrive as 'pending'."
+          ]
+        },
+        {
+          "id": "analyzer",
+          "h": "Website Analyzer",
+          "badge": "Manual trigger",
+          "p": "For each collected company website, the Analyzer fetches public pages and generates a structured profile: industry, offering description, possible pain points, confidence score, and detected language. This profile feeds the draft generator.",
+          "details": [
+            "Analyzes publicly reachable pages only — no login bypass.",
+            "Confidence score 0–100 indicates how well the site content was understood.",
+            "Language detection for multilingual outreach targeting.",
+            "Analysis results are stored and re-used for draft generation."
+          ]
+        },
+        {
+          "id": "outreach",
+          "h": "Outreach Draft Generator",
+          "badge": "Requires analysis",
+          "p": "After website analysis, the generator produces a personalized outreach draft using only verified facts from the analyzed site. Drafts are addressed to the collected contact, reference real details from the website, and wait in 'pending_review' until an operator manually approves.",
+          "details": [
+            "Uses only facts found on the analyzed website. No invented claims.",
+            "Draft includes subject line, body, and source attribution.",
+            "Status: pending_review → approved / rejected. Full audit trail.",
+            "Test-send available before campaign scheduling. Full send requires domain verified + SMTP ready."
+          ]
+        },
+        {
+          "id": "contacts",
+          "h": "Contacts",
+          "badge": "Strict status lifecycle",
+          "p": "The Contacts module stores all addressable recipients. Contacts arrive as 'pending' — they never auto-activate. An operator must explicitly set them to 'subscribed' before any send is possible. Unsubscribe and bounce events flip status permanently.",
+          "details": [
+            "Statuses: pending → subscribed / unsubscribed / bounced / complained.",
+            "No automatic transitions from pending to subscribed.",
+            "Suppression list checked before every outgoing message.",
+            "Global unsubscribes enforced across all tenants."
+          ]
+        },
+        {
+          "id": "campaigns",
+          "h": "Campaigns",
+          "badge": "Requires verified domain + SMTP",
+          "p": "Campaigns target a contact list and schedule outbound messages. They cannot be scheduled unless the sending domain is DNS-verified and SMTP reports 'ready'. Per-day caps, bounce monitoring, and complaint-rate thresholds apply automatically.",
+          "details": [
+            "Requires: sending domain verified, SMTP ready, contact list with subscribed contacts.",
+            "Daily send limits enforced per tenant.",
+            "Auto-pause on bounce rate > 2% or complaint rate > 0.08%.",
+            "Tracking: open pixel, click redirect, unsubscribe endpoint — all per-message signed tokens."
+          ]
+        },
+        {
+          "id": "domains",
+          "h": "Domain Verification",
+          "badge": "DNS-verified before first send",
+          "p": "Before any campaign can run, the sending domain must pass DNS verification: SPF, DKIM (RSA 2048, auto-generated keypair), DMARC, and Return-Path CNAME. The platform generates the exact records to publish and re-checks on demand.",
+          "details": [
+            "Auto-generates RSA 2048 DKIM keypair per domain.",
+            "Shows exact DNS records (value + type) to copy into your registrar.",
+            "Live DNS verification via Node.js dns module.",
+            "Domain status: pending → verified / failed / warning."
+          ]
+        },
+        {
+          "id": "invites",
+          "h": "Invite Links",
+          "badge": "Standalone module",
+          "p": "Branded short links with click tracking, suppression-aware redirects, and tenant safety controls. Links can be inserted in outreach drafts or shared independently. Clicks are logged with timestamp and source.",
+          "details": [
+            "Short URL with custom slug or auto-generated token.",
+            "Redirect target checked against suppression list.",
+            "Click events logged: timestamp, user-agent, IP (anonymized).",
+            "Per-link expiry and click caps available."
+          ]
+        },
+        {
+          "id": "billing",
+          "h": "Billing",
+          "badge": "UI ready",
+          "p": "Plan management, invoice history, trial period display, and manual payment confirmation flow. The billing UI is ready; a payment processor integration (Stripe, LiqPay, etc.) can be wired by the operator.",
+          "details": [
+            "Plan tiers configurable by admin.",
+            "Trial period tracked from tenant creation.",
+            "Manual payment flow: contact admin with invoice number.",
+            "Suspension enforced when payment lapses."
+          ]
+        },
+        {
+          "id": "admin",
+          "h": "Admin Panel",
+          "badge": "Super-admin only",
+          "p": "Super-admin view of every tenant: SMTP status, sending domains, active collectors, outreach volume, audit logs, and tenant-level kill switches. Used to onboard new tenants, set global defaults, and monitor platform health.",
+          "details": [
+            "Create / suspend / delete tenants.",
+            "Override per-tenant safety settings.",
+            "View all collector jobs and outreach activity.",
+            "Global suppression list management."
+          ]
+        },
+        {
+          "id": "settings",
+          "h": "Settings",
+          "badge": "Per-operator",
+          "p": "Each operator can update their display name, preferred language (EN/RU/UK), and change their password with current-password verification. Session management and logout.",
+          "details": [
+            "Profile: full name, locale preference.",
+            "Password change: requires current password (Argon2id verified server-side).",
+            "Logout clears session and redirects to login.",
+            "Account info: email (read-only), role badge."
+          ]
+        }
+      ],
+      "pipeline": {
+        "collectorLabel": "Collector",
+        "collectorSub": "Discovers sources",
+        "warehouseLabel": "Warehouse",
+        "warehouseSub": "Stores contacts",
+        "analyzerLabel": "Analyzer",
+        "analyzerSub": "Profiles websites",
+        "draftLabel": "Draft Review",
+        "draftSub": "Operator approval",
+        "testLabel": "Test Send",
+        "testSub": "SMTP + domain check",
+        "campaignLabel": "Campaign",
+        "campaignSub": "Controlled delivery"
+      },
+      "cta": {
+        "eyebrow": "Get started",
+        "heading": "Start building your outreach pipeline.",
+        "body": "Open the operator console to explore all modules.",
+        "primary": "Open dashboard",
+        "secondary": "How it works"
+      }
+    },
+    "howItWorks": {
+      "seo": {
+        "title": "How it works — Email Platform",
+        "description": "Step-by-step workflow: from source discovery to verified send. Every safety gate explained."
+      },
+      "eyebrow": "Workflow overview",
+      "title": "From source to reviewed message — every step.",
+      "sub": "The platform enforces a linear pipeline. You cannot skip steps. Each gate requires the previous stage to complete successfully.",
+      "diagramAlt": "Pipeline: Collector → Warehouse → Analyzer → Draft → Review → Test → Campaign",
+      "steps": [
+        {
+          "n": "01",
+          "h": "Add a source",
+          "p": "Paste a website URL, upload a CSV of domains, run an OpenStreetMap search by category and city, or use the Tavily search provider. Each source becomes a Collector entry. Duplicate domains per tenant are skipped automatically.",
+          "gate": null
+        },
+        {
+          "n": "02",
+          "h": "Collector crawls",
+          "p": "The perpetual collector picks up queued sources on a schedule. It fetches public pages, extracts publicly listed business emails, and stores each contact with the source URL and page snippet. No login pages, no CAPTCHAs, no private areas.",
+          "gate": null
+        },
+        {
+          "n": "03",
+          "h": "Contacts land in Warehouse",
+          "p": "Collected contacts are stored in the Lead Warehouse with status 'discovered'. Each contact has: source URL, discovery date, raw page snippet, company domain. No contact is addressable yet — they are warehouse-only.",
+          "gate": null
+        },
+        {
+          "n": "04",
+          "h": "Website analysis",
+          "p": "Trigger website analysis on any warehouse company. The analyzer reads public pages and generates a structured profile: industry, offering, pain points (inferred from site content), confidence score, language. This profile is required for draft generation.",
+          "gate": "Requires: website must be publicly reachable."
+        },
+        {
+          "n": "05",
+          "h": "Draft generation",
+          "p": "With an analysis on file, generate a personalized outreach draft. The generator uses only the analyzed website facts — no invented claims. Draft contains subject line, body, and full source attribution. Status: pending_review.",
+          "gate": "Requires: website analysis completed with confidence > 20."
+        },
+        {
+          "n": "06",
+          "h": "Operator review",
+          "p": "Every draft sits in pending_review until you open it, read it, and manually approve. The approval form shows the full draft, the analysis that generated it, the source contact, and a compliance checkbox. Reject with a reason. Full audit trail.",
+          "gate": "GATE: No draft can move to 'approved' without manual operator action."
+        },
+        {
+          "n": "07",
+          "h": "Test send",
+          "p": "Before scheduling a campaign, use the test-send to deliver the approved draft to your own inbox. This verifies SMTP is working, the template renders correctly, and the unsubscribe link is reachable.",
+          "gate": "Requires: draft approved, SMTP configured and reachable, test email address set."
+        },
+        {
+          "n": "08",
+          "h": "Verify sending domain",
+          "p": "Navigate to Domains and add your sending domain (e.g. mail.yourdomain.com). The platform generates SPF, DKIM, DMARC, and Return-Path records. Publish them at your DNS provider, then click Verify. Status must reach 'verified' before campaigns can run.",
+          "gate": "GATE: Campaigns require domain.status = verified."
+        },
+        {
+          "n": "09",
+          "h": "Configure SMTP",
+          "p": "Set SMTP credentials in your environment or settings. The worker validates connectivity and auth on startup and before every campaign run. SMTP status must reach 'ready'.",
+          "gate": "GATE: Campaigns require smtp.status = ready."
+        },
+        {
+          "n": "10",
+          "h": "Activate contacts",
+          "p": "Warehouse contacts promoted to the Contacts module arrive as 'pending'. Manually set each contact to 'subscribed' after verifying they are appropriate recipients. Pending contacts cannot receive campaigns.",
+          "gate": "GATE: Only subscribed contacts receive campaign messages."
+        },
+        {
+          "n": "11",
+          "h": "Schedule campaign",
+          "p": "With all gates satisfied, create a campaign: choose list, select approved drafts, set schedule. The worker sends within daily limits, checks suppression before each message, tracks opens, clicks, bounces, and unsubscribes in real time. Campaign pauses automatically if bounce or complaint thresholds are reached.",
+          "gate": "All gates must pass: domain verified + SMTP ready + contacts subscribed + drafts approved."
+        }
+      ],
+      "pipeline": {
+        "sourcesLabel": "Sources",
+        "collectorLabel": "Collector",
+        "warehouseLabel": "Warehouse",
+        "analyzerLabel": "Analyzer",
+        "draftLabel": "Draft",
+        "sendLabel": "Send",
+        "crawl": "Crawl",
+        "dedupe": "Dedupe",
+        "extract": "Extract",
+        "store": "Store",
+        "classify": "Classify",
+        "score": "Score",
+        "profile": "Profile",
+        "industry": "Industry",
+        "confidence": "Confidence",
+        "generate": "Generate",
+        "review": "Review",
+        "approve": "Approve",
+        "test": "Test"
+      },
+      "gateBand": {
+        "eyebrow": "All gates must pass",
+        "heading": "Before a single message can send:"
+      },
+      "gates": {
+        "domainLabel": "Domain verified",
+        "domainDetail": "SPF + DKIM + DMARC + Return-Path",
+        "smtpLabel": "SMTP ready",
+        "smtpDetail": "Connectivity + auth confirmed",
+        "contactLabel": "Contact subscribed",
+        "contactDetail": "Manually activated by operator",
+        "draftLabel": "Draft approved",
+        "draftDetail": "Reviewed + compliance checkbox",
+        "suppressionLabel": "No suppression hit",
+        "suppressionDetail": "Global + tenant suppression list"
+      },
+      "cta": {
+        "eyebrow": "Ready?",
+        "heading": "Start with the setup wizard.",
+        "body": "The onboarding guide walks you through all five setup steps in order.",
+        "primary": "Open setup wizard",
+        "secondary": "Full instructions"
+      }
+    },
+    "instructions": {
+      "seo": {
+        "title": "Operator Instructions — Email Platform",
+        "description": "Full operator manual. How to use every module: collector, warehouse, analysis, drafts, campaigns, domains, billing, and admin controls."
+      },
+      "eyebrow": "Operator manual",
+      "title": "How to use every module.",
+      "sub": "This guide covers every module in order of the pipeline. Read from top to bottom for a first setup; jump to any section for reference.",
+      "toc": "Contents",
+      "sections": [
+        {
+          "id": "getting-started",
+          "h": "1. Getting started",
+          "items": [
+            {
+              "q": "Log in",
+              "a": "Navigate to /login. Enter your operator email and password. On success you land on /dashboard. Session is stored in an HttpOnly cookie (JWT, 24h). If the token expires, you are redirected to /login automatically."
+            },
+            {
+              "q": "First-time setup",
+              "a": "Follow the setup wizard at /onboarding: (1) add a sending domain, (2) configure SMTP, (3) add your first source, (4) review your first draft, (5) send a test email."
+            },
+            {
+              "q": "Change language",
+              "a": "Click the language flag in the top-right of any page. Available: EN / RU / UK. Preference is stored in a cookie and applies immediately without page reload."
+            }
+          ]
+        },
+        {
+          "id": "collector",
+          "h": "2. Collector",
+          "items": [
+            {
+              "q": "Add a source manually",
+              "a": "Go to /collector. Click 'Add source'. Paste a URL (e.g. https://example.com). The source queues for crawling. The perpetual worker picks it up within the next cycle (up to 50 seconds)."
+            },
+            {
+              "q": "Add sources from OpenStreetMap",
+              "a": "In the Collector, click 'OSM search'. Enter a category (e.g. 'dental clinic'), a city or bounding box, and click Search. Matching business websites are imported as sources automatically."
+            },
+            {
+              "q": "Add sources from Tavily",
+              "a": "Configure TAVILY_API_KEY in your .env file. Then use 'Search provider' in the Collector to run keyword queries. Results are deduped against existing sources."
+            },
+            {
+              "q": "Upload a CSV",
+              "a": "Prepare a CSV with a 'url' column (and optionally 'label'). Upload in the Collector. Each row becomes a source. Duplicates are skipped."
+            },
+            {
+              "q": "Monitor collector status",
+              "a": "The Stats page (/stats) shows today's crawl count, new leads found, analysis run, and draft generated. The Collector page shows each source with status: pending / queued / crawling / succeeded / failed / skipped."
+            }
+          ]
+        },
+        {
+          "id": "warehouse",
+          "h": "3. Warehouse",
+          "items": [
+            {
+              "q": "Browse collected leads",
+              "a": "Go to /warehouse. Companies and contacts are listed with industry, fit score, source, and discovery date. Use filters (industry, fit category, status) to narrow results."
+            },
+            {
+              "q": "Export leads",
+              "a": "Filter to the leads you want, then click Export CSV. The export includes company name, domain, email, source URL, industry, and fit score."
+            },
+            {
+              "q": "Promote a lead to Contacts",
+              "a": "Select a lead (or use bulk select) and click 'Add to contacts'. The contact is created in the Contacts module with status 'pending'. You must manually activate them before they can receive campaigns."
+            },
+            {
+              "q": "Trigger reclassification",
+              "a": "From Admin, call GET /api/admin/warehouse/reclassify. This re-runs industry classification on all unclassified companies. Progress is visible in the API logs."
+            }
+          ]
+        },
+        {
+          "id": "analysis",
+          "h": "4. Website Analysis",
+          "items": [
+            {
+              "q": "Analyze a website",
+              "a": "From the Warehouse, open a company record and click 'Analyze website'. The worker fetches public pages, runs the analysis, and stores the result. Takes 5–30 seconds depending on site complexity."
+            },
+            {
+              "q": "What analysis produces",
+              "a": "Industry classification, offering summary (2–3 sentences), possible pain points (inferred from site content), confidence score (0–100), and detected language."
+            },
+            {
+              "q": "Low confidence score",
+              "a": "A score below 30 means the site had too little usable content (e.g. one-pager, blocked JS-only site, or landing page under construction). Drafts generated from low-confidence analyses are marked accordingly."
+            }
+          ]
+        },
+        {
+          "id": "drafts",
+          "h": "5. Outreach Drafts",
+          "items": [
+            {
+              "q": "Generate a draft",
+              "a": "From the Outreach page (/outreach), select a company with a completed analysis and click 'Generate draft'. The draft appears with status 'pending_review'."
+            },
+            {
+              "q": "Review and approve a draft",
+              "a": "Open the draft. Read the full message. Check that it references real, accurate facts from the website. Tick the compliance checkbox ('This message is accurate and compliant'). Click Approve. The draft status moves to 'approved'."
+            },
+            {
+              "q": "Reject a draft",
+              "a": "Click Reject and enter a reason. The draft is archived. You can regenerate from the company record."
+            },
+            {
+              "q": "Send a test",
+              "a": "With draft approved, click 'Send test'. Enter your test email address. The worker sends immediately via the configured SMTP. Check your inbox to verify delivery, formatting, and unsubscribe link."
+            }
+          ]
+        },
+        {
+          "id": "campaigns",
+          "h": "6. Campaigns",
+          "items": [
+            {
+              "q": "Create a campaign",
+              "a": "Go to /campaigns. Click 'New campaign'. Enter name, subject, choose sender identity, and select a contact list. Set a schedule (immediately or specific date/time). Click Create."
+            },
+            {
+              "q": "What gates must pass",
+              "a": "A campaign cannot be scheduled until: (1) sending domain is DNS-verified, (2) SMTP status is 'ready', (3) the selected list has at least one 'subscribed' contact, (4) the campaign has at least one approved draft or template attached."
+            },
+            {
+              "q": "Monitor a live campaign",
+              "a": "The Campaign detail page shows: sent, opened (unique), clicked (unique), bounced, unsubscribed, complained. Refreshes automatically. Campaign pauses if bounce rate > 2% or complaint rate > 0.08%."
+            },
+            {
+              "q": "Pause or cancel",
+              "a": "Click Pause to stop sending (resumable). Click Cancel to stop permanently. In-flight messages already queued in Redis will complete."
+            }
+          ]
+        },
+        {
+          "id": "domains",
+          "h": "7. Sending Domains",
+          "items": [
+            {
+              "q": "Add a sending domain",
+              "a": "Go to /domains. Click 'Add domain'. Enter the domain (use a subdomain like mail.yourdomain.com — not your root domain). The platform auto-generates a DKIM RSA 2048 keypair."
+            },
+            {
+              "q": "Publish DNS records",
+              "a": "The Domains page shows four records: SPF (TXT), DKIM (TXT), DMARC (TXT on _dmarc.subdomain), and Return-Path (CNAME on bounce.subdomain). Publish all four at your DNS registrar or Cloudflare."
+            },
+            {
+              "q": "Verify DNS",
+              "a": "After publishing records, click 'Verify DNS' on the domain. The platform checks all four records live. Status moves to 'verified' when all four pass. DNS propagation can take up to 24 hours."
+            },
+            {
+              "q": "Troubleshoot verification",
+              "a": "Expand 'Last verification detail' to see which records passed and which failed. Common issues: SPF record on wrong subdomain, DKIM TXT record truncated by DNS provider, CNAME pointing to wrong value."
+            }
+          ]
+        },
+        {
+          "id": "contacts",
+          "h": "8. Contacts",
+          "items": [
+            {
+              "q": "Activate a contact",
+              "a": "Open the contact record. Click 'Activate' to change status from 'pending' to 'subscribed'. This is a manual action that indicates you have verified the contact is an appropriate recipient."
+            },
+            {
+              "q": "Bulk activate",
+              "a": "Select multiple contacts using the checkboxes. Click 'Bulk actions → Set subscribed'. A confirmation dialog shows the count before proceeding."
+            },
+            {
+              "q": "Handle unsubscribes",
+              "a": "Unsubscribed contacts are flagged permanently. They cannot be re-subscribed via bulk actions. The suppression check before each send enforces this. If a contact unsubscribed, they will not receive messages even if accidentally added to a list."
+            },
+            {
+              "q": "Import contacts",
+              "a": "Go to Contacts → Import CSV. Upload a file with columns: email (required), first_name, last_name, tags. All imported contacts arrive as 'pending'."
+            }
+          ]
+        },
+        {
+          "id": "settings",
+          "h": "9. Settings & Profile",
+          "items": [
+            {
+              "q": "Update your profile",
+              "a": "Go to /settings. Update your display name and preferred language. Click Save profile. Changes apply immediately."
+            },
+            {
+              "q": "Change password",
+              "a": "In /settings, expand the password section. Enter your current password, new password (min 8 characters), and confirmation. Click Save password. The API verifies your current password (Argon2id) before accepting the change."
+            },
+            {
+              "q": "Log out",
+              "a": "Click the logout button in Settings or the sidebar footer. The session cookie is cleared and you are redirected to /login."
+            }
+          ]
+        },
+        {
+          "id": "admin",
+          "h": "10. Admin Panel",
+          "items": [
+            {
+              "q": "Access",
+              "a": "Only accounts with the 'super_admin' role can access /admin. The sidebar shows the Admin link only to super-admins."
+            },
+            {
+              "q": "Manage tenants",
+              "a": "Admin → Tenants: view all tenants, create new tenants, suspend/reactivate, view their SMTP status and sending domain status."
+            },
+            {
+              "q": "Global suppression",
+              "a": "Admin → Suppressions: view and manage the global suppression list. Emails on this list are blocked from receiving messages from any tenant."
+            },
+            {
+              "q": "Theme settings",
+              "a": "Admin → Theme: set the platform-wide default theme (applies to new users and public pages). Individual operators can override in /settings."
+            }
+          ]
+        }
+      ]
+    },
+    "safety": {
+      "seo": {
+        "title": "Safety & Anti-Abuse — Email Platform",
+        "description": "How Email Platform prevents abuse: hard sending gates, suppression enforcement, compliance checkboxes, bounce monitoring, and no-spam policy."
+      },
+      "eyebrow": "Safety & anti-abuse",
+      "title": "Hard gates between collection and sending.",
+      "sub": "Every design decision in this platform was made with one goal: prevent messages from going out without informed operator intent. Here is exactly how that works.",
+      "sections": [
+        {
+          "h": "The five required gates",
+          "p": "Before a single outgoing message can be queued, all five gates must pass simultaneously:",
+          "items": [
+            "Sending domain DNS-verified (SPF + DKIM + DMARC + Return-Path all passing)",
+            "SMTP status = ready (platform tests connectivity before every campaign run)",
+            "Target contact status = subscribed (manually set by operator — never automatic)",
+            "Draft status = approved (manually reviewed and confirmed by operator)",
+            "No global suppression hit (checked per address before each message)"
+          ]
+        },
+        {
+          "h": "The Collector module cannot send",
+          "p": "The Collector is completely isolated from the sending pipeline. It has no SMTP code, no send queue access, and no ability to trigger messages. Collected contacts land in the Warehouse — they do not auto-flow to the sending queue under any condition."
+        },
+        {
+          "h": "Pending ≠ addressable",
+          "p": "Every imported or discovered contact arrives in 'pending' status. Pending contacts cannot receive campaign messages, test sends, or invite link notifications. Only a manual operator action moves a contact from pending to subscribed."
+        },
+        {
+          "h": "Suppression is permanent and enforced",
+          "p": "When a contact unsubscribes (via the one-click link in any message), their address is added to the global suppression list immediately. This is enforced at the worker level before each individual message. Suppressed addresses cannot be force-re-subscribed via bulk actions."
+        },
+        {
+          "h": "One-click unsubscribe (RFC 8058)",
+          "p": "Every outgoing email includes a List-Unsubscribe header and a visible unsubscribe link. Both trigger the same suppression event. The platform implements RFC 8058 List-Unsubscribe-Post for mail clients that support it. No user action beyond one click is required."
+        },
+        {
+          "h": "Bounce and complaint auto-pause",
+          "p": "The worker monitors bounce and complaint rates in real time. If bounce rate exceeds 2% or complaint rate exceeds 0.08%, the running campaign is automatically paused and the operator is notified. The campaign cannot be resumed without a manual override."
+        },
+        {
+          "h": "Compliance checkpoint on every draft",
+          "p": "The draft approval form includes a compliance checkbox: 'I confirm this message is accurate, references only facts from the analyzed website, and complies with applicable laws (GDPR, CAN-SPAM, etc.).' The checkbox is not pre-ticked. The draft cannot be approved without ticking it."
+        },
+        {
+          "h": "What is prohibited",
+          "p": "The following uses are prohibited and result in immediate account suspension:",
+          "items": [
+            "Sending to purchased, rented, or leaked email lists",
+            "Sending to contacts who have not been manually reviewed and activated",
+            "Sending in volumes that exceed per-tenant daily limits",
+            "Disabling or bypassing the suppression check",
+            "Using the platform to send phishing, malware, or fraudulent content",
+            "Marketing the platform's B2B base as a 'spray-and-pray' blast list"
+          ]
+        },
+        {
+          "h": "Audit trail",
+          "p": "Every approval, rejection, send, bounce, click, unsubscribe, and admin action is timestamped and stored. The audit log is accessible to super-admins and cannot be modified by regular operators."
+        }
+      ],
+      "zohoNote": {
+        "title": "Zoho manual bridge.",
+        "body": "Optional zero-budget channel. Low-volume, operator-approved, one-by-one only. No bulk send, no scheduler, no mass subscribe. Sends only if the operator configures Zoho credentials and clicks send; otherwise drafts are copy/pasted manually. Negative replies are one-click suppressed. emails.cheap campaign rails are unchanged."
+      },
+      "gatesDiagram": {
+        "collectorLabel": "Collector",
+        "collectorNote": "No SMTP access",
+        "warehouseLabel": "Warehouse",
+        "warehouseNote": "Contacts = discovered",
+        "reviewLabel": "Review gate",
+        "reviewNote": "Manual approval",
+        "domainLabel": "Domain gate",
+        "domainNote": "DNS verified",
+        "smtpLabel": "SMTP gate",
+        "smtpNote": "Status = ready",
+        "contactLabel": "Contact gate",
+        "contactNote": "Manually subscribed",
+        "sendLabel": "Send",
+        "sendNote": "Suppression checked"
+      },
+      "antispam": {
+        "eyebrow": "Anti-spam commitment",
+        "heading": "The platform is built for legitimate B2B outreach only.",
+        "sub": "Every design decision enforces a review-first model. There is no path from contact discovery to outbox without a human operator approving each step."
+      },
+      "commitments": {
+        "autoSendH": "No auto-sending",
+        "autoSendP": "The platform has no scheduled auto-send without operator approval. Every campaign is manually triggered or manually scheduled.",
+        "purchasedH": "No purchased lists",
+        "purchasedP": "Sending to purchased, rented, or leaked lists is prohibited and results in immediate account suspension.",
+        "unsubscribeH": "Permanent unsubscribe",
+        "unsubscribeP": "One-click unsubscribe removes the address permanently. No re-add via bulk import.",
+        "auditH": "Full audit trail",
+        "auditP": "Every approval, rejection, send, and admin action is timestamped and stored. Operators cannot modify the audit log."
+      }
+    },
+    "faq": {
+      "seo": {
+        "title": "FAQ — Email Platform",
+        "description": "Frequently asked questions about Email Platform: how collecting works, what the safety gates are, SMTP setup, domain verification, and more."
+      },
+      "eyebrow": "FAQ",
+      "title": "Common questions.",
+      "sub": "Practical answers about how the platform works, what the limits are, and what to do when something doesn't work as expected.",
+      "items": [
+        {
+          "q": "Is this a bulk email blaster?",
+          "a": "No. The platform is designed for controlled, reviewed outreach — not bulk sending. Every message requires a manually approved draft, a DNS-verified domain, a configured SMTP, and a manually activated contact. There are no one-click bulk sends."
+        },
+        {
+          "q": "Can I send to any email I collect?",
+          "a": "No. Collected contacts land in the Warehouse with status 'discovered'. To send to them you must: (1) promote them to Contacts, (2) manually set them to 'subscribed', (3) ensure a domain is verified and SMTP is ready. The system does not auto-activate any contact."
+        },
+        {
+          "q": "What sources does the collector use?",
+          "a": "OpenStreetMap (via Overpass API, free), Tavily search API (requires API key, paid by query), and user-uploaded CSV files. The collector never accesses login-protected pages, CAPTCHA walls, or private systems."
+        },
+        {
+          "q": "How does the website analyzer work?",
+          "a": "The analyzer fetches publicly reachable pages from a company's website. It reads the text content and generates: industry classification, offering summary, inferred pain points, confidence score (0–100), and detected language. It does not use screenshots or render JavaScript-only content."
+        },
+        {
+          "q": "What is the confidence score?",
+          "a": "Confidence is how much usable content the analyzer found on the website. A score of 80–100 means the site had clear, detailed content about the company's services. A score below 30 means the site was sparse, under construction, or blocked the crawler."
+        },
+        {
+          "q": "Can I generate drafts without website analysis?",
+          "a": "No. The draft generator requires a completed website analysis. This ensures every draft is grounded in real, verifiable facts about the recipient's business — not generic templates."
+        },
+        {
+          "q": "What SMTP providers are supported?",
+          "a": "Any SMTP provider that supports standard SMTP with AUTH PLAIN or AUTH LOGIN: Postmark, Amazon SES, Mailgun, SendGrid, or your own Postal instance. Set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASSWORD in your .env file."
+        },
+        {
+          "q": "Why do I need to verify my sending domain?",
+          "a": "DNS verification (SPF + DKIM + DMARC + Return-Path) proves you control the domain you're sending from. This is required by most SMTP providers and inbox filters. Without verification, your messages will likely be rejected or marked as spam."
+        },
+        {
+          "q": "What happens when someone unsubscribes?",
+          "a": "Their address is added to the global suppression list immediately. The platform checks this list before each outgoing message. Suppressed addresses cannot receive messages from any tenant. This action is permanent and cannot be reversed by bulk operations."
+        },
+        {
+          "q": "Can the collector run automatically?",
+          "a": "Yes. In perpetual mode (the default), the collector worker runs on a 50-second cycle. It picks up queued sources and processes them continuously. You add sources; the worker processes them without further action."
+        },
+        {
+          "q": "How are bounce rates calculated?",
+          "a": "Bounce rate = hard bounces / delivered messages in the current campaign. Hard bounces (address not found, domain doesn't exist) increment the counter. Soft bounces (temporary failures) are retried before counting. Campaign auto-pauses at 2%."
+        },
+        {
+          "q": "Is the platform multi-tenant?",
+          "a": "Yes. Each tenant has a fully isolated workspace: separate contacts, domains, collector campaigns, sending settings, and audit logs. The super-admin can view and manage all tenants from the Admin panel."
+        },
+        {
+          "q": "Where is data stored?",
+          "a": "All data is stored in a MariaDB database on the server that hosts the platform. Redis is used for session caching and the message queue. There is no external data transmission except SMTP outgoing messages and DNS verification lookups."
+        },
+        {
+          "q": "Can I self-host this?",
+          "a": "Yes. The full stack runs on Docker Compose. You need a server (Linux VPS), a domain, an SMTP provider, and a Tavily API key (optional, for search-based collection). See the Setup Center (/setup) for the full checklist."
+        }
+      ],
+      "cta": {
+        "eyebrow": "Need more detail?",
+        "heading": "Read the full operator instructions.",
+        "body": "The Instructions page covers every module step by step.",
+        "primary": "Full instructions",
+        "secondary": "Contact support"
+      }
+    },
+    "systemOverview": {
+      "seo": {
+        "title": "System Overview — Email Platform",
+        "description": "Technical overview of Email Platform: architecture, services, data flow, and security model."
+      },
+      "eyebrow": "System overview",
+      "title": "How the platform is built.",
+      "sub": "A public-safe technical overview of the platform architecture, services, and data flow.",
+      "services": [
+        {
+          "h": "Portal",
+          "tech": "Next.js 14 App Router",
+          "p": "Server-rendered operator console. Public landing pages, authenticated dashboard, all management UIs. Served at ports 13000 (internal) → 443 via nginx."
+        },
+        {
+          "h": "API",
+          "tech": "Node.js + Express + TypeScript",
+          "p": "REST API handling auth, tenant management, lead warehouse, domains, campaigns, and tracking endpoints. JWT HS256 auth, Argon2id passwords, Zod validation, Pino logging."
+        },
+        {
+          "h": "Worker",
+          "tech": "Node.js background service",
+          "p": "Processes the collector pipeline, website analysis queue, outreach draft generation, and campaign sending. Reads jobs from Redis streams. Runs independently of the API."
+        },
+        {
+          "h": "Database",
+          "tech": "MariaDB 11.4",
+          "p": "Stores all tenants, users, contacts, collector data, warehouse companies, drafts, campaigns, domains, audit logs. Accessed only from API and Worker containers (internal network)."
+        },
+        {
+          "h": "Cache / Queue",
+          "tech": "Redis 7.4",
+          "p": "Session cache, collector job queue, send queue. All queues use Redis streams with consumer groups. Password-protected, internal network only."
+        },
+        {
+          "h": "Reverse proxy",
+          "tech": "Nginx",
+          "p": "Routes HTTPS traffic to Portal and API. Handles Cloudflare Full SSL termination. Serves static reports. Proxies Mailhog for test SMTP inspection."
+        }
+      ],
+      "securityModel": {
+        "h": "Security model",
+        "items": [
+          "All passwords hashed with Argon2id",
+          "Sessions: JWT HS256, 24h TTL, HttpOnly cookie",
+          "TLS on all connections (Cloudflare edge → nginx → containers)",
+          "CORS configured per origin",
+          "Auth rate limiting: 10 requests per minute per IP",
+          "SQL injection protection: parameterized queries throughout",
+          "XSS protection: Content-Type headers, no raw HTML injection",
+          "CSRF protection: SameSite cookie + Bearer token pattern",
+          "Secrets not logged: authorization headers redacted in Pino",
+          "Tenant isolation enforced at every database query"
+        ]
+      },
+      "dataFlow": {
+        "h": "Data flow",
+        "steps": [
+          "Browser → Cloudflare (TLS termination) → Nginx (HTTPS :443) → Portal :13000",
+          "Portal → API :4000 (internal network, no TLS required)",
+          "API → MariaDB :3306 (internal network)",
+          "API → Redis :6379 (internal network)",
+          "Worker → Redis (reads job queues) → processes → writes back to MariaDB",
+          "Worker → SMTP provider (external, for outgoing messages only)"
+        ]
+      },
+      "servicesHeading": "Services",
+      "arch": {
+        "clientLabel": "Browser / Client",
+        "serverLabel": "Server (Docker Compose)",
+        "noteBackground": "Background",
+        "noteInternal": "Internal",
+        "noteProxy": "Proxy"
+      }
+    },
+    "modules": {
+      "eyebrow": "Module reference",
+      "title": "Every module in the platform.",
+      "sub": "Quick-reference for each module: purpose, activation requirements, and what it connects to in the pipeline.",
+      "badgeActive": "Active",
+      "badgeRequiresSetup": "Requires setup",
+      "openInApp": "Open in app",
+      "cards": {
+        "collectorH": "Collector",
+        "collectorP": "Discovers and crawls public business websites from OSM, Tavily, or CSV. Runs perpetually in the background.",
+        "warehouseH": "Warehouse",
+        "warehouseP": "Stores all collected companies and contacts. Industry classification, fit scoring, source attribution.",
+        "analyzerH": "Website Analyzer",
+        "analyzerP": "Profiles each company website: industry, offering, pain points, confidence score.",
+        "outreachH": "Outreach Drafts",
+        "outreachP": "Generates personalized messages from analyzed website facts. Requires operator review before any send.",
+        "contactsH": "Contacts",
+        "contactsP": "Stores all addressable recipients. Strict pending→subscribed lifecycle. No auto-activation.",
+        "campaignsH": "Campaigns",
+        "campaignsP": "Scheduled outbound campaigns. Per-day limits, bounce monitoring, auto-pause on threshold breach.",
+        "domainsH": "Domains",
+        "domainsP": "DNS verification for sending domains: SPF, DKIM (auto-generated), DMARC, Return-Path.",
+        "invitesH": "Invite Links",
+        "invitesP": "Branded short links with click tracking and suppression-aware redirects.",
+        "billingH": "Billing",
+        "billingP": "Plan management, trial tracking, manual payment confirmation.",
+        "settingsH": "Settings",
+        "settingsP": "Profile, language, password change, session management.",
+        "adminH": "Admin Panel",
+        "adminP": "Super-admin view: all tenants, SMTP, domains, audit, global suppression.",
+        "statsH": "Stats & Logs",
+        "statsP": "Platform-wide statistics: collector activity, warehouse volume, draft status, send totals.",
+        "reqCollectorRunning": "Collector running",
+        "reqWarehouseEntry": "Warehouse entry",
+        "reqWebsiteAnalysis": "Website analysis",
+        "reqManualApproval": "Manual approval",
+        "reqManualActivation": "Manual activation",
+        "reqDomainVerified": "Domain verified",
+        "reqSmtpReady": "SMTP ready",
+        "reqSubscribedContacts": "Subscribed contacts",
+        "reqDnsAccess": "DNS access",
+        "reqNone": "None",
+        "reqAdminSetup": "Admin setup",
+        "reqAuthenticated": "Authenticated"
+      },
+      "cta": {
+        "eyebrow": "Get going",
+        "heading": "Start with the collector.",
+        "body": "Add your first source and watch leads flow into the warehouse automatically.",
+        "primary": "Open dashboard",
+        "secondary": "Detailed features"
+      }
+    }
+  },
+  "manualOutreach": {
+    "pageTitle": "Manual Outreach",
+    "heading": "Own Outreach Runtime",
+    "intro": "Provider-neutral, zero-budget, low-volume. One email at a time. No bulk send, no scheduling. If no SMTP credentials are set, copy/paste into webmail still works.",
+    "tabs": {
+      "today": "Today",
+      "setup": "Setup",
+      "providers": "Providers",
+      "cohort": "Cohort",
+      "queue": "Queue",
+      "drip": "Drip",
+      "replies": "Replies",
+      "followups": "Follow-ups",
+      "warmup": "Warmup",
+      "templates": "Templates"
+    },
+    "drip": {
+      "title": "Drip scheduler — automatic time-distributed sending",
+      "state": "State",
+      "running": "RUNNING (sending automatically)",
+      "off": "OFF (nothing sends automatically)",
+      "btnEnable": "Enable drip",
+      "btnDisable": "Stop drip",
+      "warn": "When ON, each active mailbox automatically sends APPROVED queue items — REAL email — within the caps below. Each item is re-checked (approved + opt-out line + not suppressed) at send time. Replies/bounces auto-pause as usual.",
+      "confirmEnable": "Enable drip? This starts REAL automatic sending from your active mailboxes, spread over the day within the limits. Continue?",
+      "snapshot": "Snapshot",
+      "ready": "Ready to send (approved + assigned)",
+      "sentToday": "Sent today",
+      "activeMb": "Active mailboxes",
+      "unassigned": "Approved, no mailbox",
+      "unassignedHint": "Some approved items have no mailbox assigned — build/assign them in the Cohort/Queue tabs so the drip can send them.",
+      "mailbox": "Mailbox",
+      "colSentToday": "Sent today",
+      "colQueued": "Queued (approved)",
+      "colCaps": "Caps",
+      "config": "Pacing",
+      "hourly": "Per hour / box",
+      "daily": "Per day / box",
+      "interval": "Min interval (min)",
+      "winStart": "Window start (UTC h)",
+      "winEnd": "Window end (UTC h)",
+      "btnSave": "Save pacing",
+      "configHint": "Effective limit is the lower of these and each mailbox's own daily/hourly limit. Window is server time (UTC). One mailbox sends at most once per min-interval.",
+      "saved": "Pacing saved.",
+      "enabled": "Drip enabled — sending will begin on the next tick within the window.",
+      "disabled": "Drip stopped."
+    },
+    "common": {
+      "loading": "Loading…",
+      "ok": "OK",
+      "failed": "FAILED",
+      "failedPrefix": "Failed: ",
+      "blockedPrefix": "Blocked: ",
+      "blockersLabel": "Blockers: ",
+      "close": "Close",
+      "subject": "Subject:",
+      "draft": "Draft:",
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "on": "on",
+      "off": "off",
+      "copied": "Copied.",
+      "copiedClipboard": "Copied to clipboard."
+    },
+    "today": {
+      "lookupFailed": "Lookup failed: ",
+      "nextAction": "Next recommended action:",
+      "allowedToday": "Allowed today",
+      "sentToday": "Sent today",
+      "remaining": "Remaining",
+      "repliesToday": "Replies today",
+      "interested": "Interested",
+      "negative": "Negative",
+      "bounceLike": "Bounce-like",
+      "suppressionsToday": "Suppressions today",
+      "followupsDue": "Follow-ups due",
+      "followupsBlocked": "Follow-ups blocked",
+      "queueReady": "Queue ready",
+      "queuePending": "Queue pending",
+      "queueBlocked": "Queue blocked",
+      "mailboxHealth": "Mailbox health",
+      "noMailbox": "No mailbox connected yet.",
+      "whyBlockedTitle": "Why is this contact blocked?",
+      "emailPlaceholder": "email@company.com",
+      "check": "Check",
+      "blocked": "BLOCKED",
+      "contactable": "Contactable"
+    },
+    "setup": {
+      "connected": "Bridge mailbox connected.",
+      "connectFailed": "Connect failed: ",
+      "testLabel": "test",
+      "title": "Connect existing Zoho mailbox (quick path)",
+      "bridgeStatus": "Bridge status:",
+      "copyPasteMode": "Copy/paste mode:",
+      "alwaysAvailable": "always available",
+      "setTheseIn": "Set these in",
+      "valuesNeverShown": "(values never shown here):",
+      "smtpUser": "SMTP user:",
+      "smtpPassword": "SMTP password:",
+      "imapUser": "IMAP user:",
+      "imapPassword": "IMAP password:",
+      "connectBridge": "Connect bridge mailbox",
+      "testSmtp": "Test SMTP (no send)",
+      "testImap": "Test IMAP (no read)",
+      "mailbox": "Mailbox",
+      "statusLabel": "status",
+      "dailyLimit": "daily limit",
+      "otherProviders": "For other providers (generic SMTP/IMAP, Gmail, M365), use the Providers tab."
+    },
+    "providers": {
+      "created": "Provider connected. Set the named env vars, then test.",
+      "title": "Connect a mailbox provider",
+      "dbNote": "DB stores env-var names only — never secret values. Put the real credentials in .env under those names.",
+      "displayName": "Display name",
+      "smtpHost": "SMTP host",
+      "smtpPort": "SMTP port",
+      "imapHost": "IMAP host",
+      "imapPort": "IMAP port",
+      "smtpUserRef": "SMTP user env-var NAME",
+      "smtpSecretRef": "SMTP password env-var NAME",
+      "imapUserRef": "IMAP user env-var NAME",
+      "imapSecretRef": "IMAP password env-var NAME",
+      "inbound": "inbound (IMAP)",
+      "outbound": "outbound (SMTP)",
+      "connect": "Connect provider",
+      "testStatus": "test status:",
+      "user": "user",
+      "secret": "secret",
+      "configured": "configured",
+      "err": "err:"
+    },
+    "cohort": {
+      "previewFailed": "Preview failed",
+      "queued": "Queued {n} item(s).",
+      "buildFailed": "Build failed: ",
+      "title": "Preset: manual bridge — 20 leads",
+      "subtitle": "Verified only · excludes suppressed/bounced/do-not-contact · builds queue items (NOT subscribed, NOT sent).",
+      "countryPlaceholder": "country ISO2",
+      "industriesPlaceholder": "industries (csv)",
+      "preview": "Preview",
+      "buildQueue": "Build queue (max 20)",
+      "matched": "Matched:"
+    },
+    "queue": {
+      "sentSmtp": "Sent via SMTP.",
+      "sendBlocked": "Send blocked: ",
+      "markedManual": "Marked sent manually.",
+      "followupCreated": "Follow-up #{id} created ({status}).",
+      "queueLabel": "Queue:",
+      "pending": "pending",
+      "approved": "approved",
+      "sent": "sent",
+      "doNotContact": "do-not-contact",
+      "hardMax": "hard max",
+      "copyToWebmail": "Copy to webmail",
+      "readyToSend": "Ready to send/copy.",
+      "copyRecipient": "Copy recipient",
+      "copySubject": "Copy subject",
+      "copyBody": "Copy body",
+      "safety": "safety:",
+      "source": "source",
+      "approve": "Approve",
+      "sendViaSmtp": "Send via SMTP",
+      "markSentManually": "Mark sent manually",
+      "unapprove": "Unapprove",
+      "createFollowup": "Create follow-up",
+      "skip": "Skip",
+      "doNotContactBtn": "Do not contact"
+    },
+    "replies": {
+      "imported": "Imported {n} (auto-suppressed {s}).",
+      "importBlocked": "Import blocked: ",
+      "suppressedEverywhere": "Suppressed everywhere.",
+      "followupCreated": "Follow-up task created.",
+      "importBtn": "Import recent replies (IMAP)",
+      "importHelper": "All inbound mailboxes. Disabled until IMAP creds set + IMAP enabled. Read-only; no delete/move.",
+      "noReplies": "No replies imported.",
+      "lastOutbound": "Last outbound:",
+      "noSubject": "(no subject)",
+      "conf": "conf",
+      "addFollowup": "+ follow-up",
+      "suppress": "Suppress"
+    },
+    "followups": {
+      "generated": "Created {c} task(s) ({b} blocked) from {s} sent items.",
+      "markedSent": "Marked sent.",
+      "skipped": "Skipped.",
+      "sequenceCancelled": "Sequence cancelled.",
+      "suppressed": "Suppressed.",
+      "step": "step",
+      "due": "due",
+      "blockers": "blockers:",
+      "copy": "Copy",
+      "markSent": "Mark sent",
+      "skip": "Skip",
+      "cancelSequence": "Cancel sequence",
+      "suppress": "Suppress",
+      "title": "Safe follow-ups",
+      "subtitle": "— tasks only, reviewed + sent by hand. No bulk, no scheduler.",
+      "timing": "Timing: step 1 = {s1} days, step 2 = {s2} days, max {max}.",
+      "generateBtn": "Generate tasks for sent items",
+      "copyFollowup": "Copy follow-up",
+      "ready": "Ready.",
+      "recipient": "Recipient",
+      "subject": "Subject",
+      "body": "Body",
+      "dueTodaySoon": "Due today / soon",
+      "blockedGroup": "Blocked",
+      "upcoming": "Upcoming",
+      "sent": "Sent",
+      "skippedGroup": "Skipped",
+      "cancelled": "Cancelled"
+    },
+    "warmup": {
+      "imapEnabled": "IMAP enabled.",
+      "imapDisabled": "IMAP disabled.",
+      "scheduleTitle": "Warmup schedule (recommendation only):",
+      "scheduleDesc": "day 1 → 5/day · days 2-3 → 10 · days 4-7 → 15 · after week 1 → 20 max. No automatic increase.",
+      "day": "day",
+      "limit": "limit",
+      "sentToday": "sent today",
+      "copy": "copy",
+      "remaining": "remaining",
+      "replies": "replies",
+      "interested": "interested",
+      "negative": "negative",
+      "bounceLike": "bounce-like",
+      "recommendedTomorrow": "Recommended tomorrow:",
+      "perDay": "day",
+      "lastSent": "last sent",
+      "enableImap": "Enable IMAP",
+      "disableImap": "Disable IMAP"
+    },
+    "templates": {
+      "approved": "Approved.",
+      "approvalRevoked": "Approval revoked.",
+      "title": "First-touch + follow-up templates.",
+      "subtitle": "Operator must approve before queue items can be SMTP-sent. No fake claims, clear opt-out, no tracking pixel.",
+      "editorNote": "Full editor, HTML preview, spam/link checker and versioning live in",
+      "senderStudio": "Sender Studio →",
+      "viewMode": "View mode:",
+      "replaceFields": "REPLACE fields",
+      "humanPreview": "Human preview",
+      "approvedLabel": "approved",
+      "notApproved": "not approved",
+      "showIn": "Show in {mode} mode",
+      "replaceFieldsMode": "REPLACE fields",
+      "humanPreviewMode": "human preview",
+      "fields": "Fields:",
+      "revokeApproval": "Revoke approval",
+      "approveTemplate": "Approve template"
+    }
+  },
+  "sendControl": {
+    "pageTitle": "Send Control Center",
+    "refresh": "Refresh",
+    "zohoBanner": {
+      "label": "Zero-budget option:",
+      "pre": "the ",
+      "link": "Manual Outreach (Zoho bridge)",
+      "post": " lets you contact a tiny cohort one-by-one — via Zoho SMTP if credentials are set, or copy/paste into Zoho webmail if not. Start 5/day, no bulk, no scheduler."
+    },
+    "strategyBanner": {
+      "label": "Compliant sending strategy.",
+      "pre": "Cold scraped data is high risk — do NOT send 75k from one cold domain. Build small cohorts in the ",
+      "link": "Cohort Builder",
+      "post": ", run them through a bounce-checker, export to a compliant ESP (Brevo/Instantly/Smartlead), and keep this domain at its current daily limit until warmed. Auto-pause gates: bounce > 3%, complaint > 0.1%. Main/transactional domains must not be mixed with cold outreach."
+    },
+    "killSwitch": {
+      "title": "Kill Switch — Pause All Campaigns",
+      "desc": "Immediately pauses all sending and scheduled campaigns. Does not cancel them — use to stop sending while investigating issues.",
+      "noActive": "No active campaigns.",
+      "confirm": "Pause {n} active/scheduled campaign(s)?",
+      "pausedResult": "Paused {n}/{total} campaigns.",
+      "pausing": "Pausing…",
+      "pauseAll": "Pause all ({n} active)"
+    },
+    "smtp": {
+      "heading": "SMTP",
+      "badgeReady": "SMTP ready",
+      "badgeMailhog": "Mailhog (test only)",
+      "badgeNotConfigured": "Not configured",
+      "from": "from:",
+      "blocked": "Campaign scheduling is blocked.",
+      "configureLink": "Configure SMTP in Setup →",
+      "adminOnly": "SMTP status: super admin only"
+    },
+    "domains": {
+      "heading": "Sending Domains",
+      "none": "No domains.",
+      "addLink": "Add a domain →",
+      "perDay": "{n}/day",
+      "noneVerified": "No verified domains —",
+      "verifyLink": "verify a domain first →"
+    },
+    "infra": {
+      "heading": "Sending Infrastructure",
+      "killSwitchActive": "Kill switch ACTIVE —",
+      "paused": "paused",
+      "relayProviders": "Relay providers",
+      "providersNonePre": "None. Add one via ",
+      "providersNoneMid": " (stays ",
+      "providersNonePost": " without credentials).",
+      "realWorldPre": "Real-world emails sent: ",
+      "realWorldPost": ". Production sending stays blocked until SMTP=ready + verified domain + active mailbox.",
+      "sendsToday": "today",
+      "sendsApprovedPending": "approved-pending",
+      "sendsPendingReview": "awaiting review",
+      "sendsLast": "last"
+    },
+    "mailboxes": {
+      "heading": "Mailboxes (sender identities)",
+      "none": "None.",
+      "colMailbox": "Mailbox",
+      "colPurpose": "Purpose",
+      "colStatus": "Status",
+      "colSentToday": "Sent today",
+      "colDaily": "Daily",
+      "colHourly": "Hourly",
+      "colBounced": "Bounced",
+      "colWarmup": "Warmup",
+      "left": "({n} left)"
+    },
+    "webhooks": {
+      "heading": "Provider webhook adapters",
+      "secretMissing": "(secret NOT configured — set WEBHOOK_BOUNCE_SECRET)",
+      "lastWebhook": "Last webhook:"
+    },
+    "kpi": {
+      "totalCampaigns": "Total campaigns",
+      "activeScheduled": "Active / scheduled",
+      "sentToday": "Sent today (est.)",
+      "bouncedToday": "Bounced today",
+      "unsubsToday": "Unsubs today",
+      "verifiedDomains": "Verified domains"
+    },
+    "preflight": {
+      "heading": "Campaign Preflight Gates",
+      "smtpLabel": "SMTP: production provider configured",
+      "smtpFixMailhog": "Currently Mailhog. Set real SMTP_HOST in .env → restart api.",
+      "smtpFixDefault": "Configure SMTP in /setup.",
+      "domainLabel": "At least one verified sending domain",
+      "domainFix": "Add and verify a domain in /domains.",
+      "campaignLabel": "At least one campaign created",
+      "campaignFix": "Create a campaign in /campaigns."
+    },
+    "campaigns": {
+      "heading": "All Campaigns",
+      "none": "No campaigns yet.",
+      "createLink": "Create one →",
+      "colName": "Name",
+      "colStatus": "Status",
+      "colRecipients": "Recipients",
+      "colSent": "Sent",
+      "colBounced": "Bounced",
+      "colUnsub": "Unsub",
+      "colActions": "Actions",
+      "pause": "Pause"
+    }
+  },
+  "partnerOutreach": {
+    "pageTitle": "Partner Directory Outreach",
+    "intro": "Operator-controlled, NON-EMAIL outreach. Save companies from a partner directory, generate a short partner message, open the directory contact form, copy/paste, submit it yourself, then track the reply. Nothing is sent or submitted automatically.",
+    "safetyBanner": "This directory may have its own terms. Use low-volume, relevant partner messages only. Do not submit duplicate or irrelevant messages. No login/captcha bypass, no auto-submit, no mass sending.",
+    "tabToday": "Today",
+    "tabSources": "Sources",
+    "tabTargets": "Targets",
+    "tabTasks": "Tasks",
+    "tabTemplates": "Templates",
+    "btnRefresh": "Refresh",
+    "btnSeed": "Seed Intuit/ZiftOne + templates",
+    "btnAddSource": "+ Add source",
+    "btnSave": "Save",
+    "btnCancel": "Cancel",
+    "nextAction": "Next action",
+    "limits": "Limits",
+    "tasksToday": "Tasks created today",
+    "subsToday": "Submissions today",
+    "sourceName": "Name",
+    "sourceUrl": "Directory URL",
+    "platform": "Platform",
+    "status": "Status",
+    "notes": "Notes",
+    "importTitle": "Import targets",
+    "importHint": "Paste CSV (with header), or one profile/website URL or company name per line. Max 200 rows. Dry-run previews first; confirm to save.",
+    "btnDryRun": "Preview (dry-run)",
+    "btnImportConfirm": "Confirm import",
+    "discoverHint": "Automated browser discovery is unavailable (no headless browser; the directory is login/captcha gated and we never bypass it). Use manual import from your own logged-in session.",
+    "colCompany": "Company",
+    "colCategory": "Category",
+    "colCountry": "Country",
+    "colStatus": "Status",
+    "colActions": "Actions",
+    "selectTemplate": "Template",
+    "btnCreateTasks": "Create contact-form tasks",
+    "varsHint": "Fill the REPLACE fields (sender name, website/project, directory name). Company name is filled automatically.",
+    "colMessage": "Message",
+    "btnOpenForm": "Open form",
+    "btnCopy": "Copy message",
+    "btnMarkSubmitted": "Mark submitted manually",
+    "btnSkip": "Skip",
+    "btnDnc": "Do not contact",
+    "btnReplied": "Mark replied",
+    "btnInterested": "Interested",
+    "btnNotInterested": "Not interested",
+    "loading": "Loading…",
+    "empty": "Nothing here yet.",
+    "noAutoSubmit": "No automatic form submission. You submit each form yourself.",
+    "msgSeeded": "Seeded source + {n} templates",
+    "msgError": "Error: {e}",
+    "msgPreview": "Preview: {n} rows",
+    "msgImported": "Imported {created}, duplicates {duplicates}",
+    "msgSelectTargets": "Select targets first",
+    "msgTasksCreated": "Created {created} task(s), skipped {skipped}",
+    "errDailyTaskLimit": " (daily task limit)",
+    "errDailySubmissionLimit": " (daily submission limit)",
+    "msgOkAction": "OK: {action}",
+    "msgOk": "OK",
+    "lblTargets": "Targets",
+    "lblTasks": "Tasks",
+    "phSenderName": "Sender name",
+    "phWebsiteProject": "Website / project",
+    "phPartnerProgram": "Partner program / directory name",
+    "linkForm": "form ↗"
+  },
+  "smtpNodes": {
+    "pageTitle": "SMTP Nodes — Self-Hosted Readiness Manager",
+    "intro": "Register future dedicated self-hosted SMTP nodes and check whether they are safe and ready to use. Metadata only — no passwords, no SSH keys, no secrets. Nothing is installed, no port is opened, no DNS is changed, no email is sent here.",
+    "safetyTitle": "Safety",
+    "safetyBanner": "This is a readiness, risk, DNS and reputation manager. It does NOT install a mail server, open port 25, change DNS, or send email. Sending is BLOCKED by default until every critical check passes.",
+    "prodIpWarn": "Nodes using this server's production IP are blocked for cold outreach:",
+    "btnNew": "+ Add node",
+    "btnCancel": "Cancel",
+    "btnRefresh": "Refresh",
+    "btnSaveDraft": "Save draft",
+    "btnOpen": "Open",
+    "btnRunCheck": "Run readiness check",
+    "btnExportMd": "Export Markdown",
+    "btnExportJson": "Export JSON",
+    "btnCreateProvider": "Create draft provider profile",
+    "btnDisable": "Disable node",
+    "formTitle": "Add SMTP node (draft)",
+    "formName": "Name",
+    "formNodeType": "Node type",
+    "formPurpose": "Purpose",
+    "formHostname": "Hostname",
+    "formIp": "IPv4",
+    "formPtr": "Expected PTR (rDNS)",
+    "formDomain": "Sending domain",
+    "formDkim": "DKIM selector (optional)",
+    "formIsolation": "Isolation",
+    "formProvider": "Provider name",
+    "formLocation": "Location",
+    "formIsolationNote": "Isolation note",
+    "listTitle": "Nodes",
+    "loading": "Loading…",
+    "empty": "No SMTP nodes yet. Add one to begin.",
+    "colName": "Name",
+    "colHost": "Hostname",
+    "colIp": "IP",
+    "colPurpose": "Purpose",
+    "colStatus": "Status",
+    "colScore": "Score",
+    "colLevel": "Level",
+    "colBlocker": "Top blocker",
+    "critical": "critical",
+    "risk": "Risk",
+    "safeToSend": "Safe to send",
+    "safeProvider": "Safe as provider",
+    "yes": "yes",
+    "no": "no",
+    "nextAction": "Next recommended fix",
+    "runCheckFirst": "Run a readiness check to evaluate this node.",
+    "probe25": "Also probe port 25 (read-only TCP connect, no email sent)",
+    "blockers": "Blockers",
+    "warnings": "Warnings",
+    "secDnsPtr": "DNS / PTR / isolation",
+    "secAuth": "SPF / DKIM / DMARC",
+    "secMxTls": "MX / TLS / port 25",
+    "secMailboxes": "abuse@ / postmaster@ / bounce",
+    "secReputation": "Manual blacklist / reputation",
+    "reputationHint": "Record results from manual blacklist lookups. No scraping, no paid API. Listed anywhere = sending blocked.",
+    "secDnsChecklist": "DNS checklist (instructions only — nothing is changed automatically)",
+    "dnsChecklistHint": "Apply these records at your DNS provider and your VPS panel (PTR). Merge SPF if one already exists.",
+    "dnsType": "Type",
+    "dnsHost": "Host",
+    "dnsValue": "Value",
+    "providerHint": "Available once readiness reaches ready_for_tiny_test. Creates a disabled/pending provider profile, no secrets, no sending.",
+    "msgNameRequired": "Name is required.",
+    "msgCreated": "Draft node created.",
+    "msgChecking": "Running readiness check…",
+    "msgChecked": "Readiness check complete.",
+    "msgDisabled": "Node disabled.",
+    "msgSaved": "Saved.",
+    "msgProviderCreated": "Draft provider profile #{id} created (disabled, no secrets, no sending).",
+    "msgProviderBlocked": "Cannot create provider yet: {e}",
+    "msgFailed": "Failed: {e}"
+  },
+  "senderStudio": {
+    "pageTitle": "Sender Studio",
+    "intro": "Create, preview, validate and approve email templates before any real outreach. No email is ever sent from this page. Cold-outreach templates cannot be approved without an opt-out line and a business address.",
+    "emptyState": "Select a template, or create / import one.",
+    "loading": "Loading…",
+    "empty": "(empty)",
+    "btnNew": "+ New",
+    "btnImportJson": "Import JSON",
+    "btnSeedClientsHelp": "Seed Clients.Help",
+    "btnImportAsDraft": "Import as draft",
+    "noTemplatesYet": "No templates yet.",
+    "msgCreatedDraft": "Created draft template.",
+    "msgCreateFailed": "Create failed: {e}",
+    "msgImportInvalidJson": "Import: invalid JSON.",
+    "msgImportFailed": "Import failed: {e}",
+    "btnSave": "Save",
+    "btnApprove": "Approve",
+    "btnUnapprove": "Unapprove",
+    "btnDuplicate": "Duplicate",
+    "btnArchive": "Archive",
+    "btnUnarchive": "Unarchive",
+    "btnExportJson": "Export JSON",
+    "btnExportHtml": "HTML",
+    "btnExportTxt": "TXT",
+    "btnVersions": "Versions",
+    "titleApprove": "Approve",
+    "titleFixBlocking": "Fix blocking issues first",
+    "msgSaved": "Saved.",
+    "msgSavedVersioned": "Saved. Previous approved version kept as v{prev}; now draft v{new}.",
+    "msgSaveFailed": "Save failed: {e}",
+    "msgApproved": "Approved ({status}{warn}).",
+    "msgApprovedWarnSuffix": ", {n} warning(s)",
+    "msgApprovalBlocked": "Approval blocked: {msgs}",
+    "msgActionFailed": "Failed: {e}",
+    "msgDuplicated": "Duplicated.",
+    "msgUnapproved": "Unapproved.",
+    "msgArchived": "Archived.",
+    "msgUnarchived": "Unarchived.",
+    "fieldCategory": "Category",
+    "fieldLanguage": "Language",
+    "fieldEditorMode": "Editor mode",
+    "fieldSubject": "Subject",
+    "fieldPreheader": "Preheader (preview snippet)",
+    "fieldUseCase": "Intended use case",
+    "fieldInsertReplaceField": "Insert replace field",
+    "btnDefaultFooter": "+ Default footer",
+    "fieldPlainBody": "Plain text body",
+    "fieldHtmlBody": "HTML body (sanitised on save — no scripts)",
+    "fieldPlainFallback": "Plain-text fallback (required)",
+    "visualBlocksLabel": "Visual blocks (email-safe HTML is generated automatically)",
+    "phLabel": "label",
+    "phHref": "href",
+    "phOneItemPerLine": "one item per line",
+    "phSrc": "src (placeholder ok)",
+    "phAlt": "alt text (required)",
+    "safetyLabel": "Safety",
+    "canApprove": "can approve",
+    "approvalBlocked": "approval blocked",
+    "linksCount": "{n} link(s)",
+    "noIssues": "No issues. Recipient will see opt-out + address as required.",
+    "levelBlock": "BLOCK",
+    "levelWarn": "warn",
+    "linkIssues": "Link issues",
+    "device_desktop": "desktop",
+    "device_mobile": "mobile",
+    "device_dark": "dark",
+    "device_plain": "plain",
+    "device_source": "source",
+    "btnReplaceFields": "Replace fields",
+    "btnDemoData": "Demo data",
+    "fromLabel": "From",
+    "subjectLabel": "Subject",
+    "previewIframeTitle": "preview",
+    "versionHistory": "Version history",
+    "thV": "v",
+    "thName": "name",
+    "thSubject": "subject",
+    "thStatus": "status",
+    "thAt": "at",
+    "badgeNeedsAddress": "Needs address",
+    "badgeNeedsOptOut": "Needs opt-out",
+    "badgeUnapproved": "Unapproved",
+    "badgeArchived": "Archived",
+    "badgeRiskyWording": "Has risky wording",
+    "badgeTooManyLinks": "Too many links",
+    "badgeDraftVersion": "Draft version",
+    "badgeReady": "Ready",
+    "badgeApproved": "Approved",
+    "statusSafe": "safe",
+    "statusWarning": "warning",
+    "statusBlocked": "blocked",
+    "msgExportFailed": "Export failed ({e})"
+  },
+  "warehouseCohorts": {
+    "pageTitle": "Cohort Builder",
+    "heading": "Cohort Builder",
+    "warning": "Cold scraped B2B data is high risk. Build SMALL cohorts, export to a compliant ESP, never blast 75k from one cold domain.",
+    "phIndustry": "industry slug",
+    "phCountry": "country (ISO2)",
+    "phCity": "city",
+    "phProductFit": "productFit key[:status]",
+    "phRoleType": "role type (sales/owner...)",
+    "phSourceProvider": "source provider",
+    "phMinScore": "min verify score 0-100",
+    "phMaxAgeDays": "max source age (days)",
+    "websiteAny": "website: any",
+    "websiteHas": "has website",
+    "websiteNo": "no website",
+    "loading": "Loading…",
+    "previewCohort": "Preview cohort",
+    "previewFailed": "Preview failed.",
+    "exportBlocked": "Export blocked: ",
+    "downloaded": "Downloaded {n}",
+    "ackRequired": "You must tick the compliance acknowledgement before exporting.",
+    "matched": "Matched:",
+    "eligible": "Eligible:",
+    "blocked": "Blocked:",
+    "blockedReasons": "Blocked reasons:",
+    "country": "Country:",
+    "role": "Role:",
+    "source": "Source:",
+    "recommendedFirstExport": "Recommended first export:",
+    "maxExport": "Max export:",
+    "sampleSummary": "Sample (first 20 eligible)",
+    "exportToEsp": "Export to ESP",
+    "formatGenericCsv": "Generic CSV",
+    "ackLabel": "I understand this cohort is cold B2B data. I will use compliant messaging, clear opt-out, and stop on complaints/bounces.",
+    "exportCohortCsv": "Export cohort CSV",
+    "downloadSuppression": "Download suppression list",
+    "exportBounceCheck": "Export for bounce-checker"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "seoTitle": "Privacy Policy — emails.cheap",
+    "lastUpdated": "Last updated",
+    "sections": [
+      {
+        "h": "1. Who we are",
+        "p": "emails.cheap (\"Platform\", \"we\", \"us\") is an email outreach platform for B2B businesses. We operate at https://emails.cheap and https://email.clients.help. This policy describes how we collect, use, and protect personal data in connection with the Platform."
+      },
+      {
+        "h": "2. Data we collect",
+        "p": "We collect: (a) Account data — email address, name, tenant/organisation name, hashed password. (b) Usage data — login timestamps, audit logs, campaign activity. (c) Lead warehouse data — publicly listed business contact information (business emails, websites, company names) sourced from OpenStreetMap, Tavily web search, and user-uploaded archives. All warehouse contacts are B2B (business email addresses of companies), not personal consumer addresses."
+      },
+      {
+        "h": "3. How we use your data",
+        "p": "Account data is used to authenticate your account and provide the Platform services. Lead warehouse data is used solely to power outreach draft generation and sending features for the account that controls it. We do not sell, share, or trade personal data with third parties for advertising purposes."
+      },
+      {
+        "h": "4. Data retention",
+        "p": "Account data is retained while your account is active and for 30 days after deletion. Lead warehouse data is retained as long as your account is active. You may request deletion at any time by contacting support@emails.cheap."
+      },
+      {
+        "h": "5. Anti-spam commitment",
+        "p": "The Platform enforces strict anti-spam controls: (a) One-click permanent unsubscribe is enforced on all outgoing emails. (b) Global suppression lists are maintained and honoured. (c) Accounts sending to purchased, leaked, or non-consenting lists are immediately suspended. (d) Sending requires SPF, DKIM, and DMARC authentication on verified domains."
+      },
+      {
+        "h": "6. Cookies and tracking",
+        "p": "The Platform uses a session cookie (token) to maintain your authenticated session. No third-party tracking, analytics, or advertising cookies are set. Email open/click tracking is implemented via signed tokens — recipients can opt out by unsubscribing."
+      },
+      {
+        "h": "7. Your rights",
+        "p": "You have the right to access, correct, or delete your personal data. You have the right to data portability and to restrict processing. To exercise these rights, contact support@emails.cheap. We respond within 30 days."
+      },
+      {
+        "h": "8. Security",
+        "p": "Passwords are hashed with Argon2id. All connections use TLS. Database credentials are isolated per-service. We conduct periodic security reviews. If a breach affects your data, we will notify you within 72 hours."
+      },
+      {
+        "h": "9. Contact",
+        "p": "Privacy inquiries: support@emails.cheap"
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "seoTitle": "Terms of Service — emails.cheap",
+    "lastUpdated": "Last updated",
+    "sections": [
+      {
+        "h": "1. Acceptance",
+        "p": "By creating an account on emails.cheap (\"Platform\"), you agree to these Terms. If you do not agree, do not use the Platform."
+      },
+      {
+        "h": "2. Permitted use",
+        "p": "The Platform is for legitimate B2B outreach to businesses that may have a genuine interest in your product or service. You may use it to: collect publicly listed business leads, generate personalised outreach drafts with human approval, and send emails to opted-in contacts or niche-segmented business lists."
+      },
+      {
+        "h": "3. Prohibited use",
+        "p": "You must NOT: (a) send to purchased, harvested, leaked, or consumer email lists; (b) send spam, phishing, malware, or deceptive content; (c) impersonate other entities or falsify sender information; (d) attempt to bypass suppression, unsubscribe, or bounce handling; (e) rotate sending domains to evade spam filters; (f) use the Platform for illegal activities. Violation results in immediate account suspension."
+      },
+      {
+        "h": "4. Anti-spam obligations",
+        "p": "You must: include a valid physical address in every email; provide a one-click unsubscribe link (enforced by the Platform); honour all unsubscribe and opt-out requests immediately; maintain bounce and complaint rates below industry thresholds (2% bounce, 0.08% complaint). The Platform monitors these metrics and may automatically suspend your account if thresholds are exceeded."
+      },
+      {
+        "h": "5. Content standards",
+        "p": "Approved outreach drafts must be accurate and not misleading. Claims about your product must be truthful. The Platform may review and decline content that violates these standards."
+      },
+      {
+        "h": "6. Account suspension",
+        "p": "We may suspend or terminate your account immediately for: sending spam, exceeding abuse thresholds, violating these Terms, or activity that harms the Platform's IP reputation. Suspended accounts may not access their data until the matter is resolved."
+      },
+      {
+        "h": "7. Service availability",
+        "p": "We aim for 99.5% uptime but provide the Platform \"as is\" without warranty. We are not liable for delivery failures, email filtering by third-party providers, or data loss outside our control."
+      },
+      {
+        "h": "8. Limitation of liability",
+        "p": "Our total liability for any claim related to the Platform is limited to the fees paid in the 3 months preceding the claim. We are not liable for indirect, consequential, or incidental damages."
+      },
+      {
+        "h": "9. Changes to terms",
+        "p": "We may update these Terms. We will notify active accounts by email at least 14 days before material changes take effect. Continued use after the effective date constitutes acceptance."
+      },
+      {
+        "h": "10. Governing law",
+        "p": "These Terms are governed by applicable law. Disputes shall be resolved through good-faith negotiation first, then binding arbitration if unresolved."
+      },
+      {
+        "h": "11. Contact",
+        "p": "Legal inquiries: support@emails.cheap"
+      }
+    ]
+  },
+  "goLive": {
+    "pageTitle": "Go Live",
+    "heading": "First Outreach Control Center",
+    "intro": "Safe, guided first launch using leads you already have. No discovery, no mass send.",
+    "readinessOf100": "Readiness / 100",
+    "nextStep": "Next step:",
+    "open": "open",
+    "today": "Today",
+    "activeMailboxes": "Active mailboxes",
+    "safeDay1": "Safe day-1",
+    "sentToday": "Sent today",
+    "remaining": "Remaining",
+    "queueReady": "Queue ready",
+    "pending": "Pending",
+    "followupsDue": "Follow-ups due",
+    "repliesToReview": "Replies to review",
+    "checklist": "Checklist",
+    "step": "Step",
+    "eligibleLeads": "Existing eligible leads",
+    "presetShort": "Clients.Help preset",
+    "recommendedFirst": "Recommended first selection from Warehouse",
+    "panelTitle": "Select existing leads & build first queue",
+    "panelDesc": "Choose 20 existing verified leads from your Warehouse. No discovery, no enrichment, no mass send.",
+    "srcWarehouse": "Existing Warehouse leads",
+    "srcManual": "Manually selected leads",
+    "manualPlaceholder": "paste emails (comma/space/newline separated) — must already exist & be verified in Warehouse",
+    "btnPreview": "Preview 20 existing leads (dry run)",
+    "btnPlan": "Generate day-1 plan",
+    "btnCreate": "Create safe first queue from selected existing leads",
+    "noSendAll": "No “send all”. No auto-send. Items are created as pending review only.",
+    "planTitle": "First outreach plan",
+    "safeTotalToday": "Safe recommended total today",
+    "perMailbox": "per mailbox",
+    "dryRunTitle": "Dry run",
+    "template": "Template",
+    "noApproved": "none approved",
+    "approved": "approved",
+    "notApproved": "NOT approved",
+    "wouldQueue": "Would queue",
+    "blocked": "Blocked",
+    "colEmail": "Email",
+    "colCompany": "Company",
+    "colCountry": "Country",
+    "colMailbox": "Mailbox",
+    "colMissing": "Missing",
+    "presetTitle": "Clients.Help launch preset:",
+    "firstSelection": "first selection",
+    "day1Cap": "day-1 cap",
+    "target": "target",
+    "industries": "industries",
+    "safetyLabel": "Safety",
+    "realSent": "real emails sent",
+    "prodSmtp": "production SMTP",
+    "campaignsScheduled": "campaigns scheduled",
+    "sendAllBtn": "send-all button",
+    "discovery": "lead discovery in wizard",
+    "yes": "yes",
+    "no": "no",
+    "loading": "Loading…",
+    "confirmCreate": "Create up to 20 pending-review queue items from existing eligible leads? Nothing is sent or subscribed.",
+    "createdMsg": "Created {n} pending-review item(s), {a} mailbox-assigned. Nothing sent.",
+    "blockedMsg": "Blocked: ",
+    "dryFail": "Dry run failed: ",
+    "status": {
+      "Not ready": "Not ready",
+      "Setup needed": "Setup needed",
+      "Ready for manual copy-mode": "Ready for manual copy-mode",
+      "Ready for one-by-one SMTP": "Ready for one-by-one SMTP",
+      "Running safely": "Running safely",
+      "Paused due risk": "Paused due risk"
+    },
+    "steps": {
+      "channel": "Sending channel",
+      "template": "Template",
+      "select_leads": "Select existing leads",
+      "queue": "Queue",
+      "day1": "Day 1 sending",
+      "replies": "Replies",
+      "followups": "Follow-ups"
+    },
+    "pill": {
+      "ready": "Ready",
+      "needs_action": "Needs action",
+      "blocked": "Blocked"
+    },
+    "checks": {
+      "providerProfile": "provider profile",
+      "mailboxExists": "mailbox exists",
+      "mailboxActive": "mailbox active",
+      "smtpTestPassed": "SMTP test passed",
+      "imapTestPassed": "IMAP test passed",
+      "inboundEnabled": "inbound enabled",
+      "productionSmtp": "production SMTP",
+      "anyApproved": "approved template",
+      "approvedFirstTouch": "approved first-touch",
+      "warehouseHasEligible": "eligible leads exist",
+      "enoughForFirstSelection": "enough for first selection",
+      "hasItems": "queue has items",
+      "allAssigned": "all assigned",
+      "canSendToday": "can send today",
+      "imapImportReady": "reply import ready"
+    },
+    "warmupHint": "warmup suggestion",
+    "loadError": "Could not load — check your connection or sign in again."
+  },
+  "mailboxesPage": {
+    "pageTitle": "Mailboxes — Fleet Manager",
+    "intro": "Manage 1→100+ mailboxes safely. Flow: ",
+    "flow": "Add provider profile → Add mailbox → Put env vars in .env → Restart api+worker → Test SMTP/IMAP → Activate",
+    "introTail": ". Secrets live in .env only — never shown here. No real emails are sent from this page.",
+    "tabFleet": "Fleet dashboard",
+    "tabMailboxes": "Mailboxes",
+    "tabProviders": "Provider profiles",
+    "loading": "Loading…",
+    "loadError": "Failed to load",
+    "totalMailboxes": "Total mailboxes",
+    "active": "Active",
+    "draft": "Draft",
+    "paused": "Paused",
+    "error": "Error",
+    "dailyCapacity": "Daily capacity",
+    "usedToday": "Used today",
+    "remainingToday": "Remaining today",
+    "repliesToday": "Replies today",
+    "followupsDue": "Follow-ups due",
+    "queueAssigned": "Queue assigned",
+    "health": "Health",
+    "needAttention": "Mailboxes needing attention",
+    "none": "None.",
+    "assignmentEngine": "Assignment engine",
+    "assignDesc": "Distribute queued items across healthy mailboxes (healthiest-first). Dry-run only — sets nothing.",
+    "dryRunAssign": "Dry-run assign queue",
+    "addMailbox": "Add mailbox",
+    "email": "Email",
+    "displayName": "Display name",
+    "providerProfile": "Provider profile",
+    "selectDash": "— select —",
+    "purpose": "Purpose",
+    "inboundImap": "Inbound (IMAP)",
+    "defaultsNote1": "New cold mailbox defaults to 5/day · 2/hour, status ",
+    "draftWord": "draft",
+    "defaultsNote2": ". Limits never auto-raise.",
+    "envTitle": ".env snippet (empty values only — fill with real secrets, then restart)",
+    "copy": "Copy",
+    "hide": "Hide",
+    "copied": "copied",
+    "mailboxesCount": "Mailboxes",
+    "bulkEnv": "Bulk env snippet (all drafts)",
+    "cNum": "#",
+    "cEmail": "Email",
+    "cProvider": "Provider",
+    "cStatus": "Status",
+    "cHealth": "Health",
+    "cDaily": "Daily",
+    "cUsedRem": "Used / Rem.",
+    "cReplies": "Replies",
+    "cTests": "Tests",
+    "cActions": "Actions",
+    "activate": "Activate",
+    "pause": "Pause",
+    "delete": "Delete",
+    "deleteConfirm": "Delete mailbox {email}? Its stored credentials are erased. This cannot be undone.",
+    "deleted": "Mailbox deleted.",
+    "deleteFail": "Delete failed",
+    "csvTitle": "CSV import / export (metadata only — never secrets)",
+    "csvCols": "Columns: email, display_name, provider_profile_name|provider_profile_id, purpose, daily_send_limit, hourly_send_limit, outbound_enabled, inbound_enabled, smtp_user_ref, smtp_secret_ref, imap_user_ref, imap_secret_ref. Imported mailboxes stay draft until tested + activated.",
+    "importCsv": "Import CSV (as draft)",
+    "exportCsv": "Export CSV",
+    "providerProfiles": "Provider profiles",
+    "provDesc": "Shared SMTP/IMAP host+port reused by many mailboxes. Secrets are NOT stored here.",
+    "seedZoho": "Seed Zoho EU profile",
+    "zohoExists": "Zoho EU already exists",
+    "zohoSeeded": "Zoho EU profile seeded",
+    "pName": "Name",
+    "pType": "Type",
+    "pSmtp": "SMTP",
+    "pImap": "IMAP",
+    "pDefaults": "Defaults",
+    "disable": "Disable",
+    "enable": "Enable",
+    "createProfile": "Create profile",
+    "smtpHost": "SMTP host",
+    "smtpPort": "SMTP port",
+    "smtpSecure": "SMTP SSL (port 465)",
+    "imapHost": "IMAP host",
+    "imapPort": "IMAP port",
+    "imapSecure": "IMAP SSL (port 993)",
+    "defaultDaily": "Default daily",
+    "defaultHourly": "Default hourly",
+    "create": "Create",
+    "mEmailProvReq": "email + provider profile required",
+    "mCreated": "Mailbox created (draft). Env snippet below.",
+    "mCreateFail": "Create failed: ",
+    "mPasteCsv": "paste CSV first",
+    "mImported": "Imported {a}/{n} as draft.",
+    "mAssignFail": "Assign failed: ",
+    "mDryRun": "Dry-run: {a}/{n} assignable.",
+    "mNameReq": "name required",
+    "mProfCreated": "Profile created",
+    "mFailed": "Failed: ",
+    "smtpOk": "SMTP test PASSED — credentials work.",
+    "smtpFail": "SMTP test FAILED",
+    "imapOk": "IMAP test PASSED — credentials work.",
+    "imapFail": "IMAP test FAILED",
+    "activated": "Mailbox ACTIVATED.",
+    "activateFail": "Activation FAILED",
+    "dismiss": "Dismiss",
+    "envHow": "These are env-var NAMES, not values. Secrets are never saved in the browser or database. Put them in the server file /opt/email/.env (fill the part after each =), then restart: docker compose up -d api worker. After that the SMTP/IMAP test will pass and you can Activate.",
+    "notConfigured": "not configured — credentials missing in .env",
+    "credsBtn": "🔑 Credentials",
+    "credsTitle": "Enter credentials for",
+    "credsHelp": "Entered here, encrypted in the database — no .env editing needed. Secrets are write-only (never shown back). For Zoho use an app-specific password.",
+    "smtpUser": "SMTP user (email)",
+    "smtpPass": "SMTP password",
+    "imapUser": "IMAP user (email)",
+    "imapPass": "IMAP password",
+    "imapSame": "IMAP same as SMTP",
+    "saveCreds": "Save credentials",
+    "credsSaved": "Credentials saved (encrypted). Now Test SMTP / IMAP, then Activate.",
+    "credsStoredBadge": "🔑 saved",
+    "cancel": "Cancel",
+    "dailyLimit": "Daily limit",
+    "setLimit": "Set",
+    "limitSaved": "Daily limit updated.",
+    "limitHint": "You set the number. Recommended warmup for a new mailbox: 5/day day 1, then ramp.",
+    "credsFirst": "Mailbox created. Now enter login + password below (🔑) — no .env editing.",
+    "envAdvNote": "Advanced/optional: server .env setup. You normally do NOT need this — use 🔑 Credentials instead.",
+    "provAddAny": "You can add ANY provider here — Gmail, Outlook/Microsoft 365, your own SMTP. Click a preset or fill the form below.",
+    "presetGmail": "Gmail / Workspace",
+    "presetOutlook": "Outlook / M365",
+    "presetGeneric": "Other (custom)",
+    "presetHint": "Preset fills host/port below. Then click Create. Per-mailbox login/password are entered later with the 🔑 button (encrypted, no .env).",
+    "presetFillForm": "Form filled below — set a name and click Create."
+  },
+  "deliverability": {
+    "title": "Deliverability Center",
+    "subtitle": "Live sending readiness — DNS, mailboxes, reputation, launch verdict",
+    "refresh": "Refresh",
+    "loading": "Loading real deliverability data…",
+    "loadError": "Could not load — check connection or sign in again.",
+    "verdictLabel": "Launch verdict",
+    "readiness": "Readiness",
+    "blockers": "Blockers",
+    "advisor": "Deliverability advisor",
+    "advisorClean": "No blockers or warnings detected.",
+    "checklist": "Launch checklist",
+    "dns": "Domains & authentication",
+    "domain": "Domain",
+    "returnPath": "Return-path",
+    "reachable": "Reachable",
+    "worker": "Worker",
+    "mailboxes": "Mailboxes",
+    "smtpRelay": "System SMTP",
+    "rates": "Rates (today)",
+    "sentToday": "Sent today",
+    "bounceRate": "Bounce rate",
+    "complaintRate": "Complaint rate",
+    "unsubRate": "Unsub rate",
+    "replyRate": "Reply rate",
+    "external": "External reputation",
+    "notConfigured": "not configured",
+    "externalNote": "Automated blacklist/reputation ingestion is not wired; report manually or supply credentials.",
+    "generatedAt": "Generated",
+    "verdict": {
+      "READY_FOR_LOW_VOLUME_WARMUP": "Ready for low-volume warmup",
+      "READY_FOR_CONTROLLED_TEST_SEND": "Ready for controlled test send",
+      "NOT_READY": "Not ready"
+    },
+    "check": {
+      "domain_verified": "Verified sending domain",
+      "spf_dkim_dmarc": "SPF + DKIM present",
+      "return_path": "Return-path DNS resolves",
+      "ptr": "PTR/rDNS aligned",
+      "smtp_verified": "Provider SMTP verified",
+      "imap_verified": "IMAP inbound enabled",
+      "active_mailbox": "Active sender identity",
+      "worker": "Worker heartbeat healthy",
+      "bounce_ok": "Bounce rate within limit",
+      "complaint_ok": "Complaint rate within limit",
+      "suppression": "Suppression pipeline active",
+      "campaigns_disabled": "Campaigns/drip disabled"
+    }
+  }
+}

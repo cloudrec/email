@@ -1,0 +1,27 @@
+groups:
+  - name: email-platform
+    rules:
+      # The incident class that previously went silent for days.
+      - alert: WorkerHeartbeatStale
+        expr: email_worker_heartbeat_age_seconds > 120
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: "Email worker heartbeat stale ({{ $value | humanizeDuration }})"
+          description: "Worker has not written worker:heartbeat in >120s — likely dead or hung."
+
+      - alert: WorkerDown
+        expr: email_worker_up == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: "Email worker is down"
+          description: "email_worker_up == 0 (heartbeat missing or stale)."
+
+      - alert: ApiMetricsUnreachable
+        expr: up{job="email-api"} == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: "Email API /metrics unreachable"
+          description: "Prometheus cannot scrape api:4000/metrics — API down or unhealthy."

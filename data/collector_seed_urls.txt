@@ -1,0 +1,33 @@
+# Collector seed URL list
+# ---------------------------------------------------------------
+# Rules:
+#   - One URL or domain per line.
+#   - Only PUBLIC business websites you have permission to crawl,
+#     or sites whose terms of service permit search-engine-style indexing.
+#   - No login-protected pages.
+#   - No paywalled pages.
+#   - No personal / private dashboards.
+#   - Comments start with #.
+#   - Blank lines are ignored.
+#
+# How to feed into the collector after editing this file:
+#   TTOKEN=$(curl -s -X POST http://127.0.0.1:4000/auth/login \
+#     -H 'content-type: application/json' \
+#     -d '{"email":"tenant@example.com","password":"TenantInitPass!42"}' \
+#     | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])')
+#   URLS=$(grep -v '^#' /opt/email/data/collector_seed_urls.txt | grep -v '^$' \
+#     | python3 -c 'import sys,json;print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
+#   curl -X POST http://127.0.0.1:4000/collector/campaigns/1/import-urls \
+#     -H "Authorization: Bearer $TTOKEN" -H "X-Tenant-Id: 1" \
+#     -H "content-type: application/json" \
+#     -d "{\"urls\": $URLS}"
+#
+# Default contents below are RFC-reserved or owner-controlled domains used as
+# safe placeholders. Replace with real outreach targets you have approval for.
+# ---------------------------------------------------------------
+
+# Safe placeholders (RFC-reserved / authoritative test domains):
+https://www.iana.org/about
+https://www.iana.org/help/example-domains
+
+# Add owner-approved targets below this line.
