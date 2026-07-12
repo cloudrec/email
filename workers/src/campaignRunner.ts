@@ -7,6 +7,8 @@ import { config } from './config.js';
 
 // Secret resolution is the single hardened worker vault (allowlist + strong key).
 import { resolveSecret } from './secretsVault.js';
+// Single authoritative per-mailbox cap/eligibility definition (shared with drip).
+import { mailboxBlocker } from './mailboxCaps.js';
 
 const LOCK_TTL = 60;
 
@@ -99,8 +101,9 @@ async function gateChecks(campaign: any): Promise<string | null> {
   // campaigns even if scheduler somehow let one through (defense in depth).
   if (campaign.segment_id && !campaign.list_id) return 'segment_engine_not_ready';
   if (!campaign.list_id) return 'list_required';
-  // Per-mailbox hard gate: a paused/disabled sender identity cannot send.
-  if (campaign.mailbox_status && campaign.mailbox_status !== 'active') return `mailbox_${campaign.mailbox_status}`;
+  // Per-mailbox hard gate (shared definition): active + not paused/disabled.
+  const mbBlock = mailboxBlocker({ status: campaign.mailbox_status, outbound_enabled: campaign.mailbox_outbound_enabled });
+  if (campaign.mailbox_status && mbBlock) return mbBlock;
   // Content safety — never send an empty or operator-placeholder campaign. Note
   // {{first_name}} style macros are legitimate here (rendered per-recipient by
   // sender.renderContext), so they are NOT blocked; only empty and unfilled

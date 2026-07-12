@@ -73,6 +73,8 @@ const mailboxFaults = new Map<number, number>(); // mailboxId -> consecutive fau
 
 // Secret resolution is the single hardened worker vault (allowlist + strong key).
 import { resolveSecret } from './secretsVault.js';
+// Single authoritative per-mailbox cap definition (shared with campaignRunner).
+import { dailyLimit, hourlyLimit } from './mailboxCaps.js';
 
 // HMAC unsubscribe token — MUST match api/src/routes/tracking.ts makeManualUnsubToken.
 function hmac(payload: string): string {
@@ -405,8 +407,11 @@ async function tickTenant(s: any): Promise<number> {
     // throttle (over-send). A NULL setting drops out of the min(), leaving the
     // mailbox's own limit as the backstop.
     const numOr = (v: any, d: number) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
-    const dailyCap = Math.min(numOr(s.daily_per_mailbox, Infinity), numOr(m.daily_send_limit, 9999));
-    const hourlyCap = Math.min(numOr(s.hourly_per_mailbox, Infinity), numOr(m.hourly_send_limit, 9999));
+    // Cap = min(drip-setting, authoritative per-mailbox limit). dailyLimit/hourlyLimit
+    // are the shared definition (warmup keeps daily_send_limit current); an unset
+    // mailbox limit resolves to 0 → fail-safe (blocks rather than defaulting high).
+    const dailyCap = Math.min(numOr(s.daily_per_mailbox, Infinity), dailyLimit(m));
+    const hourlyCap = Math.min(numOr(s.hourly_per_mailbox, Infinity), hourlyLimit(m));
     if (today >= dailyCap) continue;
     if (lastHour >= hourlyCap) continue;
     // Spacing guard. since_sec is computed DB-side (UTC) to avoid JS Date/timezone
