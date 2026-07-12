@@ -10,6 +10,7 @@ import { perpetualCollectorLoop } from './perpetualCollector.js';
 import { leadPromoterLoop } from './leadPromoter.js';
 import { contactVerifierLoop } from './contactVerifier.js';
 import { manualOutreachDripLoop } from './manualOutreachDrip.js';
+import { warmupSchedulerLoop } from './warmupScheduler.js';
 import { logger } from './logger.js';
 import { pool } from './db.js';
 import { redis } from './redis.js';
@@ -45,6 +46,7 @@ const loops = [
   leadPromoterLoop(),
   contactVerifierLoop(),
   manualOutreachDripLoop(),
+  warmupSchedulerLoop(),
 ];
 
 function shutdown(sig: string) {

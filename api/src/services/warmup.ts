@@ -4,6 +4,18 @@
 
 export const WARMUP_STEPS = [20, 50, 100, 250, 500, 1000, 2500, 5000] as const;
 
+// Automatic warmup ramp by DAY (1-indexed). Gentle cold-start curve that only
+// grows while health stays safe (the scheduler holds/pauses on breach).
+// Day 1=5, 2=8, 3=12, 4=18, 5=25, then continues to a steady-state ceiling.
+export const WARMUP_RAMP = [5, 8, 12, 18, 25, 35, 50, 70, 100, 140, 200, 280, 400, 500] as const;
+
+/** Daily send limit for a given warmup day (1-indexed). Caps at the last step. */
+export function warmupLimitForDay(day: number): number {
+  const d = Math.max(1, Math.floor(day || 1));
+  return WARMUP_RAMP[Math.min(d, WARMUP_RAMP.length) - 1];
+}
+export const WARMUP_MAX_DAY = WARMUP_RAMP.length;
+
 // Compliance thresholds (industry-standard auto-pause gates).
 export const GATE = {
   bounceRate: 0.03,      // > 3% bounces  -> pause
