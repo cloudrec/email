@@ -3442,6 +3442,12 @@
       "complaint_ok": "Complaint rate within limit",
       "suppression": "Suppression pipeline active",
       "campaigns_disabled": "Campaigns/drip disabled"
-    }
+    },
+    "blacklist": "Blacklist (DNSBL)",
+    "limits": "Limits",
+    "dailyLimit": "Daily limit",
+    "hourlyLimit": "Hourly limit",
+    "usedToday": "Used today",
+    "liveDnsbl": "live DNSBL"
   }
 }

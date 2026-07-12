@@ -3442,6 +3442,12 @@
       "complaint_ok": "Жалобы в пределах лимита",
       "suppression": "Конвейер подавления активен",
       "campaigns_disabled": "Кампании/капля отключены"
-    }
+    },
+    "blacklist": "Чёрные списки (DNSBL)",
+    "limits": "Лимиты",
+    "dailyLimit": "Дневной лимит",
+    "hourlyLimit": "Часовой лимит",
+    "usedToday": "Использовано сегодня",
+    "liveDnsbl": "живой DNSBL"
   }
 }

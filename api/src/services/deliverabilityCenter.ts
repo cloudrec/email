@@ -47,6 +47,13 @@ async function txt(name: string): Promise<string[]> {
   try { return (await dns.resolveTxt(name)).map((a) => a.join('')); } catch { return []; }
 }
 
+// Real DNSBL lookup: a listed IP resolves to 127.0.0.x in the blocklist zone.
+async function dnsbl(ip: string, zone: string): Promise<'listed' | 'clean' | 'unknown'> {
+  const rev = ip.split('.').reverse().join('.');
+  try { const a = await dns.resolve4(`${rev}.${zone}`); return a.length ? 'listed' : 'clean'; }
+  catch (e: any) { return (e.code === 'ENOTFOUND' || e.code === 'ENODATA') ? 'clean' : 'unknown'; }
+}
+
 export async function buildDeliverabilityCenter(tenantId: number) {
   const generatedAt = new Date().toISOString();
   const advisor: Advice[] = [];
@@ -101,9 +108,19 @@ export async function buildDeliverabilityCenter(tenantId: number) {
   const ptrOk = ptr.some((p) => /mail\./i.test(p));
   if (!ptrOk) advisor.push({ severity: 'warning', code: 'ptr', message: `PTR for ${SERVER_IP} not aligned`, evidence: ptr.join(',') || 'none', action: 'Set rDNS to mail.<domain>' });
 
-  // ---- 4. Postal health (live probe) ----
+  // ---- 4. Postal health (live probe) + HELO/banner/TLS ----
   const postal = await probePostal();
+  const heloHost = postal.banner ? (postal.banner.match(/220[\s-]+(\S+)/)?.[1] ?? null) : null;
+  const postalOut = { ...postal, helo: heloHost, tls: postal.starttls, bannerOk: /ESMTP/i.test(postal.banner || '') };
   if (!postal.reachable) advisor.push({ severity: 'warning', code: 'postal_unreachable', message: 'Postal SMTP not reachable', evidence: postal.error });
+
+  // ---- 4b. Blacklist / DNSBL (real DNS lookups; no API key) ----
+  const blacklist = {
+    spamhaus: await dnsbl(SERVER_IP, 'zen.spamhaus.org'),
+    barracuda: await dnsbl(SERVER_IP, 'b.barracudacentral.org'),
+  };
+  if (blacklist.spamhaus === 'listed') advisor.push({ severity: 'blocker', code: 'spamhaus_listed', message: `${SERVER_IP} is listed on Spamhaus`, action: 'Request delisting; pause sending' });
+  if (blacklist.barracuda === 'listed') advisor.push({ severity: 'blocker', code: 'barracuda_listed', message: `${SERVER_IP} is listed on Barracuda`, action: 'Request delisting; pause sending' });
 
   // ---- 5. Providers (DB) ----
   const providers = await query(
@@ -132,6 +149,8 @@ export async function buildDeliverabilityCenter(tenantId: number) {
   const [tot] = await query("SELECT COUNT(*) c FROM campaign_events WHERE tenant_id=? AND event_type='sent'", [tenantId]);
   const sentTotal = Number(tot?.c ?? 0);
   const sumCol = async (col: string) => Number((await query(`SELECT COALESCE(SUM(${col}),0) s FROM sender_identities WHERE tenant_id=?`, [tenantId]))[0]?.s ?? 0);
+  const dailyLimitTotal = await sumCol('daily_send_limit');
+  const hourlyLimitTotal = await sumCol('hourly_send_limit');
   const sentToday = await sumCol('sent_today');
   const bounceToday = await sumCol('bounce_like_today');
   const complaintToday = await sumCol('complaints_today');
@@ -164,11 +183,15 @@ export async function buildDeliverabilityCenter(tenantId: number) {
   // ---- 10. Suppressions ----
   const [sup] = await query("SELECT COUNT(*) c FROM suppressions WHERE tenant_id=?", [tenantId]);
 
-  // ---- 11. External integrations (honest not_configured) ----
+  // ---- 11. External integrations ----
+  // Spamhaus/Barracuda ARE queried live (DNSBL, section 4b). Google/Microsoft
+  // reputation + true inbox/spam placement need Postmaster Tools / SNDS credentials
+  // and are honestly reported as not_configured (no fabricated numbers).
   const externalIntegrations = {
-    spamhaus: 'not_configured', barracuda: 'not_configured',
-    googlePostmaster: 'not_configured', microsoftSnds: 'not_configured',
-    note: 'Automated blacklist/reputation ingestion not wired. Report manually or supply credentials.',
+    spamhaus: blacklist.spamhaus, barracuda: blacklist.barracuda,
+    googleReputation: 'not_configured', microsoftReputation: 'not_configured',
+    inboxRate: null, spamRate: null,
+    note: 'Spamhaus/Barracuda are live DNSBL lookups. Google/Microsoft reputation + true inbox/spam placement require Postmaster Tools / SNDS credentials (not configured).',
   };
 
   // ---- 12. Recent failures (app-side, real) ----
@@ -217,7 +240,10 @@ export async function buildDeliverabilityCenter(tenantId: number) {
     smtp: { state: smtp?.state ?? 'unknown', host: smtp?.host ?? null, port: smtp?.port ?? null },
     domains,
     ptr: { ip: SERVER_IP, records: ptr, aligned: ptrOk },
-    postal,
+    postal: postalOut,
+    blacklist,
+    limits: { dailyLimitTotal, hourlyLimitTotal, usedToday: sentToday },
+    reputation: { google: 'not_configured', microsoft: 'not_configured', inboxRate: null, spamRate: null },
     providers: providers.map((p: any) => ({ id: p.id, name: p.name, type: p.provider_type, status: p.status, testStatus: p.test_status, outboundEnabled: !!p.outbound_enabled })),
     senders: { total: senders.length, active: active.length, smtpTested, imapMonitored, health: mailboxHealth },
     rates,

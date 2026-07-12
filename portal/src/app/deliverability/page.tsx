@@ -129,8 +129,19 @@ export default function DeliverabilityPage() {
           {/* Infra cards */}
           <div style={grid}>
             <div style={card}>
-              <div style={{ fontSize: 12, color: '#6b7280' }}>Postal</div>
-              <div style={{ fontSize: 13, marginTop: 4 }}>{t('deliverability.reachable')}: {yn(!!d.postal?.reachable)} · AUTH: {yn(!!d.postal?.auth)}</div>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>Postal / SMTP</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>{t('deliverability.reachable')}: {yn(!!d.postal?.reachable)} · AUTH: {yn(!!d.postal?.auth)} · TLS: {yn(!!d.postal?.tls)}</div>
+              <div style={{ fontSize: 11, color: '#6b7280' }}>HELO: {d.postal?.helo ?? '—'} · Banner: {yn(!!d.postal?.bannerOk)}</div>
+            </div>
+            <div style={card}>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>{t('deliverability.blacklist')}</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>Spamhaus: <b style={{ color: d.blacklist?.spamhaus === 'listed' ? '#dc2626' : '#16a34a' }}>{d.blacklist?.spamhaus}</b></div>
+              <div style={{ fontSize: 13 }}>Barracuda: <b style={{ color: d.blacklist?.barracuda === 'listed' ? '#dc2626' : '#16a34a' }}>{d.blacklist?.barracuda}</b></div>
+            </div>
+            <div style={card}>
+              <div style={{ fontSize: 12, color: '#6b7280' }}>{t('deliverability.limits')}</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>{t('deliverability.dailyLimit')}: {d.limits?.dailyLimitTotal} · {t('deliverability.hourlyLimit')}: {d.limits?.hourlyLimitTotal}</div>
+              <div style={{ fontSize: 11, color: '#6b7280' }}>{t('deliverability.usedToday')}: {d.limits?.usedToday}</div>
             </div>
             <div style={card}>
               <div style={{ fontSize: 12, color: '#6b7280' }}>{t('deliverability.worker')}</div>
@@ -162,7 +173,8 @@ export default function DeliverabilityPage() {
           <div style={card}>
             <h3 style={{ margin: '0 0 6px', fontSize: 15 }}>{t('deliverability.external')}</h3>
             <div style={{ fontSize: 12.5, color: '#6b7280' }}>
-              Spamhaus, Barracuda, Google Postmaster, Microsoft SNDS: <b>{t('deliverability.notConfigured')}</b>. {t('deliverability.externalNote')}
+              Spamhaus / Barracuda: <b>{t('deliverability.liveDnsbl')}</b> ({d.blacklist?.spamhaus} / {d.blacklist?.barracuda}).
+              Google / Microsoft reputation, inbox/spam placement: <b>{t('deliverability.notConfigured')}</b>. {t('deliverability.externalNote')}
             </div>
           </div>
 
