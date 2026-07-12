@@ -71,15 +71,9 @@ const MAX_ATTEMPTS = 5;
 const MAILBOX_FAULT_LIMIT = 5;
 const mailboxFaults = new Map<number, number>(); // mailboxId -> consecutive fault count
 
-// ── Vault (mirror of api/src/services/secretsVault.ts) ───────────────────────
-const VAULT_KEY = crypto.createHash('sha256').update(process.env.API_JWT_SECRET || 'insecure-dev-key').digest();
-function decryptSecret(b64: string): string {
-  const buf = Buffer.from(b64, 'base64');
-  const iv = buf.subarray(0, 12), tag = buf.subarray(12, 28), ct = buf.subarray(28);
-  const d = crypto.createDecipheriv('aes-256-gcm', VAULT_KEY, iv);
-  d.setAuthTag(tag);
-  return Buffer.concat([d.update(ct), d.final()]).toString('utf8');
-}
+// Secret resolution is the single hardened worker vault (allowlist + strong key).
+import { resolveSecret } from './secretsVault.js';
+
 // HMAC unsubscribe token — MUST match api/src/routes/tracking.ts makeManualUnsubToken.
 function hmac(payload: string): string {
   return crypto.createHmac('sha256', process.env.API_JWT_SECRET || 'insecure-dev-key').update(payload).digest('base64url');
@@ -89,16 +83,6 @@ function unsubUrl(tenantId: number, email: string): string {
   const token = `${payload}.${hmac(payload)}`;
   const base = process.env.PORTAL_PUBLIC_URL || 'https://emails.cheap';
   return `${base}/u/m/${token}`;
-}
-
-async function resolveSecret(ref: string | null | undefined): Promise<string | undefined> {
-  if (!ref) return undefined;
-  try {
-    const rows = await query('SELECT value_enc FROM mailbox_secrets WHERE ref_name=? LIMIT 1', [ref]);
-    if (rows.length && rows[0].value_enc) { try { return decryptSecret(rows[0].value_enc); } catch { /* fall through */ } }
-  } catch { /* table missing → env */ }
-  const v = process.env[ref];
-  return v && v.length ? v : undefined;
 }
 
 // ── Gates (mirror of manualOutreach.ts) ──────────────────────────────────────
