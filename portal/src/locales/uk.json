@@ -413,7 +413,9 @@
     "allSetWarming": "Все налаштовано — триває безпечний прогрів.",
     "openDeliverability": "Відкрити Центр доставності",
     "warmupSent": "Надіслано сьогодні",
-    "warmupReplies": "Відповіді"
+    "warmupReplies": "Відповіді",
+    "warmupDelivered": "Доставлено",
+    "last24h": "за 24г"
   },
   "domains": {
     "title": "Домени відправлення",

@@ -62,6 +62,15 @@ export async function warmupSchedulerLoop(): Promise<void> {
   logger.info('warmupScheduler: started (auto ramp + auto-pause)');
   while (true) {
     try {
+      // Roll per-mailbox daily counters at each new UTC day so bounce/complaint rates
+      // + the dashboard reflect TODAY only (campaigns aren't running to roll them).
+      await query(
+        `UPDATE sender_identities SET sent_today=0, smtp_sent_today=0, manual_sent_today=0,
+           bounce_like_today=0, complaints_today=0, bounced_today=0, complained_today=0,
+           unsubscribes_today=0, unsubscribed_today=0, replies_today=0, interested_today=0, negative_today=0,
+           counters_day=CURDATE()
+         WHERE status='active' AND (counters_day IS NULL OR counters_day < CURDATE())`,
+      );
       const mailboxes = await query(
         `SELECT id, from_email, warmup_stage, daily_send_limit, sent_today, bounce_like_today, complaints_today
            FROM sender_identities

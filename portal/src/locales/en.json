@@ -413,7 +413,9 @@
     "allSetWarming": "You're set up — warming up safely.",
     "openDeliverability": "Open Deliverability Center",
     "warmupSent": "Sent today",
-    "warmupReplies": "Reply rate"
+    "warmupReplies": "Reply rate",
+    "warmupDelivered": "Delivered",
+    "last24h": "last 24h"
   },
   "domains": {
     "title": "Sending domains",

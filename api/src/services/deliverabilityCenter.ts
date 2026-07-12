@@ -166,6 +166,22 @@ export async function buildDeliverabilityCenter(tenantId: number) {
   if (rates.bounceRate > 3) advisor.push({ severity: 'blocker', code: 'high_bounce', message: `Bounce rate ${rates.bounceRate}% > 3%`, action: 'Pause and clean list' });
   if (rates.complaintRate > 0.1) advisor.push({ severity: 'blocker', code: 'high_complaint', message: `Complaint rate ${rates.complaintRate}% > 0.1%`, action: 'Pause sending' });
 
+  // ---- 7b. Real Postal delivery (cross-DB, last 24h) — actual delivered vs blocked ----
+  let postalDelivery: any = { available: false };
+  try {
+    const rows = await query("SELECT status, COUNT(*) c FROM `postal-server-1`.messages WHERE timestamp > UNIX_TIMESTAMP()-86400 GROUP BY status");
+    const by: Record<string, number> = {}; let total = 0;
+    for (const r of rows) { by[r.status] = Number(r.c); total += Number(r.c); }
+    const delivered = by['Sent'] || 0, hard = by['HardFail'] || 0;
+    postalDelivery = { available: true, last24h: by, total,
+      deliveredRate: total ? +(100 * delivered / total).toFixed(1) : 0,
+      hardFailRate: total ? +(100 * hard / total).toFixed(1) : 0 };
+    // Reputation warning (NOT a blocker — cold-domain warmup fixes this over time).
+    if (total >= 20 && postalDelivery.hardFailRate > 60) {
+      advisor.push({ severity: 'warning', code: 'low_delivery', message: `Only ${postalDelivery.deliveredRate}% of the last ${total} messages delivered`, evidence: 'mostly reputation blocks (Gmail/Microsoft) — warm up on non-Google recipients', action: 'Continue low-volume warmup to non-Google inboxes' });
+    }
+  } catch { postalDelivery = { available: false }; }
+
   // ---- 8. Warmup verdict (domain-level, reuse) ----
   const warmup = evaluateWarmup({
     dailyLimit: Math.max(1, ...active.map((s: any) => Number(s.daily_send_limit) || 5), 5),
@@ -247,6 +263,7 @@ export async function buildDeliverabilityCenter(tenantId: number) {
     providers: providers.map((p: any) => ({ id: p.id, name: p.name, type: p.provider_type, status: p.status, testStatus: p.test_status, outboundEnabled: !!p.outbound_enabled })),
     senders: { total: senders.length, active: active.length, smtpTested, imapMonitored, health: mailboxHealth },
     rates,
+    postalDelivery,
     warmup: { verdict: warmup },
     worker: { heartbeatAgeSec: Math.round(hbAge), alive: workerAlive },
     queue,

@@ -166,6 +166,7 @@ export default function DashboardPage() {
       {dc && (
         <div className="stat-grid" style={{ marginBottom: 4 }}>
           <div className="stat"><div className="label">{t(locale, 'dashboard.warmupSent')}</div><div className="value">{dc.rates?.sentToday ?? 0}</div></div>
+          <div className="stat"><div className="label">{t(locale, 'dashboard.warmupDelivered')}</div><div className="value">{dc.postalDelivery?.available ? `${dc.postalDelivery.deliveredRate}%` : '—'}</div><div className="delta muted" style={{ fontSize: 11 }}>{dc.postalDelivery?.available ? `${t(locale, 'dashboard.last24h')}` : ''}</div></div>
           <div className="stat"><div className="label">{t(locale, 'dashboard.warmupReplies')}</div><div className="value">{dc.rates?.replyRate ?? 0}%</div></div>
           <div className="stat"><div className="label">{t(locale, 'deliverability.bounceRate')}</div><div className="value" style={{ color: (dc.rates?.bounceRate ?? 0) > 3 ? 'var(--danger)' : undefined }}>{dc.rates?.bounceRate ?? 0}%</div></div>
           <div className="stat"><div className="label">{t(locale, 'deliverability.complaintRate')}</div><div className="value" style={{ color: (dc.rates?.complaintRate ?? 0) > 0.1 ? 'var(--danger)' : undefined }}>{dc.rates?.complaintRate ?? 0}%</div></div>

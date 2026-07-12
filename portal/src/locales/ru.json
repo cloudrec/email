@@ -413,7 +413,9 @@
     "allSetWarming": "Всё настроено — идёт безопасный прогрев.",
     "openDeliverability": "Открыть Центр доставляемости",
     "warmupSent": "Отправлено сегодня",
-    "warmupReplies": "Ответы"
+    "warmupReplies": "Ответы",
+    "warmupDelivered": "Доставлено",
+    "last24h": "за 24ч"
   },
   "domains": {
     "title": "Домены отправки",
