@@ -72,6 +72,14 @@ function brand(d) { return d.split('.')[0].split('-').map(w => w.charAt(0).toUpp
 function unsub(email) { const p = `1.${Buffer.from(email.toLowerCase()).toString('base64url')}`; return `https://emails.cheap/u/m/${p}.${crypto.createHmac('sha256', JWT).update(p).digest('base64url')}`; }
 
 async function main() {
+  // Roll per-mailbox daily counters at the start of a new UTC day so bounce/complaint
+  // rates + the dashboard reflect TODAY only (campaigns aren't running to roll them).
+  await query(`UPDATE sender_identities SET sent_today=0, smtp_sent_today=0, manual_sent_today=0,
+      bounce_like_today=0, complaints_today=0, bounced_today=0, complained_today=0,
+      unsubscribes_today=0, unsubscribed_today=0, replies_today=0, interested_today=0, negative_today=0,
+      counters_day=CURDATE()
+    WHERE status='active' AND (counters_day IS NULL OR counters_day < CURDATE())`).catch(() => {});
+
   if (!(await healthOk())) { await redis.quit(); return; }
 
   const day = await redis.incr('warmup:daynum');       // day-1 already sent; first cron run = day 2 idx

@@ -46,6 +46,9 @@ export default function DashboardPage() {
     inviteLinks: null, smtpState: null, warehouseCompanies: null, warehouseContacts: null,
   });
   const [error, setError] = useState<string | null>(null);
+  const [dc, setDc] = useState<any>(null);  // deliverability + warmup snapshot
+
+  useEffect(() => { api<any>('/deliverability/center').then(setDc).catch(() => {}); }, []);
 
   useEffect(() => {
     Promise.allSettled([
@@ -124,9 +127,51 @@ export default function DashboardPage() {
     });
   }
 
+  // Plain-language "one next step" derived from the deliverability advisor.
+  const BLOCKER_HREF: Record<string, string> = {
+    spf_missing: '/domains', dkim_missing: '/domains', dmarc_missing: '/domains', return_path_dns: '/domains',
+    no_working_provider: '/mailboxes', no_active_mailbox: '/mailboxes', no_imap: '/mailboxes',
+    high_bounce: '/deliverability', high_complaint: '/deliverability', worker_down: '/deliverability',
+    spamhaus_listed: '/deliverability', barracuda_listed: '/deliverability', ptr: '/deliverability',
+  };
+  const topBlocker = dc?.advisor?.find((a: any) => a.severity === 'blocker') || dc?.advisor?.find((a: any) => a.severity === 'warning');
+  const verdictColor: Record<string, string> = { READY_FOR_LOW_VOLUME_WARMUP: 'var(--ok)', READY_FOR_CONTROLLED_TEST_SEND: 'var(--warn)', NOT_READY: 'var(--danger)' };
+
   return (
     <>
       {error && <div className="notice danger">{error}</div>}
+
+      {/* ── Your next step (plain, one action) ── */}
+      {dc && (
+        <div className="panel" style={{ borderLeft: `4px solid ${verdictColor[dc.verdict] ?? 'var(--line)'}` }}>
+          <div className="panel-h"><h2>{t(locale, 'dashboard.nextStep')}</h2>
+            <span className="right" style={{ color: verdictColor[dc.verdict] }}>{t(locale, `deliverability.verdict.${dc.verdict}`)} · {dc.readinessScore}/100</span>
+          </div>
+          {topBlocker ? (
+            <div style={{ fontSize: 15 }}>
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>{topBlocker.message}</div>
+              {topBlocker.action && <div className="muted" style={{ marginBottom: 8 }}>→ {topBlocker.action}</div>}
+              <a className="btn btn-primary" href={`${BLOCKER_HREF[topBlocker.code] ?? '/deliverability'}${tenantSearch}`}>{t(locale, 'dashboard.fixNow')}</a>
+            </div>
+          ) : (
+            <div style={{ fontSize: 15 }}>
+              <div style={{ fontWeight: 600, color: 'var(--ok)', marginBottom: 6 }}>✓ {t(locale, 'dashboard.allSetWarming')}</div>
+              <a href={`/deliverability${tenantSearch}`}>{t(locale, 'dashboard.openDeliverability')} →</a>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Warmup & sending today ── */}
+      {dc && (
+        <div className="stat-grid" style={{ marginBottom: 4 }}>
+          <div className="stat"><div className="label">{t(locale, 'dashboard.warmupSent')}</div><div className="value">{dc.rates?.sentToday ?? 0}</div></div>
+          <div className="stat"><div className="label">{t(locale, 'dashboard.warmupReplies')}</div><div className="value">{dc.rates?.replyRate ?? 0}%</div></div>
+          <div className="stat"><div className="label">{t(locale, 'deliverability.bounceRate')}</div><div className="value" style={{ color: (dc.rates?.bounceRate ?? 0) > 3 ? 'var(--danger)' : undefined }}>{dc.rates?.bounceRate ?? 0}%</div></div>
+          <div className="stat"><div className="label">{t(locale, 'deliverability.complaintRate')}</div><div className="value" style={{ color: (dc.rates?.complaintRate ?? 0) > 0.1 ? 'var(--danger)' : undefined }}>{dc.rates?.complaintRate ?? 0}%</div></div>
+          <div className="stat"><div className="label">{t(locale, 'deliverability.blacklist')}</div><div className="value" style={{ fontSize: 15 }}>{dc.blacklist?.spamhaus === 'listed' || dc.blacklist?.barracuda === 'listed' ? <span className="chip warn">listed</span> : <span className="chip ok">clean</span>}</div></div>
+        </div>
+      )}
 
       <div className="stat-grid">
         <div className="stat kpi">

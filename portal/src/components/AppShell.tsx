@@ -23,32 +23,48 @@ type Health = {
   pendingDrafts?: number;
 };
 
-const ITEMS: Array<{ key: string; href: (q: string) => string; superOnly?: boolean }> = [
-  { key: 'dashboard',  href: (q) => `/dashboard${q}` },
-  { key: 'leads',      href: (q) => `/leads${q}` },
-  { key: 'collector',  href: (q) => `/collector${q}` },
-  { key: 'outreach',   href: (q) => `/outreach${q}` },
-  { key: 'invites',    href: (q) => `/invites${q}` },
-  { key: 'contacts',   href: (q) => `/contacts${q}` },
-  { key: 'warehouse',  href: (q) => `/warehouse${q}` },
-  { key: 'campaigns',   href: (q) => `/campaigns${q}` },
-  { key: 'goLive',     href: (q) => `/go-live${q}` },
-  { key: 'deliverability', href: (q) => `/deliverability${q}` },
-  { key: 'sendControl', href: (q) => `/send-control${q}` },
-  { key: 'manualOutreach', href: (q) => `/manual-outreach${q}` },
-  { key: 'senderStudio', href: (q) => `/sender-studio${q}` },
-  { key: 'mailboxes',   href: (q) => `/mailboxes${q}` },
-  { key: 'smtpNodes',   href: (q) => `/smtp-nodes${q}` },
-  { key: 'partnerOutreach', href: (q) => `/partner-outreach${q}` },
-  { key: 'domains',     href: (q) => `/domains${q}` },
-  { key: 'billing',     href: (q) => `/billing${q}` },
-  { key: 'onboarding', href: (q) => `/onboarding${q}` },
-  { key: 'setup',      href: (q) => `/setup${q}` },
-  { key: 'stats',      href: (q) => `/stats${q}` },
-  { key: 'settings',   href: () => `/settings` },
-  { key: 'themes',     href: () => `/themes` },
-  { key: 'admin',      href: () => `/admin`, superOnly: true },
-  { key: 'adminTheme', href: () => `/admin/theme`, superOnly: true },
+// Navigation grouped by the operator's job-to-be-done — one clear place per task,
+// plain names, with rarely-used infra folded under "Advanced". Routes are unchanged.
+const GROUPS: Array<{ section: string; superOnly?: boolean; items: Array<{ key: string; href: (q: string) => string }> }> = [
+  { section: 'home', items: [
+    { key: 'dashboard', href: (q) => `/dashboard${q}` },
+  ] },
+  { section: 'find', items: [
+    { key: 'collector',  href: (q) => `/collector${q}` },
+    { key: 'warehouse',  href: (q) => `/warehouse${q}` },
+    { key: 'leads',      href: (q) => `/leads${q}` },
+    { key: 'contacts',   href: (q) => `/contacts${q}` },
+  ] },
+  { section: 'outreach', items: [
+    { key: 'senderStudio',   href: (q) => `/sender-studio${q}` },
+    { key: 'campaigns',      href: (q) => `/campaigns${q}` },
+    { key: 'manualOutreach', href: (q) => `/manual-outreach${q}` },
+    { key: 'outreach',       href: (q) => `/outreach${q}` },
+  ] },
+  { section: 'deliver', items: [
+    { key: 'deliverability', href: (q) => `/deliverability${q}` },
+    { key: 'goLive',         href: (q) => `/go-live${q}` },
+    { key: 'domains',        href: (q) => `/domains${q}` },
+    { key: 'mailboxes',      href: (q) => `/mailboxes${q}` },
+  ] },
+  { section: 'settings', items: [
+    { key: 'settings',   href: () => `/settings` },
+    { key: 'billing',    href: (q) => `/billing${q}` },
+    { key: 'onboarding', href: (q) => `/onboarding${q}` },
+    { key: 'setup',      href: (q) => `/setup${q}` },
+  ] },
+  { section: 'advanced', items: [
+    { key: 'smtpNodes',       href: (q) => `/smtp-nodes${q}` },
+    { key: 'sendControl',     href: (q) => `/send-control${q}` },
+    { key: 'partnerOutreach', href: (q) => `/partner-outreach${q}` },
+    { key: 'invites',         href: (q) => `/invites${q}` },
+    { key: 'stats',           href: (q) => `/stats${q}` },
+    { key: 'themes',          href: () => `/themes` },
+  ] },
+  { section: 'admin', superOnly: true, items: [
+    { key: 'admin',      href: () => `/admin` },
+    { key: 'adminTheme', href: () => `/admin/theme` },
+  ] },
 ];
 
 function fetchMe(token: string): Promise<Me | null> {
@@ -132,26 +148,19 @@ function SidebarContent({
       </div>
 
       <nav className="menu">
-        <div className="section">{t(locale, 'nav.sectionWork')}</div>
-        {ITEMS.filter((i) => !i.superOnly).map((i) => (
-          <a key={i.key} href={i.href(tenantParam)} className={pageKey === i.key ? 'active' : ''} onClick={onNavClick}>
-            {t(locale, `nav.${i.key}`)}
-            {i.key === 'outreach' && (health.pendingDrafts ?? 0) > 0 && <span className="dot warn" />}
-            {i.key === 'domains' && health.domainsTotal === 0 && <span className="dot warn" />}
-            {i.key === 'collector' && (health.collectorActive ?? 0) > 0 && <span className="dot ok" />}
-          </a>
-        ))}
-
-        {me.isSuperAdmin && (
-          <>
-            <div className="section">{t(locale, 'nav.sectionAdmin')}</div>
-            {ITEMS.filter((i) => i.superOnly).map((i) => (
+        {GROUPS.filter((g) => !g.superOnly || me.isSuperAdmin).map((g) => (
+          <div key={g.section}>
+            <div className="section">{t(locale, `nav.section.${g.section}`)}</div>
+            {g.items.map((i) => (
               <a key={i.key} href={i.href(tenantParam)} className={pageKey === i.key ? 'active' : ''} onClick={onNavClick}>
                 {t(locale, `nav.${i.key}`)}
+                {i.key === 'outreach' && (health.pendingDrafts ?? 0) > 0 && <span className="dot warn" />}
+                {i.key === 'domains' && health.domainsTotal === 0 && <span className="dot warn" />}
+                {i.key === 'collector' && (health.collectorActive ?? 0) > 0 && <span className="dot ok" />}
               </a>
             ))}
-          </>
-        )}
+          </div>
+        ))}
 
         <a href="/guide-ru.html" target="_blank" rel="noopener" style={{ marginTop: 10 }}>📖 {t(locale, 'nav.guide')}</a>
       </nav>
