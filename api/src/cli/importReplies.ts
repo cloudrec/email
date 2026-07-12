@@ -60,7 +60,14 @@ async function main() {
     if (!conn.imapConfigured) { console.log(`  [${mb.id}] IMAP not configured`); continue; }
 
     const startAt = mb.imap_start_at ? new Date(mb.imap_start_at) : null;
-    const r = await rtFetchReplies(conn, { sinceUid: mb.imap_last_uid ?? null, startAt, limit: 50 });
+    // Hard per-mailbox timeout: a slow/hanging IMAP box (some providers stall on the
+    // source fetch) must NOT stall the whole sequential import. On timeout the box is
+    // skipped and the cursor is left untouched (retried next run).
+    const r = await Promise.race([
+      rtFetchReplies(conn, { sinceUid: mb.imap_last_uid ?? null, startAt, limit: 50 }),
+      new Promise<Awaited<ReturnType<typeof rtFetchReplies>>>((res) =>
+        setTimeout(() => res({ ok: false, detail: 'imap_timeout', replies: [], maxUid: mb.imap_last_uid ?? 0 }), 35000)),
+    ]);
 
     if (!r.ok && r.replies.length === 0) { console.log(`  [${mb.id}] Error: ${r.detail}`); continue; }
 
@@ -176,7 +183,9 @@ async function main() {
   console.log(`\nDone. Total imported: ${totalImported}, Total suppressed: ${totalSuppressed}`);
 }
 
-main().catch((e) => {
-  console.error('FATAL:', e);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))   // force clean exit even if a timed-out IMAP socket lingers
+  .catch((e) => {
+    console.error('FATAL:', e);
+    process.exit(1);
+  });
