@@ -55,6 +55,13 @@ async function recipientsFor(campaign: any): Promise<Recipient[]> {
        AND c.tenant_id = ?
        AND c.status = 'subscribed'
        AND NOT EXISTS (SELECT 1 FROM suppressions s WHERE s.tenant_id = c.tenant_id AND s.email = c.email)
+       -- Global suppression (email + domain) — matches drip/portal isSuppressed so a
+       -- globally hard-bounced/complained/opted-out address (or suppressed domain) is
+       -- never mailable by a campaign. Previously campaigns checked only suppressions.
+       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g
+                        WHERE g.type='email' AND g.normalized_value = LOWER(c.email))
+       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g
+                        WHERE g.type='domain' AND g.normalized_value = LOWER(SUBSTRING_INDEX(c.email,'@',-1)))
        -- Skip contacts already sent this campaign, so a throttled/resumed run never
        -- re-mails the head of the list (duplicate-send guard).
        AND NOT EXISTS (
@@ -110,6 +117,16 @@ async function gateChecks(campaign: any): Promise<string | null> {
   if (!campaign.list_id) return 'list_required';
   // Per-mailbox hard gate: a paused/disabled sender identity cannot send.
   if (campaign.mailbox_status && campaign.mailbox_status !== 'active') return `mailbox_${campaign.mailbox_status}`;
+  // Content safety — never send an empty or operator-placeholder campaign. Note
+  // {{first_name}} style macros are legitimate here (rendered per-recipient by
+  // sender.renderContext), so they are NOT blocked; only empty and unfilled
+  // <<<REPLACE>>> / broken-grammar markers are.
+  const subj = String(campaign.subject ?? '').trim();
+  const body = String(campaign.html_body ?? campaign.text_body ?? '').trim();
+  if (!subj) return 'missing_subject';
+  if (!body) return 'missing_body';
+  if (/<<<\s*REPLACE[\s\S]*?>>>/i.test(`${subj}\n${body}`)) return 'unfilled_replace_field';
+  if (/\bthe your\s+\w+/i.test(`${subj}\n${body}`)) return 'broken_grammar';
   return null;
 }
 
