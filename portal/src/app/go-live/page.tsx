@@ -42,6 +42,8 @@ export default function GoLivePage() {
   const [d, setD] = useState<any>(null);
   const [loadErr, setLoadErr] = useState(false);
   const [msg, setMsg] = useState('');
+  const [lc, setLc] = useState<any>(null);      // full launch check (deliverability)
+  const [lcBusy, setLcBusy] = useState(false);
   const [busy, setBusy] = useState(false);
   const [dry, setDry] = useState<any>(null);
   const [plan, setPlan] = useState<any>(null);
@@ -86,6 +88,13 @@ export default function GoLivePage() {
     else setMsg(t('goLive.blockedMsg') + (r.json?.detail || r.json?.error || JSON.stringify(r.json)));
   };
 
+  const runLaunchCheck = async () => {
+    setLcBusy(true); setLc(null);
+    try { const r = await api('/deliverability/checklist'); if (r.ok) setLc(r.json); else setLc({ error: r.json?.error || 'check_failed' }); }
+    catch { setLc({ error: 'network' }); } finally { setLcBusy(false); }
+  };
+  const VERDICT_COLOR: Record<string, string> = { READY_FOR_LOW_VOLUME_WARMUP: '#15803d', READY_FOR_CONTROLLED_TEST_SEND: '#a16207', NOT_READY: '#b91c1c' };
+
   if (!d) return <AppShell pageKey="goLive" pageTitle={t('goLive.pageTitle')}><div style={{ padding: 16 }}>{loadErr ? t('goLive.loadError') : t('goLive.loading')}</div></AppShell>;
 
   const rd = d.readiness ?? {};
@@ -97,6 +106,34 @@ export default function GoLivePage() {
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>{t('goLive.heading')}</h1>
         <p style={{ color: '#92400e', fontWeight: 600, fontSize: 14 }}>{t('goLive.intro')}</p>
         {msg && <p style={{ color: '#1d4ed8', whiteSpace: 'pre-wrap' }}>{msg}</p>}
+
+        {/* One-press Launch check — runs the full deliverability wizard and shows exact blockers */}
+        <div style={{ ...card, background: '#fff' }}>
+          <button style={btnPrimary} onClick={runLaunchCheck} disabled={lcBusy}>{lcBusy ? t('goLive.checking') : t('goLive.runLaunchCheck')}</button>
+          {lc && !lc.error && (
+            <div style={{ marginTop: 12 }}>
+              <div style={{ fontSize: 16, fontWeight: 800, color: VERDICT_COLOR[lc.verdict] ?? '#333' }}>
+                {t(`deliverability.verdict.${lc.verdict}`)} · {lc.readinessScore}/100
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 6, marginTop: 10 }}>
+                {lc.checklist?.map((c: any) => (
+                  <div key={c.key} style={{ fontSize: 13 }}>
+                    <span style={{ color: c.status === 'pass' ? '#16a34a' : c.status === 'warn' ? '#d97706' : '#dc2626', fontWeight: 700 }}>
+                      {c.status === 'pass' ? '✓' : c.status === 'warn' ? '!' : '✗'}
+                    </span>{' '}{t(`deliverability.check.${c.key}`)}
+                  </div>
+                ))}
+              </div>
+              {lc.blockers?.length > 0 && (
+                <div style={{ marginTop: 10, color: '#b91c1c', fontSize: 13 }}>
+                  <b>{t('deliverability.blockers')}:</b> {lc.blockers.join(', ')}
+                </div>
+              )}
+              <a href="/deliverability" style={{ fontSize: 12, color: '#1d4ed8' }}>{t('goLive.openDeliverability')} →</a>
+            </div>
+          )}
+          {lc?.error && <div style={{ marginTop: 10, color: '#b91c1c', fontSize: 13 }}>{lc.error}</div>}
+        </div>
 
         {/* Readiness score + status */}
         <div style={{ ...card, display: 'flex', gap: 20, alignItems: 'center', background: '#f8fafc' }}>

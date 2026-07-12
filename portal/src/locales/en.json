@@ -3264,7 +3264,10 @@
       "imapImportReady": "reply import ready"
     },
     "warmupHint": "warmup suggestion",
-    "loadError": "Could not load — check your connection or sign in again."
+    "loadError": "Could not load — check your connection or sign in again.",
+    "runLaunchCheck": "Run launch check",
+    "checking": "Checking…",
+    "openDeliverability": "Open Deliverability Center"
   },
   "mailboxesPage": {
     "pageTitle": "Mailboxes — Fleet Manager",
