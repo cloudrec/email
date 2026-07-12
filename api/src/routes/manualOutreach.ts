@@ -1042,6 +1042,12 @@ manualOutreachRouter.post('/replies/import', requireWriteAccess, async (req, res
               "UPDATE manual_outreach_queue SET safety_status='suppressed', status='do_not_contact' WHERE tenant_id=? AND email=? AND status IN ('pending_review','approved')",
               [tenantId, failedEmail],
             );
+            // Cancel the FAILED recipient's follow-ups (the generic cancel above keys
+            // on rep.fromEmail = mailer-daemon on a bounce). Mirrors the CLI importer.
+            await query(
+              "UPDATE manual_followup_tasks SET status='cancelled' WHERE tenant_id=? AND email=? AND status IN ('pending','ready')",
+              [tenantId, failedEmail],
+            );
             suppressedAuto++;
           }
         }
