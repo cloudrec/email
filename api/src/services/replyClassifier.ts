@@ -18,6 +18,11 @@ export function classifyReply(subject: string | null, snippet: string | null, fr
   const text = `${subject ?? ''} \n ${snippet ?? ''}`.toLowerCase();
   const has = (...ws: string[]) => ws.find((w) => text.includes(w)) ?? null;
   let m: string | null;
+  // Our templates instruct recipients to reply "STOP" — a standalone STOP token
+  // is a hard opt-out and MUST auto-suppress. Word-boundary match (won't hit
+  // "stopwatch"/"unstoppable"); over-suppression is the compliant direction.
+  if (/\bstop\b/i.test(text))
+    return { classification: 'unsubscribe', confidence: 0.97, reason: 'matched "stop"' };
   if ((m = has('unsubscribe', 'opt out', 'opt-out', 'remove me', 'take me off', 'remove from your list')))
     return { classification: 'unsubscribe', confidence: 0.95, reason: `matched "${m}"` };
   if ((m = has('do not contact', "don't contact", 'do not email', 'stop emailing', 'cease', 'lose my details')))
