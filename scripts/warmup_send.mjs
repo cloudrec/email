@@ -35,6 +35,32 @@ async function healthOk() {
   return true;
 }
 
+// ---- 1b. Sync real Postal bounces -> suppress INVALID addresses (not reputation) ----
+async function syncPostalBounces() {
+  let rows = [];
+  try {
+    rows = await query("SELECT m.rcpt_to, d.output FROM `postal-server-1`.messages m " +
+      "JOIN `postal-server-1`.deliveries d ON d.id=(SELECT MAX(id) FROM `postal-server-1`.deliveries WHERE message_id=m.id) " +
+      "WHERE m.timestamp > UNIX_TIMESTAMP()-90000 AND m.status IN ('HardFail','Bounced')");
+  } catch { return { invalid: 0 }; }
+  const INVALID = /(5\.1\.[013]|user unknown|no such (user|mailbox|recipient)|mailbox (unavailable|not found|does not exist|disabled|full)|recipient (unknown|rejected|not found|address rejected)|address (rejected|not found)|does not exist|no mailbox|account.*(disabled|closed|suspended))/i;
+  const SKIP = /(5\.7\.1|reputation|spam|blocked|blacklist|rp\.emails\.cheap|sender address rejected|greylist|try again|rate|deferred|temporar)/i;
+  let invalid = 0, suppressed = 0;
+  for (const r of rows) {
+    const o = r.output || '';
+    if (!INVALID.test(o) || SKIP.test(o)) continue;
+    invalid++;
+    const em = (r.rcpt_to || '').toLowerCase();
+    if (!em.includes('@')) continue;
+    await query('INSERT IGNORE INTO suppressions (tenant_id, email, reason) VALUES (?,?,?)', [TENANT, em, 'bounce_hard']).catch(() => {});
+    await query("INSERT IGNORE INTO global_contact_suppression (type, normalized_value, reason) VALUES ('email',?,'hard_bounce')", [em]).catch(() => {});
+    await query("UPDATE contact_points SET status='bounced' WHERE value=?", [em]).catch(() => {});
+    suppressed++;
+  }
+  if (suppressed) log(`postal bounce sync: suppressed ${suppressed} invalid address(es)`);
+  return { invalid };
+}
+
 // ---- 2. non-Google MX check ----
 const GOOG = /(aspmx.*google|google\.com|googlemail|gmail-smtp)/i;
 async function nonGoogle(domain) {
@@ -61,7 +87,7 @@ async function candidates(need) {
       AND NOT EXISTS (SELECT 1 FROM suppressions s WHERE s.email=cp.value)
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='email' AND g.normalized_value=LOWER(cp.value))
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='domain' AND g.normalized_value=LOWER(cp.email_domain))
-      AND NOT EXISTS (SELECT 1 FROM outreach_touchpoints tp WHERE tp.email=cp.value)
+      AND NOT EXISTS (SELECT 1 FROM outreach_touchpoints tp WHERE tp.email LIKE CONCAT('%@', cp.email_domain))
     GROUP BY cp.email_domain
     ORDER BY cp.verification_score DESC, cp.id
     LIMIT ?`, [need * 4]);   // over-select; MX filter drops Google-hosted
@@ -81,6 +107,7 @@ async function main() {
       counters_day=CURDATE()
     WHERE status='active' AND (counters_day IS NULL OR counters_day < CURDATE())`).catch(() => {});
 
+  await syncPostalBounces();                 // real bounces -> suppress invalid addresses
   if (!(await healthOk())) { await redis.quit(); return; }
 
   const day = await redis.incr('warmup:daynum');       // day-1 already sent; first cron run = day 2 idx
