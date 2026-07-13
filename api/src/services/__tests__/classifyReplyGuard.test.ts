@@ -29,7 +29,7 @@ describe('classifyReply — welcome/automated-mail guard (never a lead)', () => 
   it('a bare STOP reply auto-classifies as unsubscribe (compliance)', () => {
     expect(classifyReply('Re: quick question', 'STOP', 'anna@co.com').classification).toBe('unsubscribe');
     expect(classifyReply('Re: outreach', 'Stop.', 'bob@x.com').classification).toBe('unsubscribe');
-    expect(classifyReply(null, 'stop emailing me please', 'c@d.com').classification).toBe('unsubscribe');
+    expect(classifyReply(null, 'stop emailing me please', 'c@d.com').classification).toBe('do_not_contact'); // "stop emailing" is a do_not_contact phrase
     // confidence high enough to trigger auto-suppression (>= 0.9)
     expect(classifyReply(null, 'stop', 'c@d.com').confidence).toBeGreaterThanOrEqual(0.9);
     // does NOT false-positive on words containing "stop"
@@ -38,9 +38,10 @@ describe('classifyReply — welcome/automated-mail guard (never a lead)', () => 
 
   it('unsubscribe / do_not_contact still win over the automated guard', () => {
     expect(classifyReply('unsubscribe', 'remove me', 'noreply@acme.com').classification).toBe('unsubscribe');
-    // "stop" is a hard opt-out and wins (both unsubscribe + do_not_contact auto-suppress):
-    expect(classifyReply('please stop emailing', 'do not contact me', 'x@y.com').classification).toBe('unsubscribe');
-    expect(classifyReply('do not contact', 'lose my details', 'x@y.com').classification).toBe('do_not_contact');
+    // explicit do_not_contact keyword wins (checked before the standalone STOP token):
+    expect(classifyReply('please do not contact me', 'lose my details', 'x@y.com').classification).toBe('do_not_contact');
+    // a plain STOP reply still auto-suppresses (as unsubscribe):
+    expect(classifyReply('Re: hi', 'STOP', 'human@realco.com').classification).toBe('unsubscribe');
   });
 
   it('negative reply is not_interested, not interested', () => {

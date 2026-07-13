@@ -18,11 +18,6 @@ export function classifyReply(subject: string | null, snippet: string | null, fr
   const text = `${subject ?? ''} \n ${snippet ?? ''}`.toLowerCase();
   const has = (...ws: string[]) => ws.find((w) => text.includes(w)) ?? null;
   let m: string | null;
-  // Our templates instruct recipients to reply "STOP" — a standalone STOP token
-  // is a hard opt-out and MUST auto-suppress. Word-boundary match (won't hit
-  // "stopwatch"/"unstoppable"); over-suppression is the compliant direction.
-  if (/\bstop\b/i.test(text))
-    return { classification: 'unsubscribe', confidence: 0.97, reason: 'matched "stop"' };
   if ((m = has('unsubscribe', 'opt out', 'opt-out', 'remove me', 'take me off', 'remove from your list')))
     return { classification: 'unsubscribe', confidence: 0.95, reason: `matched "${m}"` };
   if ((m = has('do not contact', "don't contact", 'do not email', 'stop emailing', 'cease', 'lose my details')))
@@ -39,6 +34,11 @@ export function classifyReply(subject: string | null, snippet: string | null, fr
     return { classification: 'auto_reply', confidence: 0.85, reason: 'welcome/account/system subject' };
   if ((m = has('auto-reply', 'autoreply', 'automatic reply', 'this is an automated', 'do-not-reply', 'do not reply', 'noreply')))
     return { classification: 'auto_reply', confidence: 0.8, reason: `matched "${m}"` };
+  // Standalone STOP token = hard opt-out. Checked AFTER the bounce/OOO/automated/welcome
+  // guards so a bounce or auto-reply that merely QUOTES our "reply STOP" instruction
+  // isn't misfiled as an unsubscribe. A genuine human "STOP" reply still lands here.
+  if (/\bstop\b/i.test(text))
+    return { classification: 'unsubscribe', confidence: 0.95, reason: 'matched "stop"' };
   if ((m = has('wrong person', 'no longer with', 'left the company', 'not the right', 'try contacting', 'forwarded to', 'no longer works')))
     return { classification: 'wrong_person', confidence: 0.7, reason: `matched "${m}"` };
   if ((m = has('not interested', 'no thanks', 'no thank you', 'not for us', 'we already', 'not a fit', 'please stop')))

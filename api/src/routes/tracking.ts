@@ -100,16 +100,28 @@ async function manualUnsub(token: string): Promise<boolean> {
   try { await query("UPDATE contact_points SET status='do_not_contact' WHERE value=?", [t.email.toLowerCase()]); } catch { /* best effort */ }
   return true;
 }
+// GET shows a confirmation page and does NOT suppress — antivirus/link scanners
+// (corporate mail security) auto-fetch every URL in an email, and a GET-suppress
+// would unsubscribe recipients they never chose to. Actual opt-out happens on POST
+// (the confirm button below, or an RFC 8058 List-Unsubscribe-Post one-click).
 trackingRouter.get('/u/m/:token', async (req, res) => {
-  const ok = await manualUnsub(req.params.token);
-  if (!ok) return res.status(400).send('Invalid unsubscribe link');
-  const base = process.env.PORTAL_PUBLIC_URL || 'https://emails.cheap';
-  res.redirect(302, `${base}/unsubscribed`);
+  const t = parseManualUnsubToken(req.params.token);
+  if (!t) return res.status(400).send('Invalid unsubscribe link');
+  const tok = req.params.token.replace(/[^A-Za-z0-9._-]/g, '');
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send(`<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:460px;margin:12vh auto;padding:24px;color:#1f2733;text-align:center}
+.b{display:inline-block;margin-top:16px;padding:11px 22px;background:#b91c1c;color:#fff;border:0;border-radius:8px;font-size:15px;cursor:pointer}</style>
+<h2>Unsubscribe</h2><p>Stop receiving emails at <b>${t.email.replace(/[<>&]/g, '')}</b>?</p>
+<form method="POST" action="/u/m/${tok}"><button class="b" type="submit">Unsubscribe me</button></form>
+<p style="color:#94a3b8;font-size:13px;margin-top:18px">You can also just reply STOP to the email.</p>`);
 });
 trackingRouter.post('/u/m/:token', async (req, res) => {
   const ok = await manualUnsub(req.params.token);
-  if (!ok) return res.status(400).json({ error: 'invalid_token' });
-  res.json({ ok: true });
+  if (!ok) return res.status(400).send('Invalid unsubscribe link');
+  // 200 for RFC 8058 one-click clients; the HTML body is for humans clicking the button.
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  res.send('<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:460px;margin:12vh auto;padding:24px;text-align:center;color:#1f2733}</style><h2>✓ Unsubscribed</h2><p>You won\'t receive any more emails from us.</p>');
 });
 
 // One-click unsubscribe

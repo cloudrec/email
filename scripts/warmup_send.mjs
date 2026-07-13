@@ -50,8 +50,9 @@ async function candidates(need) {
     WHERE cp.type='email' AND cp.status='verified'
       AND cp.email_domain NOT REGEXP '(gmail|googlemail|yahoo|hotmail|outlook|live|aol|aim\\\\.com|icloud|me\\\\.com|mac\\\\.com|gmx|protonmail|proton\\\\.me|mail\\\\.ru|mail\\\\.com|yandex|msn|comcast|web\\\\.de|t-online|fastmail|zoho|tutanota|hey\\\\.com)'
       AND cp.email_domain NOT LIKE '%.ru' AND cp.email_domain NOT LIKE '%.gov%' AND cp.email_domain NOT LIKE '%.mil%'
+      AND cp.email_domain NOT REGEXP 'gov|\\\\.gc\\\\.ca|\\\\.gob\\\\.|\\\\.gouv|\\\\.mil|zendesk|freshdesk|helpscout'
       AND cp.email_domain NOT IN ('xyz.com','yourcompany.com','example.com','example.org','domain.com','yourdomain.com','company.com','test.com','email.com','website.com')
-      AND SUBSTRING_INDEX(cp.value,'@',1) NOT REGEXP '^(abc|your\\\\.?name|your\\\\.?email|example|test|user|name|email|username|firstname|noreply|no-reply|donotreply|postmaster)$'
+      AND SUBSTRING_INDEX(cp.value,'@',1) NOT REGEXP '^(abc|your\\\\.?name|your\\\\.?email|example|test|user|name|email|username|firstname|noreply|no-reply|donotreply|postmaster|privacy|rgpd|gdpr|dpo|legal|abuse|compliance|dmca|security|webmaster|hostmaster|spam)$'
       AND cp.value NOT LIKE '%example%' AND cp.value NOT LIKE '%yourname%'
       AND SUBSTRING_INDEX(cp.email_domain,'.',-1) IN ('com','uk','ca','au','ie','nz','de','nl','at','se','dk','ch','fi','be','pt','it','net')
       AND co.name IS NOT NULL AND co.name<>''
