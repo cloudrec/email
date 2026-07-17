@@ -154,6 +154,11 @@ async function processJob(job: JobRow): Promise<void> {
     leadsFound += emails.length;
 
     for (const e of emails) {
+      // Reject "user@www.example.com" — a real recurring source-data bug: the
+      // domain part has a stray www. baked in, which usually has no mail
+      // server (just the site's web A-record), so it verifies as "has an A
+      // record" but every actual send just piles up in the outbound queue.
+      if (/^www\./i.test(e.email.split('@')[1] ?? '')) continue;
       const ins = await query(
         `INSERT IGNORE INTO discovered_leads
            (tenant_id, source_id, discovery_job_id, email, email_domain, company_domain,

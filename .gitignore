@@ -16,6 +16,10 @@ secrets/
 *.sql
 *.sql.gz
 *.dump
+# ...but migrations are source, not dumps. Without this the `*.sql` rule above
+# silently excluded every db/migrations/*.sql from the repo — the schema existed
+# only on the live box and in backups, so a checkout could never rebuild the DB.
+!db/migrations/*.sql
 
 # Backups & runtime
 backups/

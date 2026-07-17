@@ -43,7 +43,7 @@ const OVERPASS_MIRRORS = (process.env.OVERPASS_ENDPOINT
     ]
 );
 const REDIS_OSM_MIRROR_IDX = 'perpcol:osm:mirror_idx';
-const OVERPASS_TIMEOUT  = 30_000;
+const OVERPASS_TIMEOUT  = 55_000;
 const OVERPASS_GAP_MS   = 5_000;  // polite gap between Overpass requests
 
 const CAMPAIGN_NAME    = '__perpetual_global__';
@@ -427,6 +427,40 @@ const OSM_CITIES_FOR_OVERPASS: Array<{ city: string; country_code: string; bbox:
   { city: 'Sydney',          country_code: 'AU', bbox: [-33.97, 151.00,-33.83, 151.28] },
   { city: 'Melbourne',       country_code: 'AU', bbox: [-37.92, 144.88,-37.78, 145.02] },
   { city: 'Brisbane',        country_code: 'AU', bbox: [-27.58, 152.88,-27.43, 153.12] },
+  // Batch 2 — fresh territory: fills TLD gaps (fr/ee/sk/za/sg/il/ae) + more mid-size
+  // Western cities so the fixed city×category grid doesn't saturate as fast.
+  { city: 'Paris',           country_code: 'FR', bbox: [48.80,   2.22, 48.92,   2.42] },
+  { city: 'Lyon',            country_code: 'FR', bbox: [45.70,   4.78, 45.80,   4.90] },
+  { city: 'Tallinn',         country_code: 'EE', bbox: [59.38,  24.60, 59.50,  24.85] },
+  { city: 'Bratislava',      country_code: 'SK', bbox: [48.10,  17.05, 48.22,  17.20] },
+  { city: 'Johannesburg',    country_code: 'ZA', bbox: [-26.28, 27.95,-26.10,  28.15] },
+  { city: 'Cape Town',       country_code: 'ZA', bbox: [-34.00, 18.38,-33.85,  18.55] },
+  { city: 'Singapore',       country_code: 'SG', bbox: [ 1.25, 103.70,  1.45, 103.95] },
+  { city: 'Tel Aviv',        country_code: 'IL', bbox: [32.03,  34.73, 32.13,  34.83] },
+  { city: 'Dubai',           country_code: 'AE', bbox: [25.05,  55.05, 25.30,  55.40] },
+  { city: 'Auckland',        country_code: 'NZ', bbox: [-37.00,174.70,-36.80, 174.90] },
+  { city: 'Wellington',      country_code: 'NZ', bbox: [-41.35,174.72,-41.25, 174.82] },
+  { city: 'Cardiff',         country_code: 'GB', bbox: [51.44,  -3.25, 51.53,  -3.10] },
+  { city: 'Newcastle',       country_code: 'GB', bbox: [54.94,  -1.70, 55.02,  -1.55] },
+  { city: 'Belfast',         country_code: 'GB', bbox: [54.55,  -5.98, 54.63,  -5.85] },
+  { city: 'Boston',          country_code: 'US', bbox: [42.30, -71.15, 42.42, -70.98] },
+  { city: 'Seattle',         country_code: 'US', bbox: [47.55,-122.42, 47.72,-122.25] },
+  { city: 'Denver',          country_code: 'US', bbox: [39.65,-105.05, 39.80,-104.90] },
+  { city: 'Atlanta',         country_code: 'US', bbox: [33.70, -84.45, 33.85, -84.30] },
+  { city: 'Miami',           country_code: 'US', bbox: [25.70, -80.30, 25.85, -80.13] },
+  { city: 'San Francisco',   country_code: 'US', bbox: [37.72,-122.52, 37.82,-122.38] },
+  { city: 'Dallas',          country_code: 'US', bbox: [32.72, -96.90, 32.85, -96.72] },
+  { city: 'Montreal',        country_code: 'CA', bbox: [45.45, -73.65, 45.58, -73.48] },
+  { city: 'Ottawa',          country_code: 'CA', bbox: [45.35, -75.78, 45.45, -75.62] },
+  { city: 'Perth',           country_code: 'AU', bbox: [-32.00,115.78,-31.88, 115.92] },
+  { city: 'Adelaide',        country_code: 'AU', bbox: [-34.98,138.55,-34.85, 138.68] },
+  // Batch 3 — Ukraine (JobHunter B2B lead pool; NOT wired into any active
+  // send campaign yet — content/offer pending, see project notes).
+  { city: 'Kyiv',            country_code: 'UA', bbox: [50.35,  30.35, 50.55,  30.65] },
+  { city: 'Lviv',            country_code: 'UA', bbox: [49.78,  23.95, 49.88,  24.10] },
+  { city: 'Kharkiv',         country_code: 'UA', bbox: [49.90,  36.15, 50.08,  36.35] },
+  { city: 'Odesa',           country_code: 'UA', bbox: [46.42,  30.65, 46.52,  30.80] },
+  { city: 'Dnipro',          country_code: 'UA', bbox: [48.40,  34.90, 48.52,  35.10] },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -584,7 +618,7 @@ async function osmSearch(city: string, countryCode: string, bbox: [number,number
   // bbox query — reliable; area+admin_level queries time out on public mirrors
   const [s, w, n, e] = bbox;
   const selectorStr = selectors.map((sel) => `  ${sel};`).join('\n');
-  const ql = `[out:json][timeout:25][bbox:${s},${w},${n},${e}];\n(\n${selectorStr}\n);\nout center 100;`;
+  const ql = `[out:json][timeout:50][bbox:${s},${w},${n},${e}];\n(\n${selectorStr}\n);\nout center 300;`;
 
   // Try each mirror in order, rotate on failure
   const startIdx = parseInt(await redis.get(REDIS_OSM_MIRROR_IDX) ?? '0', 10) % OVERPASS_MIRRORS.length;
