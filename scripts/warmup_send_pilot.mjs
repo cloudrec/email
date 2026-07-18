@@ -134,6 +134,9 @@ async function candidates(need, categoryFilter) {
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='email' AND g.normalized_value=LOWER(cp.value))
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='domain' AND g.normalized_value=LOWER(cp.email_domain))
       AND NOT EXISTS (SELECT 1 FROM outreach_touchpoints tp WHERE tp.email LIKE CONCAT('%@', cp.email_domain))
+      -- Postal silently Holds mail to anyone on its own suppression list (still 250 OK),
+      -- so a suppressed pick is "sent" and never delivered. Exclude up front.
+      AND NOT EXISTS (SELECT 1 FROM \`postal-server-1\`.suppressions ps WHERE ps.address=cp.value)
     GROUP BY cp.email_domain
     ORDER BY cp.verification_score DESC, cp.id
     LIMIT ?`, [need * 4]);   // over-select; the loop still drops newly-classified Google/no-MX

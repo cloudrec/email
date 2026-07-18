@@ -138,6 +138,10 @@ async function candidates(need) {
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='email' AND g.normalized_value=LOWER(cp.value))
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='domain' AND g.normalized_value=LOWER(cp.email_domain))
       AND NOT EXISTS (SELECT 1 FROM outreach_touchpoints tp WHERE tp.email LIKE CONCAT('%@', cp.email_domain))
+      -- Postal keeps its OWN suppression list and silently Holds mail to anyone on it
+      -- while still returning 250 OK. Without this, a suppressed recipient is picked,
+      -- "sent", and quietly Held — 28 of 100 wasted this way on 2026-07-18.
+      AND NOT EXISTS (SELECT 1 FROM \`postal-server-1\`.suppressions ps WHERE ps.address=cp.value)
     GROUP BY cp.email_domain
     ORDER BY cp.verification_score DESC, cp.id
     LIMIT ?`, [need * 4]);   // over-select; the loop still drops newly-classified Google/no-MX
