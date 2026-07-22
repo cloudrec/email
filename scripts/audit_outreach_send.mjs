@@ -35,6 +35,10 @@ const DOMAIN = 'clients.help';
 const TENANT = 1;
 const JWT = process.env.API_JWT_SECRET;
 const REPLY_TO = 'andrii@emails.cheap';   // monitored inbox the reply importer reads
+// The body is first-person ("I run website audits"), so it must be signed by a person,
+// not the brand — a named sender lifts cold-outreach reply rates. Kept consistent with
+// the reply-to inbox (andrii@) so a reply lands with the person it appears to come from.
+const SENDER_NAME = 'Andrii';
 
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
 const log = (m) => console.log(`[${now()}] audit_send: ${m}`);
@@ -107,9 +111,9 @@ let sent = 0, idx = 0;
 for (const c of ready) {
   const s = senders[idx % senders.length];
   const u = unsub(c.email);
-  // The generated body ends "Best regards," with no name — sign it with the sender,
+  // The generated body ends "Best regards," with no name — sign it with a person,
   // and append the one-click unsubscribe line.
-  const body = `${c.body.trimEnd()}\n${s.from_name}\n\nUnsubscribe: ${u}`;
+  const body = `${c.body.trimEnd()}\n${SENDER_NAME}\n\nUnsubscribe: ${u}`;
 
   if (!SEND) {
     console.log(`\n===== ${c.domain}  (score ${c.score})  ->  ${c.email}  [from ${s.from_email}] =====`);
@@ -119,7 +123,7 @@ for (const c of ready) {
   }
   try {
     await tx.sendMail({
-      from: `"${s.from_name}" <${s.from_email}>`, to: c.email, replyTo: REPLY_TO,
+      from: `"${SENDER_NAME}" <${s.from_email}>`, to: c.email, replyTo: REPLY_TO,
       subject: c.subject, text: body,
       headers: {
         'List-Unsubscribe': `<mailto:${REPLY_TO}?subject=unsubscribe>, <${u}>`,
