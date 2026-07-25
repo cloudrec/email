@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { query } from '../db.js';
 import { authMiddleware, requireTenant, requireWriteAccess } from '../middleware/auth.js';
 import { audit } from '../middleware/audit.js';
-import { addSuppression } from '../services/suppression.js';
+import { addSuppression, isSuppressedGlobal } from '../services/suppression.js';
 import { contentBlockers } from '../services/outboundContentGuard.js';
 import { evaluateMessageQuality } from '../services/messageQualityGate.js';
 import { redis } from '../redis.js';
@@ -47,20 +47,9 @@ function hasOptOut(body: string | null | undefined): boolean {
   return /unsubscribe|opt[\s-]?out|reply\s+["'“”]?\s*stop|\bstop\b.*won'?t email|no longer wish|reply .*to stop|don'?t want to hear|i'?ll remove you|i won'?t email again/.test(t);
 }
 
-export async function isEmailSuppressed(tenantId: number, email: string): Promise<boolean> {
-  const e = email.toLowerCase();
-  const domain = e.split('@')[1] ?? '';
-  const rows = await query(
-    `SELECT 1 FROM suppressions WHERE tenant_id=? AND email=? LIMIT 1`, [tenantId, e],
-  );
-  if (rows.length) return true;
-  const g = await query(
-    `SELECT 1 FROM global_contact_suppression
-     WHERE (type='email' AND normalized_value=?) OR (type='domain' AND normalized_value=?) LIMIT 1`,
-    [e, domain],
-  );
-  return g.length > 0;
-}
+// Guard moved to services/suppression.ts (isSuppressedGlobal) so it is dependency-free
+// and unit-testable; re-exported here under the original name for existing callers.
+export const isEmailSuppressed = isSuppressedGlobal;
 
 // Roll per-mailbox manual counter to today, return the row with fresh counters.
 async function mailboxWithCounters(tenantId: number, mailboxId: number): Promise<any | null> {

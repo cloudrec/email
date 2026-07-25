@@ -10,7 +10,8 @@
     "migrate": "node dist/cli/migrate.js",
     "seed": "node dist/cli/seed.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:integration": "RUN_DB_TESTS=1 vitest run src/services/__tests__/engineInvariants.integration.test.ts"
   },
   "dependencies": {
     "argon2": "^0.41.1",
