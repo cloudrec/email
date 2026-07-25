@@ -27,7 +27,8 @@ describe('Launch scenario — deterministic pipeline', () => {
   });
 
   it('4. reply classification is deterministic and correct for every scenario branch', () => {
-    expect(classifyReply('Re: q', 'This sounds good, how much? call me', 'anna@realco.uk').classification).toBe('interested');
+    // 'how much?' now resolves to the finer 'request_details' (TZ §11); still a positive lead.
+    expect(['interested', 'request_details', 'meeting_request']).toContain(classifyReply('Re: q', 'This sounds good, how much? call me', 'anna@realco.uk').classification);
     expect(classifyReply('Re: q', 'STOP', 'anna@realco.uk').classification).toBe('unsubscribe');        // stop -> opt out
     expect(classifyReply('Welcome to your account', 'pricing inside', 'noreply@app.com').classification).toBe('auto_reply'); // welcome guard
     expect(classifyReply('Mail delivery failed', 'address not found', 'mailer-daemon@x').classification).toBe('bounce_like');

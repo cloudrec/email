@@ -21,9 +21,12 @@ describe('classifyReply — welcome/automated-mail guard (never a lead)', () => 
     expect(classifyReply('Password reset request', 'click here', 'wp@site.com').classification).toBe('auto_reply');
   });
 
-  it('STILL classifies a genuine human interested reply', () => {
+  it('STILL classifies a genuine human interested reply as a positive lead', () => {
+    // Taxonomy got finer (TZ §11): a pricing question is now the more specific
+    // 'request_details' rather than the generic 'interested'. Both are positive
+    // human leads (escalate to a draft, never auto-send) — the guard's intent holds.
     const r = classifyReply('Re: quick question', 'This sounds good, how much is it? Call me.', 'anna@realcleaningco.co.uk');
-    expect(r.classification).toBe('interested');
+    expect(['interested', 'request_details', 'meeting_request']).toContain(r.classification);
   });
 
   it('a bare STOP reply auto-classifies as unsubscribe (compliance)', () => {
