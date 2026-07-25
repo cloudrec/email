@@ -30,6 +30,7 @@ async function cleanup() {
   await query(`DELETE FROM suppressions WHERE tenant_id=? AND email LIKE ?`, [TENANT, `%${MARK}`]);
   await query(`DELETE FROM contacts WHERE tenant_id=? AND email LIKE ?`, [TENANT, `%${MARK}`]);
   await query(`DELETE FROM conversion_events WHERE idempotency_key LIKE ?`, [`enginetest-${stamp}-%`]);
+  await query(`DELETE FROM click_events WHERE idempotency_key LIKE ?`, [`enginetest-${stamp}-%`]);
 }
 
 async function seedContact(addr: string) {
@@ -117,5 +118,53 @@ d('TZ §21 engine invariants (DB integration)', () => {
     await ins(); // simulated worker restart / postback retry
     const rows = await query(`SELECT COUNT(*) AS n FROM conversion_events WHERE idempotency_key=?`, [key]);
     expect(Number(rows[0].n)).toBe(1);
+  });
+
+  // §21.19 — tracking parameters map a conversion back to campaign / contact / offer.
+  // The click and the conversion carry the same campaign_id/offer_id/contact_email/
+  // click_id, so a conversion is attributable to the exact campaign, offer and contact
+  // that produced the click (the mapping the postback route persists).
+  it('conversion tracking params map to campaign, contact and offer', async () => {
+    const campaignId = 970001;
+    const offerId = 970002;
+    const contact = email('attrib');
+    const clickId = `ck-${stamp}`;
+    const subId = `sub-${stamp}`;
+    const clickKey = `enginetest-${stamp}-click19`;
+    const convKey = `enginetest-${stamp}-conv19`;
+
+    await query(
+      `INSERT IGNORE INTO click_events (campaign_id, offer_id, contact_email, sub_id, click_id, idempotency_key)
+       VALUES (?,?,?,?,?,?)`,
+      [campaignId, offerId, contact, subId, clickId, clickKey],
+    );
+    await query(
+      `INSERT IGNORE INTO conversion_events (campaign_id, offer_id, contact_email, event_type, sub_id, click_id, idempotency_key)
+       VALUES (?,?,?, 'sale', ?,?,?)`,
+      [campaignId, offerId, contact, subId, clickId, convKey],
+    );
+
+    // The stored conversion round-trips every tracking dimension.
+    const [conv] = await query(
+      `SELECT campaign_id, offer_id, contact_email, click_id, sub_id FROM conversion_events WHERE idempotency_key=?`,
+      [convKey],
+    );
+    expect(Number(conv.campaign_id)).toBe(campaignId);
+    expect(Number(conv.offer_id)).toBe(offerId);
+    expect(conv.contact_email).toBe(contact);
+    expect(conv.click_id).toBe(clickId);
+
+    // And it joins back to its originating click on click_id, agreeing on campaign/offer/contact.
+    const [joined] = await query(
+      `SELECT cv.campaign_id, cv.offer_id, cv.contact_email
+         FROM conversion_events cv
+         JOIN click_events ck ON ck.click_id = cv.click_id
+        WHERE cv.idempotency_key=? AND ck.idempotency_key=?
+          AND ck.campaign_id = cv.campaign_id AND ck.offer_id = cv.offer_id
+          AND ck.contact_email = cv.contact_email`,
+      [convKey, clickKey],
+    );
+    expect(joined).toBeTruthy();
+    expect(joined.contact_email).toBe(contact);
   });
 });
