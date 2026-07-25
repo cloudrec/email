@@ -43,6 +43,8 @@ import { mailboxesRouter } from './routes/mailboxes.js';
 import { smtpNodesRouter } from './routes/smtpNodes.js';
 import { partnerOutreachRouter } from './routes/partnerOutreach.js';
 import { listsRouter } from './routes/lists.js';
+import { affiliateOffersRouter } from './routes/affiliateOffers.js';
+import { affiliateTrackingRouter } from './routes/affiliateTracking.js';
 import { authMiddleware } from './middleware/auth.js';
 import { seoBlogRouter } from './routes/seoBlog.js';
 
@@ -90,6 +92,7 @@ app.use('/', publicInviteRouter);
 
 // Webhooks are token-authenticated (Bearer / x-webhook-token / ?token=)
 app.use('/webhooks', webhooksRouter);
+app.use('/webhooks/affiliate', affiliateTrackingRouter);
 
 // Auth (with stricter rate limit on login/register)
 app.use('/auth', authLimiter, authRouter);
@@ -101,6 +104,7 @@ app.use('/tenants', tenantsRouter);
 app.use('/domains', domainsRouter);
 app.use('/contacts', contactsRouter);
 app.use('/campaigns', campaignsRouter);
+app.use('/affiliate/offers', affiliateOffersRouter);
 app.use('/billing', billingRouter);
 app.use('/leads', leadsRouter);
 app.use('/product-profiles', productProfilesRouter);
