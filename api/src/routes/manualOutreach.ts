@@ -5,6 +5,7 @@ import { authMiddleware, requireTenant, requireWriteAccess } from '../middleware
 import { audit } from '../middleware/audit.js';
 import { addSuppression } from '../services/suppression.js';
 import { contentBlockers } from '../services/outboundContentGuard.js';
+import { evaluateMessageQuality } from '../services/messageQualityGate.js';
 import { redis } from '../redis.js';
 import {
   zohoPresence, zohoBridgeStatus, testZohoSmtp, testZohoImap,
@@ -819,6 +820,24 @@ async function evaluateSendGate(tenantId: number, item: any) {
   // grammar — previously only the drip worker checked these; the portal one-by-one
   // send bypassed them entirely and could ship broken drafts.
   blockers.push(...contentBlockers(item.draft_subject, item.draft_body));
+  // Message-quality gate (TZ §9). Only the high-precision spam-tells are added as
+  // hard blockers here — guaranteed income, false urgency, fabricated case study,
+  // misleading RE:/FWD: subject, hidden affiliate nature. Opt-out and sender identity
+  // are deliberately NOT re-checked here (opt-out is already covered above by
+  // `no_opt_out_line`, and a strict identity regex would false-block legit approved
+  // drafts on this live send path). Fuzzy heuristics (manipulative tone, fake
+  // familiarity, unverified savings) are surfaced as advisory reviewFlags, not blocks.
+  const quality = evaluateMessageQuality({
+    subject: item.draft_subject,
+    body: item.draft_body,
+    isReply: false,
+    requireSenderIdentity: false,
+    requireOptOut: false,
+    isAffiliate: !!item.affiliate_offer_id,
+    disclosurePresent: undefined,
+  });
+  for (const code of quality.blockers) blockers.push(`quality_${code}`);
+  const reviewFlags = quality.reviewFlags;
   // Tenant kill-switch — honoured here (was only respected by the drip worker).
   const paused = await query(
     'SELECT outreach_paused FROM tenant_safety_settings WHERE tenant_id=? AND outreach_paused=1 LIMIT 1',
@@ -849,7 +868,7 @@ async function evaluateSendGate(tenantId: number, item: any) {
     const used = Number(mailbox.sent_today || 0);
     if (used >= Number(mailbox.daily_send_limit)) blockers.push('daily_limit_reached');
   }
-  return { blockers, smtpConfigured: !!(conn?.smtpConfigured), mailbox };
+  return { blockers, reviewFlags, smtpConfigured: !!(conn?.smtpConfigured), mailbox };
 }
 
 // ── SMTP one-by-one send (REAL send — only when Zoho creds configured + gated) ─
@@ -916,7 +935,7 @@ manualOutreachRouter.get('/queue/:id/copy', async (req, res) => {
   res.json({
     recipient: item.email, subject: item.draft_subject, body: item.draft_body,
     company: item.company_name, reason: item.reason, sourceUrl: item.source_url,
-    gate: { blockers: gate.blockers, smtpConfigured: gate.smtpConfigured },
+    gate: { blockers: gate.blockers, reviewFlags: gate.reviewFlags, smtpConfigured: gate.smtpConfigured },
     note: 'Paste into Zoho webmail manually, then mark as sent.',
   });
 });
