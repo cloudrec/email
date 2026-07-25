@@ -169,6 +169,30 @@ async function main() {
           );
           boxSuppressed++;
         }
+
+        // TZ §11 escalation: a complaint or a legal/privacy request is a hard stop.
+        // Suppress the sender globally (never contact again) and flag loudly for a human —
+        // a complaint must pause outreach and a legal request must be reviewed by a person.
+        if (['complaint', 'legal_or_privacy'].includes(cls.classification) && rep.fromEmail) {
+          const isComplaint = cls.classification === 'complaint';
+          const reason = isComplaint ? 'complaint' : 'legal_request';
+          // addSuppression's typed reason has no 'legal_request'; map legal→'manual'
+          // (a human-review suppression). The descriptive reason is kept in the global row.
+          await addSuppression(TENANT_ID, rep.fromEmail, isComplaint ? 'complaint' : 'manual');
+          await query(
+            `INSERT IGNORE INTO global_contact_suppression (type, normalized_value, reason, source)
+             VALUES ('email', ?, ?, 'reply_import_escalation')`,
+            [rep.fromEmail, reason],
+          );
+          await query("UPDATE contact_points SET status='do_not_contact' WHERE value=?", [rep.fromEmail]);
+          await query(
+            "UPDATE manual_outreach_queue SET safety_status='suppressed', status='do_not_contact' WHERE tenant_id=? AND email=? AND status IN ('pending_review','approved')",
+            [TENANT_ID, rep.fromEmail],
+          );
+          boxSuppressed++;
+          // Human-escalation signal — surfaced in logs the owner/monitor watches.
+          console.warn(`  [ESCALATE] ${cls.classification.toUpperCase()} from ${rep.fromEmail} — suppressed globally, needs human review (subject: ${(rep.subject || '').slice(0, 60)})`);
+        }
       } catch (e: any) {
         if (e?.code !== 'ER_DUP_ENTRY') throw e;
       }
