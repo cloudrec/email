@@ -15,7 +15,8 @@ campaignsRouter.get('/', async (req, res) => {
   const rows = await query(
     `SELECT id, uuid, name, subject, status, scheduled_at, total_recipients,
             sent_count, delivered_count, opened_count, clicked_count, bounced_count,
-            unsubscribed_count, created_at
+            unsubscribed_count, created_at,
+            campaign_mode, lifecycle_state, affiliate_offer_id, mode_owner, max_send_volume
      FROM campaigns WHERE tenant_id=? ORDER BY created_at DESC LIMIT 200`,
     [req.auth!.tenantId],
   );

@@ -41,6 +41,11 @@ const GROUPS: Array<{ section: string; superOnly?: boolean; items: Array<{ key: 
     { key: 'manualOutreach', href: (q) => `/manual-outreach${q}` },
     { key: 'outreach',       href: (q) => `/outreach${q}` },
   ] },
+  { section: 'engine', items: [
+    { key: 'affiliateOffers', href: (q) => `/affiliate-offers${q}` },
+    { key: 'replies',         href: (q) => `/replies${q}` },
+    { key: 'revenue',         href: (q) => `/revenue${q}` },
+  ] },
   { section: 'deliver', items: [
     { key: 'deliverability', href: (q) => `/deliverability${q}` },
     { key: 'goLive',         href: (q) => `/go-live${q}` },

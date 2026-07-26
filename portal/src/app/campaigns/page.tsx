@@ -9,6 +9,9 @@ type Campaign = {
   id: number; uuid: string; name: string; subject: string; status: string;
   scheduled_at: string | null; total_recipients: number;
   sent_count: number; opened_count: number; clicked_count: number; bounced_count: number; created_at: string;
+  // Engine fields (TZ §17) — read-only surface; all nullable on legacy campaigns.
+  campaign_mode?: string | null; lifecycle_state?: string | null;
+  affiliate_offer_id?: number | null; mode_owner?: string | null; max_send_volume?: number | null;
 };
 type SenderIdentity = { id: number; from_email: string; from_name: string; domain: string; domain_status: string; is_default: number; };
 type CList = { id: number; name: string; contact_count: number; };
@@ -472,7 +475,18 @@ export default function CampaignsPage() {
           <tbody>
             {campaigns.map(c => (
               <tr key={c.id} style={{ borderBottom: '1px solid var(--line)' }}>
-                <td style={{ padding: '8px 10px', fontWeight: 500 }}>{c.name}</td>
+                <td style={{ padding: '8px 10px', fontWeight: 500 }}>
+                  {c.name}
+                  {c.campaign_mode && (
+                    <div className="cluster" style={{ marginTop: 4, gap: 4, fontWeight: 400 }}>
+                      <span className="chip info">{c.campaign_mode === 'AFFILIATE' ? 'affiliate' : 'own product'}</span>
+                      {c.lifecycle_state && <span className="chip muted">{c.lifecycle_state}</span>}
+                      {c.affiliate_offer_id && <span className="chip muted">offer #{c.affiliate_offer_id}</span>}
+                      {c.mode_owner && <span className="chip muted">{c.mode_owner}</span>}
+                      {c.max_send_volume != null && <span className="chip muted">≤{c.max_send_volume}/day</span>}
+                    </div>
+                  )}
+                </td>
                 <td style={{ padding: '8px 10px', color: 'var(--ink-3)', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.subject}</td>
                 <td style={{ padding: '8px 10px' }}><span className={statusColor(c.status)}>{t(locale, `campaigns.${c.status}`)}</span></td>
                 <td style={{ padding: '8px 10px', textAlign: 'right' }}>{c.total_recipients}</td>
