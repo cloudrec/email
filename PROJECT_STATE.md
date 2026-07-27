@@ -16,8 +16,9 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
   postback ingestion (idempotent), 7 new tables, 3 DRAFT experiments.
 - Reply ingestion + finer classifier (TZ §11 classes + escalation map/actions).
 - Message quality gate (TZ §9) + affiliate compliance gate (TZ §10), both fail-closed.
-- Admin UI (TZ §17): portal pages /affiliate-offers, /revenue, /replies, /engine-safety,
-  plus read-only engine badges on /campaigns. Read-only revenue + engine-safety endpoints.
+- Admin UI (TZ §17, COMPLETE — all 6 sections): portal pages /affiliate-offers, /revenue,
+  /replies, /engine-safety, contact detail panel on /contacts, read-only engine badges on
+  /campaigns. Read-only revenue + engine-safety + contact-detail endpoints.
 - Silent health/reply monitor (pings owner only on a genuine reply or real breakage).
 - Tests: 109 passed + 7 skipped (DB integration, run via `npm run test:integration`).
 
@@ -28,9 +29,9 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
 
 ## KNOWN RISKS
 - 20/day-2/hour not enforced in code (owner deferred).
-- TZ mostly complete: §9,§10,§11,§17,§21(17/20 tests),§23(7 docs),§24 done. Not done:
-  §21 #13/#14/#15 (need a campaign-driven send loop that does not exist — audit is a cron).
-  Contacts admin page reused as-is, not field-audited vs §17.
+- TZ complete except 3 tests: §9,§10,§11,§17(all 6 sections),§21(17/20 tests),§23(7 docs),
+  §24 done. Not done: §21 #13/#14/#15 (need a campaign-driven send loop that does not exist
+  — audit is a cron; building it = enabling real campaign sends, owner approval required).
 - Audit outreach hits some role addresses (info@/support@) that route into helpdesks.
 
 ## PENDING APPROVALS
@@ -39,9 +40,9 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
 - Any affiliate test send (EXP-C) — owner approval required.
 
 ## NEXT SAFE TASK
-Optional Contacts field-parity pass (§17). The §21 #13/#14/#15 tests need a campaign-
-driven send loop first — build that only on explicit owner approval (it is the path to
-real sending). All current work is additive; no send.
+TZ implementation is done except §21 #13/#14/#15, which require a campaign-driven send
+loop. That loop is the path to real campaign sending — build ONLY on explicit owner
+approval. Everything shipped so far is additive; no send, no limit/credential change.
 
 ## LAST VERIFIED COMMANDS
 ```

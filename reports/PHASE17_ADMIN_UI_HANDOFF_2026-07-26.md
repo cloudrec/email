@@ -78,10 +78,20 @@ Verified: endpoint 401 unauth (mounted+authed), page 200 + built into image, all
 SQL queries run against the live DB (0 rows — no engine data yet), api suite 109 passed /
 7 skipped. Deployed (fresh api+portal images, health 200).
 
-## Remaining
+## Update 2026-07-27 (2) — Contacts field-parity DONE
 
-1. Contacts field-parity pass (§17) — `/contacts` reused as-is, not audited vs
-   source/relevance/status/suppression/campaign-history.
-2. Deferred §21 tests (#13 dup-message, #14 paused-campaign-not-processed, #15 mailbox-
-   limits) need a campaign-driven send loop that does not exist yet — build only on
-   explicit owner approval (it is the path to real sending).
+- `api/src/routes/contacts.ts` — `GET /contacts/:id/detail` (tenant-scoped, read-only):
+  source (consent_source + tags + latest outreach-queue source_url/company), relevance
+  reason (manual_outreach_queue.reason), status, suppression (isSuppressedGlobal +
+  reason/scope), campaign history (campaign_events + outreach_touchpoints).
+- `portal/src/app/contacts/page.tsx` — per-row "Details" button + detail panel.
+Endpoint 401 unauth, page 200, SQL validated live, suite 109/7, deployed.
+
+**§17 is now COMPLETE** across all six sections: campaigns, affiliate offers, contacts,
+replies, revenue, safety.
+
+## Remaining (whole TZ)
+
+Only the deferred §21 tests (#13 dup-message, #14 paused-campaign-not-processed, #15
+mailbox-limits) — they need a campaign-driven send loop that does not exist yet. Build
+only on explicit owner approval (it is the path to real sending).
