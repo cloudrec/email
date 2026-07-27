@@ -27,7 +27,7 @@ Legacy campaigns have `campaign_mode = NULL` and behave exactly as before.
 - **Reply classification + escalation (§11)** — `api/src/services/replyClassifier.ts`
   (`classifyReply`, `REPLY_ESCALATION`); escalation actions run in `api/src/cli/importReplies.ts`.
 - **Schema** — `db/migrations/0022_*.sql` (campaigns columns + affiliate tables),
-  `db/migrations/0023_*.sql` (inbox reply classification enum). Last migration = 0023.
+  `db/migrations/0023_*.sql` (inbox reply classification enum). Last migration = 0024.
 
 ## Data model added by 0022
 

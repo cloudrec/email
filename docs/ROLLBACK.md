@@ -52,6 +52,8 @@ nothing you keep now reads these columns):
 cd /opt/email
 DBP=$(grep -E '^DB_ROOT_PASSWORD=' .env | cut -d= -f2); DBN=$(grep -E '^DB_NAME=' .env | cut -d= -f2)
 docker compose exec -T db mariadb -uroot -p"$DBP" "$DBN" <<'SQL'
+-- 0024 reverse: drop the campaign send log.
+DROP TABLE IF EXISTS campaign_send_log;
 -- 0022 reverse: drop the new tables and the added campaigns columns.
 DROP TABLE IF EXISTS campaign_experiments, compliance_snapshots,
   revenue_events, conversion_events, click_events,

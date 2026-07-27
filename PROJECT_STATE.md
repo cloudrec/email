@@ -20,7 +20,11 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
   /replies, /engine-safety, contact detail panel on /contacts, read-only engine badges on
   /campaigns. Read-only revenue + engine-safety + contact-detail endpoints.
 - Silent health/reply monitor (pings owner only on a genuine reply or real breakage).
-- Tests: 122 passed + 7 skipped (DB integration, run via `npm run test:integration`). TZ §21 20/20.
+- Campaign send-worker (TZ §18): `dist/cli/campaignSendWorker.js`, DRY-RUN by default (sends
+  nothing, writes nothing). Live only when armed by owner (CAMPAIGN_SEND_LIVE=1 + campaign
+  ACTIVE + CAMPAIGN_SEND_CONFIRM=uuid), capped, quality+compliance gated, idempotent via
+  campaign_send_log (migration 0024). NOT on any cron.
+- Tests: 129 passed + 7 skipped (DB integration, run via `npm run test:integration`). TZ §21 20/20.
 
 ## LIMITS
 - Send volume: kept as-is per owner (audit 25/day; warmup ramp). Per-mailbox schema fields
@@ -40,10 +44,11 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
 - Any affiliate test send (EXP-C) — owner approval required.
 
 ## NEXT SAFE TASK
-TZ is fully implemented and tested. The only remaining build is a LIVE campaign-send
-worker that calls `campaignSendGate` and actually dispatches — the path to real campaign
-sending, to be built ONLY on explicit owner approval. Everything shipped is additive; no
-send, no limit/credential change.
+TZ is fully implemented and tested, including the campaign send-worker (dry-run default).
+To go live on a real campaign: register+approve an offer (affiliate) or set the campaign
+to lifecycle_state='ACTIVE', then run the worker armed (CAMPAIGN_SEND_LIVE=1 +
+CAMPAIGN_SEND_CONFIRM=uuid) with a small CAMPAIGN_SEND_MAX — owner-driven only. Consider a
+first supervised live send of 1–5 messages before any scale-up.
 
 ## LAST VERIFIED COMMANDS
 ```

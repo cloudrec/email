@@ -1,13 +1,13 @@
 # Affiliate & B2B Outreach — Test Report
 
 **Filename date 2026-07-23** (TZ §24 fixed name). **Executed:** 2026-07-26 on branch
-`launch-stage3`, `/opt/email`. Last migration = 0023.
+`launch-stage3`, `/opt/email`. Last migration = 0024.
 
 ## Summary
 
 | Suite | Result |
 |-------|--------|
-| Host unit suite (`npm test`) | **122 passed**, 7 skipped (10 files) — incl. §9 quality gate (19), §17 engine-safety (9), §21 campaign send gate (13) |
+| Host unit suite (`npm test`) | **129 passed**, 7 skipped (11 files) — incl. §9 quality gate (19), §17 engine-safety (9), §21 send gate (13), §18 send planner (7) |
 | DB integration suite (`npm run test:integration`, live DB) | **7 passed** |
 | TypeScript (`tsc --noEmit`) | clean, exit 0 |
 | API build + health | rebuilt, container healthy |
@@ -22,10 +22,11 @@ The 7 integration tests are `describe.skip` on the host (fake DB creds) and run 
 | Engine work start (baseline) | 64 |
 | After reply classes/escalation (§11) | 81 |
 | After §9 quality gate + §21 integration | 100 unit + 7 integration = 107 |
-| After §17 engine-safety + §21 campaign send gate | **122 unit + 7 integration = 129** |
+| After §17 engine-safety + §21 send gate | 122 unit + 7 integration = 129 |
+| After §18 send-worker + planner | **129 unit + 7 integration = 136** |
 
-New this session: `messageQualityGate.test.ts` (19), `engineInvariants.integration.test.ts` (7).
-No existing passing test was removed or weakened.
+New this session added: §17 engine-safety + contact detail, §18 campaign send-worker +
+planner, §21 send gate. No existing passing test was removed or weakened.
 
 ## How to run
 
@@ -55,6 +56,7 @@ keys and are deleted in `afterAll`. Verified **0 residue** in `suppressions`, `c
 | `outboundContentGuard.test.ts` | 7 | pre-send content blockers |
 | `engineSafety.test.ts` | 9 | §17 terms-staleness / daysSince (engine-safety view) |
 | `campaignSendGate.test.ts` | 13 | §21 send-safety decision (#13/#14/#15 + suppressed/offer) |
+| `campaignSendPlanner.test.ts` | 7 | §18 per-batch send planning + capacity accounting |
 | `launchScenario.test.ts` | 6 | launch scenario |
 
 ## TZ §21 coverage matrix
@@ -82,44 +84,46 @@ keys and are deleted in `afterAll`. Verified **0 residue** in `suppressions`, `c
 | 19 | tracking maps conversion to campaign/contact/offer | ✅ | integration: click→conversion attribution join |
 | 20 | backup and restore instructions are valid | ✅ (procedure) | `scripts/backup.sh` / `scripts/restore.sh` reviewed; pre-change backup verified present; documented in `docs/ROLLBACK.md` |
 
-**20 of 20 automated.** #13/#14/#15 are covered at the send-decision level by the pure
-`campaignSendGate` contract (`api/src/services/campaignSendGate.ts`): `decideCampaignSend`
-returns the blockers a campaign worker must honour (duplicate_send, campaign_paused,
-daily_limit_reached, contact_suppressed, affiliate_offer_not_approved). NOTE: a live
-campaign dispatch loop that CALLS this gate is intentionally not built — enabling real
-campaign sending is an owner-gated step. The gate is the tested contract that loop would
-use; the invariants themselves are now automated and green.
+**20 of 20 automated.** #13/#14/#15 are covered by the pure `campaignSendGate` +
+`campaignSendPlanner` (`api/src/services/`), and those are now consumed by a real worker:
+`api/src/cli/campaignSendWorker.js`. The worker is **dry-run by default** (sends nothing,
+writes nothing) and was exercised end-to-end against the live DB on a throwaway campaign:
+recipients planned, paused→blocked, suppressed→blocked, LIVE-requested-but-not-armed→dry
+run, `campaign_send_log` stayed empty, scratch data removed (0 residue). Real dispatch is
+owner-gated (CAMPAIGN_SEND_LIVE=1 + campaign ACTIVE + CAMPAIGN_SEND_CONFIRM=uuid + cap).
 
 ## Unresolved risks
 
-- **§13/§14/§15 tested at the decision level, not end-to-end.** `campaignSendGate` is
-  unit-tested and is the contract a campaign worker must obey, but no live worker calls it
-  yet, so there is no end-to-end "message was withheld" assertion. This is deliberate: the
-  worker is the owner-gated path to real sending.
+- **§13/§14/§15 verified via the worker in dry-run, not via a real send.** The worker
+  (`campaignSendWorker.js`) applies the gate/planner and was proven end-to-end on a throwaway
+  campaign (paused/suppressed/duplicate all blocked, `campaign_send_log` empty). A true
+  "message physically withheld at SMTP" assertion needs an armed live run, which is
+  owner-gated — not exercised here.
 - **Integration suite needs a live DB** — it is not part of CI's default host run. It must
   be run manually (command above) before a release that touches suppression, tracking, or
   the reply importer.
-- **`campaigns` rows do not yet drive real sends** — the engine is API + gates + schema;
-  no autonomous campaign sending is wired. This is by design (TZ: no real send without
-  owner approval) but means several §21 items stay latent.
+- **No autonomous sending** — the worker is dry-run by default and on no cron; a real
+  campaign send requires the owner to arm it (CAMPAIGN_SEND_LIVE=1 + campaign ACTIVE +
+  CAMPAIGN_SEND_CONFIRM=uuid). By design (TZ: no real send without owner approval).
 
 ## Rollback
 
 See `docs/ROLLBACK.md`. Levels: (1) `git revert` the engine commits + rebuild api;
-(2) reverse migrations 0022/0023 (additive, drop new tables + `campaigns` columns);
+(2) reverse migrations 0022/0023/0024 (additive, drop new tables + `campaigns` columns);
 (3) full `make restore F=<backup>`. Pre-change backup:
 `/opt/backups/email-outreach/20260725T075113Z/` (verified present).
 
 ## Production readiness
 
-Gates, schema, offer registry, postback ingestion, reply escalation, and suppression are
-**implemented and tested**. No autonomous campaign sending is enabled. Safe to leave
+Gates, schema, offer registry, postback ingestion, reply escalation, suppression, admin
+UI, and the campaign send-worker are **implemented and tested**. The send-worker defaults
+to dry-run and is not on any cron; no autonomous campaign sending is enabled. Safe to leave
 running as-is; the audit cron is unaffected.
 
 ## Next recommended action
 
-The TZ is implemented and tested (§17 admin UI shipped; §21 20/20 automated). The only
-remaining build is a **live campaign-send worker** that calls `campaignSendGate` and
-actually dispatches — this is the path to real campaign sending and must be built ONLY on
-explicit owner approval. When built, add an end-to-end test asserting a paused/duplicate/
-over-limit message is physically withheld.
+The TZ is fully implemented and tested (§17 admin UI; §21 20/20; §18 send-worker in
+dry-run). Next is an **owner-driven first live send**: set one campaign to `ACTIVE`, arm the
+worker (CAMPAIGN_SEND_LIVE=1 + CAMPAIGN_SEND_CONFIRM=uuid) with a small `CAMPAIGN_SEND_MAX`
+(1–5), watch delivery, then decide on scale-up. After a real armed run exists, add an
+end-to-end test asserting a paused/duplicate/over-limit message is physically withheld.

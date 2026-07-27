@@ -44,7 +44,7 @@ make shell-api # shell into api          make shell-db  # shell into db
 cd /opt/email && make migrate            # runs dist/cli/migrate.js inside the api container
 ```
 
-Migrations live in `db/migrations/`. Last applied = `0023`. All engine migrations are
+Migrations live in `db/migrations/`. Last applied = `0024`. All engine migrations are
 additive and reversible (see [ROLLBACK.md](ROLLBACK.md)).
 
 ## Database access
@@ -58,6 +58,44 @@ docker compose exec -T db mariadb -uroot -p"$DBP" "$DBN" -e "SHOW TABLES;"
 The client is `mariadb`, not `mysql`. The Postal message store is a **separate** DB
 (`postal-server-1`).
 
+## Campaign send-worker (TZ §18) — dry-run by default
+
+The engine campaign sender is `api/src/cli/campaignSendWorker.js`. It plans one message
+per subscribed recipient of each engine-mode campaign (`campaign_mode` set) through the
+pure `campaignSendPlanner` / `campaignSendGate`, and dispatches **only when explicitly
+armed by the owner**. It is NOT wired to any cron — run it by hand.
+
+**Default (dry run) — sends nothing, writes nothing:**
+
+```bash
+cd /opt/email
+docker compose exec -T api node dist/cli/campaignSendWorker.js            # all engine campaigns
+docker compose exec -T api node dist/cli/campaignSendWorker.js <campaignId>
+```
+
+It prints, per campaign: `recipients / wouldSend / blocked` and a blocker breakdown
+(`campaign_paused`, `contact_suppressed`, `duplicate_send`, `daily_limit_reached`,
+`affiliate_offer_not_approved`).
+
+**Live send — requires ALL of these (any missing ⇒ stays dry-run):**
+
+1. `CAMPAIGN_SEND_LIVE=1` (global arm)
+2. the campaign's `lifecycle_state = 'ACTIVE'`
+3. `CAMPAIGN_SEND_CONFIRM=<campaign.uuid>` (per-campaign confirmation token)
+
+plus a per-run cap `CAMPAIGN_SEND_MAX` (default 1), and every message must pass the §9
+quality gate and (affiliate) §10 compliance gate. The worker claims each `send_key` in
+`campaign_send_log` (UNIQUE) BEFORE dispatch, so a re-run or restart never double-sends.
+
+```bash
+docker compose exec -T \
+  -e CAMPAIGN_SEND_LIVE=1 -e CAMPAIGN_SEND_CONFIRM=<uuid> -e CAMPAIGN_SEND_MAX=5 \
+  api node dist/cli/campaignSendWorker.js <campaignId>
+```
+
+Idempotency ledger: `campaign_send_log` (migration 0024). Dry runs leave it empty; only
+real sends write `status='sent'` rows.
+
 ## Send safety (TZ §18)
 
 Every queue operation is idempotent: unique send key per campaign/contact/step,
@@ -69,6 +107,6 @@ and idempotency guarantees are covered by `npm run test:integration`.
 
 ```bash
 cd /opt/email/api
-npm test                 # unit suite (100 passed, integration skipped)
+npm test                 # unit suite (129 passed, 7 integration skipped)
 npm run test:integration # DB-backed §21 invariants — see B2B_AND_AFFILIATE_ENGINE.md for the container run
 ```
