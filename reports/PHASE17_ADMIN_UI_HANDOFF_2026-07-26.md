@@ -62,11 +62,26 @@ curl -s http://portal:3000/... # via nginx: GET /api/affiliate/revenue/summary
 
 New pages: `/affiliate-offers`, `/revenue`, `/replies` (+ engine badges on `/campaigns`).
 
-## Next recommended action
+## Update 2026-07-27 — Safety aggregation DONE
 
-1. Finish Safety: one admin view aggregating offer-policy-violations (compliance_snapshots
-   where prohibited_claim_check='fail'), stale terms (offers past terms_verified_at+30d),
-   paused campaigns (lifecycle_state='PAUSED'). Add a small read-only `/admin/engine-safety`
-   endpoint.
-2. Contacts field-parity pass if required.
-3. Then the deferred §21 tests (#13/#14/#15) once a campaign send loop exists.
+Closed the three Safety gaps with a read-only endpoint + view:
+- `api/src/services/engineSafety.ts` — pure `isTermsStale` / `daysSince` (30-day window,
+  consistent with affiliateCompliance). 9 unit tests in `engineSafety.test.ts`.
+- `api/src/routes/engineSafety.ts` — `GET /engine/safety` (tenant-authed, SELECT-only):
+  offer-policy-violations (compliance_snapshots prohibited_claim_check='fail'), stale terms
+  (APPROVED offers failing isTermsStale), paused campaigns (lifecycle_state='PAUSED').
+  Mounted `/engine` in index.ts.
+- `portal/src/app/engine-safety/page.tsx` — KPI tiles + three tables. Nav item
+  `engineSafety` in the engine group; en/ru/uk labels.
+
+Verified: endpoint 401 unauth (mounted+authed), page 200 + built into image, all three
+SQL queries run against the live DB (0 rows — no engine data yet), api suite 109 passed /
+7 skipped. Deployed (fresh api+portal images, health 200).
+
+## Remaining
+
+1. Contacts field-parity pass (§17) — `/contacts` reused as-is, not audited vs
+   source/relevance/status/suppression/campaign-history.
+2. Deferred §21 tests (#13 dup-message, #14 paused-campaign-not-processed, #15 mailbox-
+   limits) need a campaign-driven send loop that does not exist yet — build only on
+   explicit owner approval (it is the path to real sending).

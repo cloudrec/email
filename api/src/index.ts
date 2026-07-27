@@ -46,6 +46,7 @@ import { listsRouter } from './routes/lists.js';
 import { affiliateOffersRouter } from './routes/affiliateOffers.js';
 import { affiliateTrackingRouter } from './routes/affiliateTracking.js';
 import { affiliateRevenueRouter } from './routes/affiliateRevenue.js';
+import { engineSafetyRouter } from './routes/engineSafety.js';
 import { authMiddleware } from './middleware/auth.js';
 import { seoBlogRouter } from './routes/seoBlog.js';
 
@@ -107,6 +108,7 @@ app.use('/contacts', contactsRouter);
 app.use('/campaigns', campaignsRouter);
 app.use('/affiliate/offers', affiliateOffersRouter);
 app.use('/affiliate/revenue', affiliateRevenueRouter);
+app.use('/engine', engineSafetyRouter);
 app.use('/billing', billingRouter);
 app.use('/leads', leadsRouter);
 app.use('/product-profiles', productProfilesRouter);

@@ -7,7 +7,7 @@
 
 | Suite | Result |
 |-------|--------|
-| Host unit suite (`npm test`) | **100 passed**, 7 skipped (8 files) |
+| Host unit suite (`npm test`) | **109 passed**, 7 skipped (9 files) — incl. §9 quality gate (19) and §17 engine-safety (9) |
 | DB integration suite (`npm run test:integration`, live DB) | **7 passed** |
 | TypeScript (`tsc --noEmit`) | clean, exit 0 |
 | API build + health | rebuilt, container healthy |
@@ -52,6 +52,7 @@ keys and are deleted in `afterAll`. Verified **0 residue** in `suppressions`, `c
 | `classifyReply.test.ts` / `classifyReplyGuard.test.ts` | 8 / 7 | reply classification |
 | `bounceParser.test.ts` | 36 | bounce parsing → suppression reason |
 | `outboundContentGuard.test.ts` | 7 | pre-send content blockers |
+| `engineSafety.test.ts` | 9 | §17 terms-staleness / daysSince (engine-safety view) |
 | `launchScenario.test.ts` | 6 | launch scenario |
 
 ## TZ §21 coverage matrix

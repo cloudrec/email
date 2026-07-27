@@ -45,6 +45,7 @@ const GROUPS: Array<{ section: string; superOnly?: boolean; items: Array<{ key: 
     { key: 'affiliateOffers', href: (q) => `/affiliate-offers${q}` },
     { key: 'replies',         href: (q) => `/replies${q}` },
     { key: 'revenue',         href: (q) => `/revenue${q}` },
+    { key: 'engineSafety',    href: (q) => `/engine-safety${q}` },
   ] },
   { section: 'deliver', items: [
     { key: 'deliverability', href: (q) => `/deliverability${q}` },
