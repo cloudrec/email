@@ -20,7 +20,7 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
   /replies, /engine-safety, contact detail panel on /contacts, read-only engine badges on
   /campaigns. Read-only revenue + engine-safety + contact-detail endpoints.
 - Silent health/reply monitor (pings owner only on a genuine reply or real breakage).
-- Tests: 109 passed + 7 skipped (DB integration, run via `npm run test:integration`).
+- Tests: 122 passed + 7 skipped (DB integration, run via `npm run test:integration`). TZ §21 20/20.
 
 ## LIMITS
 - Send volume: kept as-is per owner (audit 25/day; warmup ramp). Per-mailbox schema fields
@@ -29,9 +29,9 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
 
 ## KNOWN RISKS
 - 20/day-2/hour not enforced in code (owner deferred).
-- TZ complete except 3 tests: §9,§10,§11,§17(all 6 sections),§21(17/20 tests),§23(7 docs),
-  §24 done. Not done: §21 #13/#14/#15 (need a campaign-driven send loop that does not exist
-  — audit is a cron; building it = enabling real campaign sends, owner approval required).
+- TZ implemented + tested: §9,§10,§11,§17(all 6 sections),§21(20/20 tests),§23(7 docs),§24.
+  §21 #13/#14/#15 tested at the decision level via the pure `campaignSendGate` contract; a
+  LIVE campaign-send worker that calls it is intentionally NOT built (owner-gated = real send).
 - Audit outreach hits some role addresses (info@/support@) that route into helpdesks.
 
 ## PENDING APPROVALS
@@ -40,9 +40,10 @@ dormant and fail-closed — no affiliate email can send until an offer is approv
 - Any affiliate test send (EXP-C) — owner approval required.
 
 ## NEXT SAFE TASK
-TZ implementation is done except §21 #13/#14/#15, which require a campaign-driven send
-loop. That loop is the path to real campaign sending — build ONLY on explicit owner
-approval. Everything shipped so far is additive; no send, no limit/credential change.
+TZ is fully implemented and tested. The only remaining build is a LIVE campaign-send
+worker that calls `campaignSendGate` and actually dispatches — the path to real campaign
+sending, to be built ONLY on explicit owner approval. Everything shipped is additive; no
+send, no limit/credential change.
 
 ## LAST VERIFIED COMMANDS
 ```

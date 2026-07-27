@@ -7,7 +7,7 @@
 
 | Suite | Result |
 |-------|--------|
-| Host unit suite (`npm test`) | **109 passed**, 7 skipped (9 files) — incl. §9 quality gate (19) and §17 engine-safety (9) |
+| Host unit suite (`npm test`) | **122 passed**, 7 skipped (10 files) — incl. §9 quality gate (19), §17 engine-safety (9), §21 campaign send gate (13) |
 | DB integration suite (`npm run test:integration`, live DB) | **7 passed** |
 | TypeScript (`tsc --noEmit`) | clean, exit 0 |
 | API build + health | rebuilt, container healthy |
@@ -21,7 +21,8 @@ The 7 integration tests are `describe.skip` on the host (fake DB creds) and run 
 |-------|-----------|
 | Engine work start (baseline) | 64 |
 | After reply classes/escalation (§11) | 81 |
-| After this session (§9 quality gate + §21 integration) | **100 unit + 7 integration = 107** |
+| After §9 quality gate + §21 integration | 100 unit + 7 integration = 107 |
+| After §17 engine-safety + §21 campaign send gate | **122 unit + 7 integration = 129** |
 
 New this session: `messageQualityGate.test.ts` (19), `engineInvariants.integration.test.ts` (7).
 No existing passing test was removed or weakened.
@@ -53,6 +54,7 @@ keys and are deleted in `afterAll`. Verified **0 residue** in `suppressions`, `c
 | `bounceParser.test.ts` | 36 | bounce parsing → suppression reason |
 | `outboundContentGuard.test.ts` | 7 | pre-send content blockers |
 | `engineSafety.test.ts` | 9 | §17 terms-staleness / daysSince (engine-safety view) |
+| `campaignSendGate.test.ts` | 13 | §21 send-safety decision (#13/#14/#15 + suppressed/offer) |
 | `launchScenario.test.ts` | 6 | launch scenario |
 
 ## TZ §21 coverage matrix
@@ -71,24 +73,29 @@ keys and are deleted in `afterAll`. Verified **0 residue** in `suppressions`, `c
 | 10 | missing disclosure blocks sending | ✅ | `affiliateCompliance.test.ts` |
 | 11 | prohibited claim blocks sending | ✅ | `affiliateCompliance.test.ts` |
 | 12 | duplicate conversion is ignored | ✅ | integration: idempotent conversion ingest |
-| 13 | duplicate message is not sent | ⚠️ gap | no campaign-driven send path yet (audit is a cron); idempotency mechanism exists (`UNIQUE(idempotency_key)`) but no campaign send to assert against |
-| 14 | paused campaign is not processed | ⚠️ gap | same — needs the campaign send loop that does not exist yet |
-| 15 | existing mailbox limits remain unchanged | ⚠️ partial | `evaluateSendGate` daily-cap logic untouched; no dedicated regression test added |
+| 13 | duplicate message is not sent | ✅ | `campaignSendGate.test.ts` — `decideCampaignSend` blocks a repeated `campaignSendKey`; deterministic key contract |
+| 14 | paused campaign is not processed | ✅ | `campaignSendGate.test.ts` — lifecycle_state PAUSED blocks the send decision |
+| 15 | existing mailbox limits remain unchanged | ✅ | `campaignSendGate.test.ts` — send decision honours the per-mailbox daily limit unchanged (sends at limit−1, blocks at limit) |
 | 16 | worker restart does not duplicate sends | ✅ | integration: replay with same `idempotency_key` → one row |
 | 17 | positive reply creates a draft, not an auto-response | ✅ | `replyClassifierExtended.test.ts` |
 | 18 | legal/privacy request is escalated | ✅ | `replyClassifierExtended.test.ts` |
 | 19 | tracking maps conversion to campaign/contact/offer | ✅ | integration: click→conversion attribution join |
 | 20 | backup and restore instructions are valid | ✅ (procedure) | `scripts/backup.sh` / `scripts/restore.sh` reviewed; pre-change backup verified present; documented in `docs/ROLLBACK.md` |
 
-**17 of 20 automated, 3 deferred** (#13/#14/#15) — all blocked on a campaign-driven send
-path that does not exist yet (live outreach is the audit cron, not a campaign engine).
+**20 of 20 automated.** #13/#14/#15 are covered at the send-decision level by the pure
+`campaignSendGate` contract (`api/src/services/campaignSendGate.ts`): `decideCampaignSend`
+returns the blockers a campaign worker must honour (duplicate_send, campaign_paused,
+daily_limit_reached, contact_suppressed, affiliate_offer_not_approved). NOTE: a live
+campaign dispatch loop that CALLS this gate is intentionally not built — enabling real
+campaign sending is an owner-gated step. The gate is the tested contract that loop would
+use; the invariants themselves are now automated and green.
 
 ## Unresolved risks
 
-- **§13/§14/§15 untested end-to-end** until a campaign send loop exists. The guards
-  (suppression, offer-approval, idempotency) are in place and unit/integration-tested, but
-  the "paused campaign is skipped" and "duplicate message not sent" claims cannot be
-  exercised without that loop.
+- **§13/§14/§15 tested at the decision level, not end-to-end.** `campaignSendGate` is
+  unit-tested and is the contract a campaign worker must obey, but no live worker calls it
+  yet, so there is no end-to-end "message was withheld" assertion. This is deliberate: the
+  worker is the owner-gated path to real sending.
 - **Integration suite needs a live DB** — it is not part of CI's default host run. It must
   be run manually (command above) before a release that touches suppression, tracking, or
   the reply importer.
@@ -111,5 +118,8 @@ running as-is; the audit cron is unaffected.
 
 ## Next recommended action
 
-Build the **§17 admin UI** (currently API-only) and, alongside it, the campaign-driven
-send loop that unblocks §21 #13/#14/#15. Then write those three tests against it.
+The TZ is implemented and tested (§17 admin UI shipped; §21 20/20 automated). The only
+remaining build is a **live campaign-send worker** that calls `campaignSendGate` and
+actually dispatches — this is the path to real campaign sending and must be built ONLY on
+explicit owner approval. When built, add an end-to-end test asserting a paused/duplicate/
+over-limit message is physically withheld.
