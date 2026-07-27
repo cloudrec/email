@@ -3,10 +3,69 @@ import { z } from 'zod';
 import { query } from '../db.js';
 import { authMiddleware, requireTenant, requireWriteAccess } from '../middleware/auth.js';
 import { audit } from '../middleware/audit.js';
-import { addSuppression } from '../services/suppression.js';
+import { addSuppression, isSuppressedGlobal } from '../services/suppression.js';
 
 export const contactsRouter = Router();
 contactsRouter.use(authMiddleware, requireTenant);
+
+// Per-contact detail for the admin UI (TZ §17 Contacts): source, relevance reason,
+// status, suppression, and campaign history. Read-only aggregation over existing tables;
+// writes nothing. All lookups are scoped to the caller's tenant via the contact row.
+contactsRouter.get('/:id/detail', async (req, res) => {
+  const tenantId = req.auth!.tenantId!;
+  const id = parseInt(req.params.id, 10);
+  const [contact] = await query(
+    `SELECT id, email, first_name, last_name, status, language, country, tags,
+            consent_source, last_event_at, created_at,
+            unsubscribed_at, bounced_at, complained_at
+       FROM contacts WHERE id=? AND tenant_id=? LIMIT 1`, [id, tenantId]);
+  if (!contact) return res.status(404).json({ error: 'not_found' });
+  const email = String(contact.email);
+
+  // Suppression (tenant + global), with the reason if present.
+  const suppressed = await isSuppressedGlobal(tenantId, email);
+  const [supRow] = await query(
+    `SELECT reason, created_at FROM suppressions WHERE tenant_id=? AND email=? LIMIT 1`, [tenantId, email]);
+  const [gsupRow] = await query(
+    `SELECT reason, created_at FROM global_contact_suppression
+      WHERE type='email' AND normalized_value=? LIMIT 1`, [email.toLowerCase()]);
+
+  // Source + relevance reason from the most recent outreach-queue entry for this email.
+  const [queueRow] = await query(
+    `SELECT reason, source_url, company_name, status, safety_status
+       FROM manual_outreach_queue WHERE tenant_id=? AND email=? ORDER BY id DESC LIMIT 1`,
+    [tenantId, email]);
+
+  // Campaign history: broadcast events + per-contact outreach touchpoints.
+  const broadcastEvents = await query(
+    `SELECT ce.campaign_id, c.name AS campaign_name, ce.event_type, ce.occurred_at
+       FROM campaign_events ce LEFT JOIN campaigns c ON c.id = ce.campaign_id
+      WHERE ce.tenant_id=? AND (ce.contact_id=? OR ce.email=?)
+      ORDER BY ce.occurred_at DESC LIMIT 50`, [tenantId, id, email]);
+  const touchpoints = await query(
+    `SELECT campaign_id, channel, direction, touch_type, status, subject, created_at
+       FROM outreach_touchpoints
+      WHERE tenant_id=? AND (contact_id=? OR email=?)
+      ORDER BY created_at DESC LIMIT 50`, [tenantId, id, email]);
+
+  res.json({
+    contact,
+    source: {
+      consentSource: contact.consent_source ?? null,
+      tags: contact.tags ?? null,
+      sourceUrl: queueRow?.source_url ?? null,
+      company: queueRow?.company_name ?? null,
+    },
+    relevanceReason: queueRow?.reason ?? null,
+    suppression: {
+      suppressed,
+      reason: supRow?.reason ?? gsupRow?.reason ?? null,
+      at: supRow?.created_at ?? gsupRow?.created_at ?? null,
+      scope: supRow ? 'tenant' : gsupRow ? 'global' : null,
+    },
+    campaignHistory: { broadcastEvents, touchpoints },
+  });
+});
 
 contactsRouter.get('/', async (req, res) => {
   const limit = Math.min(500, parseInt((req.query.limit as string) ?? '100', 10));
