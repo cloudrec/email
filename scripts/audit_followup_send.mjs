@@ -18,6 +18,7 @@
 //   docker compose exec -T api node /app/audit_followup_send.mjs --file /app/queue.json --send    # send
 import { resolveSecret } from './dist/services/secretsVault.js';
 import { query } from './dist/db.js';
+import { loadReservedDomains, isReserved } from './dist/services/reservedDomains.js';
 import nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -101,12 +102,17 @@ const candidates = await query(
 
 log(`${candidates.length} contacted ${MIN_AGE_DAYS}-${MAX_AGE_DAYS}d ago, non-refusing, not-yet-followed`);
 
+// Reserved domains (personal audit batch) are excluded from follow-ups too.
+const reserved = await loadReservedDomains(query);
+if (reserved.size) log(`${reserved.size} reserved domain(s) will be excluded`);
+
 const ready = [];
 for (const c of candidates) {
   if (ready.length >= CAP) break;
   const email = (c.email || '').toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) continue;
   const domain = email.split('@')[1] || '';
+  if (isReserved(email, reserved)) { log(`skip ${email}: reserved for audit batch`); continue; }
   const row = byDomain.get(norm(domain));
   if (!row) continue;                                       // no current report/offer for this domain
   // Domain-level global suppression + Postal's own list (would be Held).

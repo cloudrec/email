@@ -22,6 +22,7 @@
 //   docker compose exec -T api node /app/audit_outreach_send.mjs --file /app/queue.json --send     # send
 import { resolveSecret } from './dist/services/secretsVault.js';
 import { query } from './dist/db.js';
+import { loadReservedDomains, isReserved } from './dist/services/reservedDomains.js';
 import nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -59,6 +60,10 @@ const senders = await query(
     ORDER BY id`, [TENANT]);
 if (!senders.length) { console.error('no warmed clients.help senders'); process.exit(1); }
 
+// Reserved domains (personal audit batch) are excluded from every send — the safety gate.
+const reserved = await loadReservedDomains(query);
+if (reserved.size) log(`${reserved.size} reserved domain(s) will be excluded`);
+
 // Validate + filter the whole batch first, so a bad row can't leave a half-sent run.
 const ready = [];
 for (const r of queue) {
@@ -66,6 +71,7 @@ for (const r of queue) {
   const email = (r.email || '').toLowerCase();
   const domain = email.split('@')[1] || '';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { continue; }
+  if (isReserved(email, reserved) || isReserved(r.domain, reserved)) { log(`skip ${email}: reserved for audit batch`); continue; }
   if (!r.body || !r.subject || !r.report_url || !r.body.includes(r.report_url)) { continue; }
 
   // Wrong-target guard: an audit of THIS site must reach THIS business. Send only if

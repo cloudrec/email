@@ -142,6 +142,8 @@ async function candidates(need) {
       -- while still returning 250 OK. Without this, a suppressed recipient is picked,
       -- "sent", and quietly Held — 28 of 100 wasted this way on 2026-07-18.
       AND NOT EXISTS (SELECT 1 FROM \`postal-server-1\`.suppressions ps WHERE ps.address=cp.value)
+      -- Domain reservation gate: never warm a domain queued for the personal audit batch.
+      AND NOT EXISTS (SELECT 1 FROM reserved_domains rd WHERE rd.domain=LOWER(cp.email_domain) AND rd.released_at IS NULL)
     GROUP BY cp.email_domain
     ORDER BY cp.verification_score DESC, cp.id
     LIMIT ?`, [need * 4]);   // over-select; the loop still drops newly-classified Google/no-MX

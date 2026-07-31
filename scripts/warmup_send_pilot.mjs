@@ -137,6 +137,8 @@ async function candidates(need, categoryFilter) {
       -- Postal silently Holds mail to anyone on its own suppression list (still 250 OK),
       -- so a suppressed pick is "sent" and never delivered. Exclude up front.
       AND NOT EXISTS (SELECT 1 FROM \`postal-server-1\`.suppressions ps WHERE ps.address=cp.value)
+      -- Domain reservation gate: never warm a domain queued for the personal audit batch.
+      AND NOT EXISTS (SELECT 1 FROM reserved_domains rd WHERE rd.domain=LOWER(cp.email_domain) AND rd.released_at IS NULL)
     GROUP BY cp.email_domain
     ORDER BY cp.verification_score DESC, cp.id
     LIMIT ?`, [need * 4]);   // over-select; the loop still drops newly-classified Google/no-MX
