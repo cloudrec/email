@@ -133,7 +133,12 @@ async function candidates(need, categoryFilter) {
       AND NOT EXISTS (SELECT 1 FROM suppressions s WHERE s.email=cp.value)
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='email' AND g.normalized_value=LOWER(cp.value))
       AND NOT EXISTS (SELECT 1 FROM global_contact_suppression g WHERE g.type='domain' AND g.normalized_value=LOWER(cp.email_domain))
-      AND NOT EXISTS (SELECT 1 FROM outreach_touchpoints tp WHERE tp.email LIKE CONCAT('%@', cp.email_domain))
+      -- domain already approached by any campaign -> skip. Uncorrelated set (built once)
+      -- instead of a per-row leading-wildcard LIKE, which scanned outreach_touchpoints
+      -- for every candidate and grew ~linearly with sends until candidates() hung for
+      -- ~28 min and starved the daily send (2026-08-06). LIKE '%@%' guards out NULL/
+      -- malformed addresses so NOT IN can never collapse to zero rows.
+      AND cp.email_domain NOT IN (SELECT DISTINCT SUBSTRING_INDEX(tp.email,'@',-1) FROM outreach_touchpoints tp WHERE tp.email LIKE '%@%')
       -- Postal silently Holds mail to anyone on its own suppression list (still 250 OK),
       -- so a suppressed pick is "sent" and never delivered. Exclude up front.
       AND NOT EXISTS (SELECT 1 FROM \`postal-server-1\`.suppressions ps WHERE ps.address=cp.value)
